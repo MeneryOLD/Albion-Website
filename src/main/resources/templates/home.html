@@ -1,1 +1,111 @@
-Hello world
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Albion Mobile Friendly</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <style>
+        body { overflow-x: hidden; }
+
+        .nav-link-custom {
+            border: 1px solid #000;
+            border-radius: 25px;
+            margin: 5px;
+            padding: 8px 20px !important;
+            color: #000 !important;
+            text-align: center;
+            display: inline-block;
+            white-space: nowrap;
+        }
+
+        .pictures-placeholder {
+            background: #f8f9fa;
+            border: 1px solid #ddd;
+            margin: 20px 0;
+            min-height: 150px;
+            display: flex;
+            align-items: center;
+        }
+
+        .border-mobile { border-bottom: 1px solid #ddd; padding: 15px 0; }
+        @media (min-width: 768px) {
+            .border-mobile { border-bottom: none; border-right: 1px solid #ddd; }
+        }
+
+        footer {
+            background: #fff;
+            border-top: 3px solid #000;
+            padding: 30px 10px;
+            margin-top: 40px;
+        }
+
+        button, a { -webkit-tap-highlight-color: transparent; }
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-light bg-white border-bottom pt-3 pb-3">
+    <div class="container d-flex justify-content-between align-items-center flex-nowrap">
+
+        <a class="navbar-brand d-flex align-items-center m-0" href="#">
+            <div class="rounded-circle border border-dark me-2" style="width: 25px; height: 25px; border-width: 2px !important;"></div>
+            <span style="font-size: 1.1rem; letter-spacing: 1px;">name</span>
+        </a>
+
+        <div class="d-flex align-items-center small">
+            <span>Eng.</span>
+            <div class="form-check form-switch ms-2 mt-1">
+                <input class="form-check-input" type="checkbox" role="switch" id="langSwitch">
+            </div>
+            <span class="ms-1">Pl.</span>
+        </div>
+    </div>
+
+    <div class="container mt-3">
+        <div class="d-flex flex-wrap justify-content-center">
+            <a class="nav-link nav-link-custom" th:href="@{/language-courses/}">courses</a>
+            <a class="nav-link nav-link-custom" th:href="@{/blog/}">blog</a>
+            <a class="nav-link nav-link-custom" th:href="@{/about-us/}">About us</a>
+            <a class="nav-link nav-link-custom" th:href="@{/store/}">Store</a>
+        </div>
+    </div>
+</nav>
+
+<main class="container text-center mt-4">
+
+    <section class="py-4">
+        <h2 class="h4">info</h2>
+        <div class="text-muted w-75 mx-auto" style="border-top: 1px solid #ccc; height: 10px; margin-top: 10px;"></div>
+    </section>
+
+    <section class="row pictures-placeholder mx-1 rounded">
+        <div class="col-12 col-md-4 border-mobile">Pictures L</div>
+        <div class="col-12 col-md-4 border-mobile"><strong>Pictures Center</strong></div>
+        <div class="col-12 col-md-4">Pictures R</div>
+    </section>
+
+    <section class="py-5">
+        <div class="text-muted w-100 mb-3">〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰</div>
+        <h3 class="h4">information</h3>
+        <div class="text-muted w-100 mt-3">〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰</div>
+    </section>
+
+</main>
+
+<footer class="text-center">
+    <div class="container">
+        <div class="mb-4">
+            <h5 class="fw-bold">Privacy policies and social media</h5>
+        </div>
+        <div class="row g-3 justify-content-center">
+            <div class="col-6 col-md-auto"><a th:href="@{/polices/contact-information/}" class="text-dark small text-decoration-none">Contact info</a></div>
+            <div class="col-6 col-md-auto"><a th:href="@{/polices/terms-of-service/}" class="text-dark small text-decoration-none">Terms of service</a></div>
+            <div class="col-6 col-md-auto"><a th:href="@{/polices/refund-policy/}" class="text-dark small text-decoration-none">Refund policy</a></div>
+            <div class="col-6 col-md-auto"><a th:href="@{/polices/privacy-policy/}" class="text-dark small text-decoration-none">Privacy policy</a></div>
+        </div>
+    </div>
+</footer>
+
+</body>
+</html>
