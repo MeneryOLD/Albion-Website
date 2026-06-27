@@ -24,6 +24,7 @@
         .nav-links{display:flex;align-items:center;gap:28px}
         .nav-links a{text-decoration:none;color:#1f1f1f;padding:8px 20px;font-weight:600;transition:color .3s,background-color .3s;border-radius:20px}
         .nav-links a:hover{color:#d4af37;background:rgba(212,175,55,.1)}
+        .nav-links a.active{color: #917003;}
         .menu-toggle{display:none;border:none;background:none;font-size:1.8rem;cursor:pointer;color:var(--text)}
 
         /* HERO */
@@ -147,7 +148,7 @@
         <button class="menu-toggle" id="menuToggle">☰</button>
         <nav class="nav-links" id="navMenu">
             <a th:href="@{/language-courses}">Courses</a>
-            <a th:href="@{/blog}">Blog</a>
+            <a th:href="@{/blog}" class="active">Blog</a>
             <a th:href="@{/store}">Store</a>
             <a th:href="@{/about-us}">About us</a>
         </nav>

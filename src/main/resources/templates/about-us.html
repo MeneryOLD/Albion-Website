@@ -31,6 +31,7 @@
     .nav-links { display:flex; align-items:center; gap:28px; }
     .nav-links a { text-decoration:none; color:var(--dark-text); padding:8px 20px; font-weight:600; transition:color 0.3s; }
     .nav-links a:hover { color:#d4d400; }
+    .nav-links a.active{color: #917003;}
     .menu-toggle { display:none; border:none; background:none; font-size:1.8rem; cursor:pointer; color:var(--dark-text); }
 
     /* MAIN */
@@ -456,7 +457,7 @@
       <span>Albion</span> </a>
     <button class="menu-toggle" id="menuToggle"> ☰</button>
     <nav class="nav-links" id="navMenu"><a th:href="@{/language-courses}">Courses</a> <a
-            th:href="@{/blog}">Blog</a> <a th:href="@{/store}">Store</a> <a th:href="@{/about-us}">About us</a>
+            th:href="@{/blog}">Blog</a> <a th:href="@{/store}">Store</a> <a th:href="@{/about-us}" class="active">About us</a>
     </nav>
   </div>
 </header>

@@ -1,38 +1,43 @@
 package com.albion.website.model;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
+@Entity
+@Table(name = "users", schema = "albiondata")
 @Getter
 @Setter
-
-@Entity
-@Table(name = "users")
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Enumerated(EnumType.STRING)
-    private RoleType role;
-
-    @Column(name = "name")
+    @Column(nullable = false, length = 100)
     private String name;
 
-    @Column(name = "password")
+    @Column(nullable = false)
     private String password;
 
-    @Column(name = "email")
+    @Column(nullable = false, unique = true)
     private String email;
 
-    @Column(name = "create_date", updatable = false)
+    @Column(name = "create_date", nullable = false, updatable = false)
     private LocalDateTime createDate;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 30)
+    @Builder.Default
+    private Role role = Role.USER;
+
     @PrePersist
-    protected void onCreate() {
-        this.createDate = LocalDateTime.now();
+    public void prePersist() {
+        if (createDate == null) {
+            createDate = LocalDateTime.now();
+        }
     }
 }

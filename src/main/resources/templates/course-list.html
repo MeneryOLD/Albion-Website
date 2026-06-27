@@ -87,6 +87,7 @@ header {
   padding: 8px 20px; font-weight: 600;
   transition: color 0.3s ease, background-color 0.3s ease;
 }
+.nav-links a.active{color: #917003;}
 .nav-links a:hover { color: #d4af37 !important; }
 
 .menu-toggle { display: none; border: none; background: none; font-size: 1.8rem; cursor: pointer; color: var(--text); }
@@ -502,7 +503,7 @@ header {
         </a>
         <button class="menu-toggle" id="menuToggle">☰</button>
         <nav class="nav-links" id="navMenu">
-            <a th:href="@{/language-courses}">Courses</a>
+            <a th:href="@{/language-courses}" class="active">Courses</a>
             <a th:href="@{/blog}">Blog</a>
             <a th:href="@{/store}">Store</a>
             <a th:href="@{/about-us}">About us</a>
@@ -781,6 +782,12 @@ header {
                     card.style.display = 'none';
                 }
             });
+        });
+    });
+    document.querySelectorAll('.premium-course-card').forEach(card => {
+        card.addEventListener('click', () => {
+            const slug = card.dataset.slug;
+            if (slug) window.location.href = '/language-courses/' + slug;
         });
     });
 </script>
