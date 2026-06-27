@@ -9,14 +9,17 @@ public class PolicyController {
     public String getContactInformation() {
         return "contact-information";
     }
+
     @GetMapping("/polices/terms-of-service/")
     public String getTermsOfService() {
         return "terms-of-service";
     }
+
     @GetMapping("/polices/refund-policy/")
     public String getRefundPage() {
         return "refund-policy";
     }
+
     @GetMapping("/polices/privacy-policy/")
     public String getPrivacyPage() {
         return "privacy-policy";

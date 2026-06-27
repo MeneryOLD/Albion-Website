@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="ru" th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Admin Panel | Modern Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --sidebar-bg: #ffffff;
+            --sidebar-active-bg: #f1f5f9;
+            --sidebar-text: #64748b;
+            --sidebar-active-text: #0f172a;
+            --main-bg: #f8fafc;
+            --accent: #3b82f6;
+            --card-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+        }
+
+        body {
+            background-color: var(--main-bg);
+            font-family: 'Inter', sans-serif;
+            color: #1e293b;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .sidebar {
+            height: 100vh;
+            background: var(--sidebar-bg);
+            padding: 24px 16px;
+            position: fixed;
+            top: 0; left: 0;
+            width: 260px;
+            z-index: 1000;
+            border-right: 1px solid #e2e8f0;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 0 12px 32px 12px;
+            font-weight: 700;
+            font-size: 1.25rem;
+            color: #0f172a;
+            letter-spacing: -0.025em;
+        }
+
+        .sidebar-brand-icon {
+            width: 32px;
+            height: 32px;
+            background: var(--accent);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .menu-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #94a3b8;
+            padding: 0 12px 12px 12px;
+        }
+
+        .sidebar a {
+            color: var(--sidebar-text);
+            padding: 10px 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-radius: 10px;
+            margin-bottom: 4px;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .sidebar a:hover {
+            background: var(--sidebar-active-bg);
+            color: var(--sidebar-active-text);
+        }
+
+        .sidebar a.active {
+            background: var(--sidebar-active-bg);
+            color: var(--accent);
+            position: relative;
+        }
+
+        .sidebar a.active::after {
+            content: '';
+            position: absolute;
+            right: 12px;
+            width: 6px;
+            height: 6px;
+            background: var(--accent);
+            border-radius: 50%;
+        }
+
+        .content {
+            margin-left: 260px;
+            padding: 40px;
+            transition: all 0.3s ease;
+        }
+
+        .top-bar { margin-bottom: 32px; }
+
+        .page-title {
+            font-size: 1.875rem;
+            font-weight: 700;
+            color: #0f172a;
+            letter-spacing: -0.025em;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 24px;
+        }
+
+        .card-item {
+            background: white;
+            border-radius: 16px;
+            padding: 16px;
+            box-shadow: var(--card-shadow);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid #f1f5f9;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .card-item:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1);
+        }
+
+        .card-img-placeholder {
+            position: relative;
+            width: 100%;
+            height: 180px;
+            margin-bottom: 16px;
+            overflow: hidden;
+            border-radius: 12px;
+            background: #f1f5f9;
+        }
+
+        .card-img-top { width: 100%; height: 100%; object-fit: cover; }
+
+        .status-badge {
+            position: absolute; top: 12px; right: 12px;
+            padding: 6px 12px; border-radius: 8px;
+            font-size: 0.65rem; font-weight: 700;
+            text-transform: uppercase; z-index: 2;
+            backdrop-filter: blur(4px);
+        }
+
+        .bg-success { background-color: rgba(34, 197, 94, 0.9) !important; }
+        .bg-secondary { background-color: rgba(100, 116, 139, 0.9) !important; }
+
+        .price-tag {
+            position: absolute; bottom: 12px; left: 12px;
+            background: #0f172a; color: white;
+            padding: 6px 12px; border-radius: 8px;
+            font-weight: 600; font-size: 0.875rem; z-index: 2;
+        }
+
+        .btn-primary { background-color: var(--accent); border: none; }
+        .btn-primary:hover { background-color: #2563eb; }
+        .btn-round { border-radius: 12px; padding: 12px 24px; font-weight: 600; font-size: 0.875rem; }
+
+        .modal-content { border-radius: 24px; border: none; }
+        .form-control, .form-select {
+            border-radius: 10px; padding: 10px 14px;
+            border: 1px solid #e2e8f0; font-size: 0.935rem;
+        }
+        .form-control:focus { border-color: var(--accent); box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1); }
+
+        .preview-container { position: relative; margin: 4px; }
+        .delete-badge {
+            position: absolute; top: -6px; right: -6px; background: #ef4444; color: white;
+            border-radius: 50%; width: 22px; height: 22px; display: flex;
+            align-items: center; justify-content: center; cursor: pointer;
+            border: 2px solid white; font-size: 12px;
+        }
+        .marked-for-delete { opacity: 0.3; filter: grayscale(1); }
+
+        @media (max-width: 991px) {
+            .sidebar { width: 80px; padding: 24px 8px; }
+            .sidebar-brand-text, .menu-label, .link-text { display: none; }
+            .sidebar-brand { justify-content: center; padding: 0 0 32px 0; }
+            .sidebar a { justify-content: center; padding: 12px; }
+            .sidebar a.active::after { display: none; }
+            .content { margin-left: 80px; padding: 30px 20px; }
+        }
+
+        @media (max-width: 767px) {
+            body {
+                padding-bottom: 70px;
+                background-color: white;
+            }
+            .sidebar {
+                width: 100%; height: 70px;
+                top: auto; bottom: 0;
+                display: flex; flex-direction: row; justify-content: space-around; align-items: center;
+                padding: 0 10px; border-right: none; border-top: 1px solid #e2e8f0;
+                box-shadow: 0 -4px 10px rgba(0,0,0,0.03);
+            }
+            .sidebar-brand, .menu-label { display: none; }
+            .sidebar a {
+                flex-direction: column; justify-content: center; gap: 4px;
+                padding: 8px 4px; flex: 1; border-radius: 8px; margin: 0;
+            }
+            .sidebar a:hover { background: transparent; }
+            .sidebar a.active { background: transparent; color: var(--accent); }
+            .sidebar a span:first-child { font-size: 1.3rem; }
+            .link-text { display: block !important; font-size: 0.65rem; font-weight: 600; margin-top: 2px;}
+
+            .content { margin-left: 0; padding: 20px 15px; }
+
+            .top-bar {
+                flex-direction: column;
+                align-items: flex-start !important;
+                gap: 16px;
+                margin-bottom: 24px;
+            }
+            .top-bar .btn { width: 100%; }
+
+            .grid { grid-template-columns: 1fr; gap: 16px; }
+            .card-img-placeholder { height: 220px; }
+
+            .modal-content { border-radius: 16px; }
+            .modal-body { padding: 15px; }
+            .modal-footer { flex-direction: column; gap: 10px; padding: 15px; }
+            .modal-footer .btn { width: 100%; margin: 0; }
+        }
+    </style>
+</head>
+<script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+<body>
+
+<aside class="sidebar">
+    <div class="sidebar-brand">
+        <div class="sidebar-brand-icon">M</div>
+        <span class="sidebar-brand-text">Manager</span>
+    </div>
+
+    <div class="menu-label">Main Menu</div>
+    <a onclick="switchEntity('articles', this)" class="menu-link active">
+        <span>📝</span> <span class="link-text">Articles</span>
+    </a>
+    <a onclick="switchEntity('courses', this)" class="menu-link">
+        <span>🎓</span> <span class="link-text">Courses</span>
+    </a>
+    <a onclick="switchEntity('items', this)" class="menu-link">
+        <span>📦</span> <span class="link-text">Items</span>
+    </a>
+</aside>
+
+<main class="content">
+    <div class="top-bar d-flex justify-content-between align-items-end">
+        <div>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mb-1">
+                    <li class="breadcrumb-item small text-muted">Admin</li>
+                    <li class="breadcrumb-item small text-muted active" aria-current="page">Dashboard</li>
+                </ol>
+            </nav>
+            <h2 id="pageTitle" class="page-title m-0 text-capitalize">Articles</h2>
+        </div>
+        <button class="btn btn-primary btn-round shadow-sm" onclick="openModal()">
+            <span class="me-1">+</span> New Entry
+        </button>
+    </div>
+
+    <div id="cardContainer" class="grid"></div>
+
+    <div class="d-flex justify-content-center align-items-center mt-5 gap-3">
+        <button class="btn btn-white border shadow-sm btn-sm px-4 py-2" style="border-radius: 10px"
+                onclick="changePage(-1)">Previous
+        </button>
+        <span id="pageInfo" class="small fw-600 text-muted">PAGE 0</span>
+        <button class="btn btn-white border shadow-sm btn-sm px-4 py-2" style="border-radius: 10px"
+                onclick="changePage(1)">Next
+        </button>
+    </div>
+</main>
+
+<div class="modal fade" id="entityModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content shadow-lg">
+            <form id="entityForm" enctype="multipart/form-data">
+                <div class="modal-header border-0 px-4 pt-4">
+                    <h5 class="modal-title fw-bold" id="modalTitle">Edit Entry</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body px-4">
+                    <input type="hidden" id="entityId" name="id">
+
+                    <div class="row g-3">
+                        <div class="col-md-8">
+                            <label class="form-label fw-semibold small text-uppercase text-muted">Title / Name</label>
+                            <input type="text" class="form-control" id="entityTitle" name="title" required>
+                        </div>
+                        <div class="col-md-4 slug-field">
+                            <label class="form-label fw-semibold small text-uppercase text-muted">Slug (URL)</label>
+                            <input type="text" class="form-control" id="entitySlug" name="slug">
+                        </div>
+
+                        <div class="col-md-4 course-only">
+                            <label class="form-label fw-semibold small text-uppercase text-muted">Price</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light">$</span>
+                                <input type="number" step="0.01" class="form-control" id="coursePrice" name="price">
+                            </div>
+                        </div>
+                        <div class="col-md-4 course-only">
+                            <label class="form-label fw-semibold small text-uppercase text-muted">Duration</label>
+                            <input type="text" class="form-control" id="courseDuration" name="duration"
+                                   placeholder="e.g. 12 weeks">
+                        </div>
+                        <div class="col-md-4 course-only">
+                            <label class="form-label fw-semibold small text-uppercase text-muted">Level</label>
+                            <select class="form-select" id="courseLevel" name="level">
+                                <option value="Beginner">Beginner</option>
+                                <option value="Intermediate">Intermediate</option>
+                                <option value="Advanced">Advanced</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6 course-only">
+                            <label class="form-label fw-semibold small text-uppercase text-muted">Format</label>
+                            <select class="form-select" id="courseFormat" name="format">
+                                <option value="ONLINE">Online</option>
+                                <option value="OFFLINE">Offline</option>
+                                <option value="HYBRID">Hybrid</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6 course-only">
+                            <label class="form-label fw-semibold small text-uppercase text-muted">Type</label>
+                            <select class="form-select" id="courseType" name="type">
+                                <option value="INDIVIDUAL">Individual</option>
+                                <option value="GROUP">Group</option>
+                                <option value="WEBINAR">Webinar</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4 course-only">
+                            <label class="form-label fw-semibold small text-uppercase text-muted">
+                                Language
+                            </label>
+                            <input type="text" class="form-control" id="courseLanguage" name="language">
+                        </div>
+
+                        <!-- ITEM FIELDS -->
+                        <div class="col-md-4 item-only">
+                            <label class="form-label fw-semibold small text-uppercase text-muted">Price</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light">$</span>
+                                <input type="number" step="0.01" class="form-control" id="itemPrice" name="price">
+                            </div>
+                        </div>
+                        <div class="col-md-4 item-only">
+                            <label class="form-label fw-semibold small text-uppercase text-muted">Stock Amount</label>
+                            <input type="number" class="form-control" id="itemAmount" name="amount">
+                        </div>
+                        <div class="col-md-4 item-only">
+                            <label class="form-label fw-semibold small text-uppercase text-muted">Availability</label>
+                            <select class="form-select" id="itemAvailable" name="available">
+                                <option value="true">In Stock</option>
+                                <option value="false">Out of Stock</option>
+                            </select>
+                        </div>
+                        <!-- NEW: Category field for items -->
+                        <div class="col-md-12 item-only">
+                            <label class="form-label fw-semibold small text-uppercase text-muted">Category</label>
+                            <select class="form-select" id="itemCategory" name="category">
+                                <option value="">— Select category —</option>
+                                <option value="BOOKS">Books</option>
+                                <option value="COURSES">Courses</option>
+                                <option value="MATERIALS">Materials</option>
+                                <option value="LECTURES">Lectures</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-12">
+                            <label class="form-label fw-semibold small text-uppercase text-muted">Short
+                                Description</label>
+                            <textarea class="form-control" id="entityDescription" name="description"
+                                      rows="2"></textarea>
+                        </div>
+
+                        <div class="col-md-12" id="textContainer">
+                            <label class="form-label fw-semibold small text-uppercase text-muted">Full Content</label>
+                            <div id="editor" style="height: 300px;"></div>
+                        </div>
+
+                        <div class="col-md-12">
+                            <div class="p-3 border rounded-4 bg-light d-flex align-items-center justify-content-between">
+                                <div>
+                                    <label class="form-check-label fw-bold d-block mb-0" for="entityPublished">Public
+                                        Status</label>
+                                    <small class="text-muted">Set visibility for end users</small>
+                                </div>
+                                <div class="form-check form-switch m-0">
+                                    <input class="form-check-input" type="checkbox" id="entityPublished"
+                                           name="published" style="width: 3em; height: 1.5em; cursor: pointer;">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12">
+                            <label class="form-label fw-semibold small text-uppercase text-muted">Gallery</label>
+                            <div id="existingPictures" class="d-flex flex-wrap gap-2 mb-2"></div>
+                            <input type="file" class="form-control" name="pictures" multiple accept="image/*">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer border-0 px-4 pb-4">
+                    <button type="button" class="btn btn-light rounded-3 px-4 py-2" data-bs-dismiss="modal">Cancel
+                    </button>
+                    <button type="submit" class="btn btn-primary rounded-3 px-4 py-2 shadow">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    let currentEntity = 'articles';
+    let currentPage = 0;
+    const pageSize = 9;
+    let modalInstance = null;
+    let picturesToDelete = [];
+    let quill;
+
+    document.addEventListener("DOMContentLoaded", () => {
+        modalInstance = new bootstrap.Modal(document.getElementById('entityModal'));
+        quill = new Quill('#editor', {
+            theme: 'snow',
+            placeholder: 'Write content here...',
+            modules: {
+                toolbar: [
+                    [{ header: [1, 2, 3, false] }],
+                    ['bold', 'italic', 'underline'],
+                    [{ list: 'ordered' }, { list: 'bullet' }],
+                    ['link'],
+                    ['clean']
+                ]
+            }
+        });
+        loadData();
+        document.getElementById('entityForm').addEventListener('submit', saveData);
+    });
+
+    function switchEntity(entity, element) {
+        document.querySelectorAll('.menu-link').forEach(l => l.classList.remove('active'));
+        element.classList.add('active');
+        currentEntity = entity;
+        currentPage = 0;
+        document.getElementById('pageTitle').innerText = entity;
+        loadData();
+    }
+
+    async function loadData() {
+        document.querySelectorAll('.course-only').forEach(el => el.style.display = (currentEntity === 'courses' ? 'block' : 'none'));
+        document.querySelectorAll('.item-only').forEach(el => el.style.display = (currentEntity === 'items' ? 'block' : 'none'));
+
+        try {
+            const response = await fetch(`/api/admin/${currentEntity}?page=${currentPage}&size=${pageSize}`);
+            const pageData = await response.json();
+            const items = pageData.content || pageData;
+            document.getElementById('pageInfo').innerText = `PAGE ${currentPage}`;
+            renderCards(items);
+        } catch (e) { console.error("Load error", e); }
+    }
+
+    function renderCards(items) {
+        const container = document.getElementById('cardContainer');
+        container.innerHTML = '';
+        items.forEach(item => {
+            const imgId = `img-ctx-${item.id}`;
+            const isLive = item.published;
+            const price = item.price ? `<div class="price-tag">$${item.price}</div>` : '';
+
+            // Format category for display: "ELECTRONICS" → "Electronics"
+            const categoryLabel = item.category
+                ? item.category.charAt(0) + item.category.slice(1).toLowerCase()
+                : null;
+
+            const div = document.createElement('div');
+            div.innerHTML = `
+                <div class="card-item">
+                    <div class="card-img-placeholder" id="${imgId}">
+                        <span class="status-badge ${isLive ? 'bg-success' : 'bg-secondary'} text-white shadow-sm">${isLive ? 'Live' : 'Draft'}</span>
+                        ${price}
+                        <div class="d-flex align-items-center justify-content-center h-100 bg-light">
+                            <div class="spinner-border spinner-border-sm text-muted" style="opacity: 0.3"></div>
+                        </div>
+                    </div>
+                    <h6 class="fw-bold text-truncate m-0 mb-2" style="font-size: 1.05rem; color: #0f172a">${item.name || item.title || 'Untitled'}</h6>
+                    <div class="mb-3 d-flex gap-1 flex-wrap">
+                        ${item.level ? `<span class="badge text-dark border small" style="background: #f1f5f9; font-weight: 500">${item.level}</span>` : ''}
+                        ${item.amount !== undefined ? `<span class="badge ${item.amount > 0 ? 'bg-info-subtle text-info' : 'bg-danger-subtle text-danger'} small border">Stock: ${item.amount}</span>` : ''}
+                        ${categoryLabel ? `<span class="badge text-dark border small" style="background: #eff6ff; color: #3b82f6 !important; font-weight: 500">${categoryLabel}</span>` : ''}
+                    </div>
+                    <p class="text-muted small text-truncate mb-4 flex-grow-1" style="line-height: 1.5">${item.description || 'No description provided.'}</p>
+                    <div class="d-flex gap-2 mt-auto">
+                        <button class="btn btn-light btn-sm flex-grow-1 fw-600 border" style="border-radius: 8px" onclick='editItem(${JSON.stringify(item).replace(/'/g, "&apos;")})'>Edit</button>
+                        <button class="btn btn-outline-danger btn-sm px-3" style="border-radius: 8px" onclick="deleteItem(${item.id})">🗑</button>
+                    </div>
+                </div>
+            `;
+            container.appendChild(div);
+            fetchPreview(item.id, imgId);
+        });
+    }
+
+    async function fetchPreview(entityId, containerId) {
+        try {
+            const type = currentEntity.toUpperCase().replace(/S$/, '');
+            const res = await fetch(`/api/pictures/entity/${entityId}?type=${type}`);
+            const pics = await res.json();
+            const container = document.getElementById(containerId);
+            if (pics && pics.length > 0) {
+                const badges = container.querySelectorAll('.status-badge, .price-tag');
+                container.innerHTML = '';
+                badges.forEach(b => container.appendChild(b));
+                const img = document.createElement('img');
+                img.src = pics[0].url;
+                img.className = 'card-img-top';
+                container.appendChild(img);
+            }
+        } catch (e) {}
+    }
+
+    function openModal() {
+        document.getElementById('entityForm').reset();
+        document.getElementById('entityId').value = '';
+        document.getElementById('existingPictures').innerHTML = '';
+        picturesToDelete = [];
+        quill.root.innerHTML = '';
+        document.getElementById('modalTitle').innerText = `Create ${currentEntity.slice(0, -1)}`;
+        modalInstance.show();
+    }
+
+    function editItem(item) {
+        openModal();
+        document.getElementById('entityId').value = item.id;
+        document.getElementById('entityTitle').value = item.name || item.title || '';
+        document.getElementById('entityDescription').value = item.description || '';
+        quill.root.innerHTML = item.text || '';
+        document.getElementById('entityPublished').checked = item.published || false;
+        document.getElementById('entitySlug').value = item.slug || '';
+
+        if (currentEntity === 'courses') {
+            document.getElementById('coursePrice').value = item.price || '';
+            document.getElementById('courseDuration').value = item.duration || '';
+            document.getElementById('courseLevel').value = item.level || 'Beginner';
+            document.getElementById('courseFormat').value = item.format || 'ONLINE';
+            document.getElementById('courseType').value = item.type || 'INDIVIDUAL';
+            document.getElementById('courseLanguage').value = item.language || '';
+        } else if (currentEntity === 'items') {
+            document.getElementById('itemPrice').value = item.price || '';
+            document.getElementById('itemAmount').value = item.amount || 0;
+            document.getElementById('itemAvailable').value = String(item.available !== false);
+            // Set category — falls back to empty string if null/undefined
+            document.getElementById('itemCategory').value = item.category || '';
+        }
+        loadExistingPictures(item.id);
+    }
+
+    async function loadExistingPictures(id) {
+        const picContainer = document.getElementById('existingPictures');
+        const type = currentEntity.toUpperCase().replace(/S$/, '');
+        const res = await fetch(`/api/pictures/entity/${id}?type=${type}`);
+        const pics = await res.json();
+        pics.forEach(pic => {
+            const wrap = document.createElement('div');
+            wrap.className = 'preview-container';
+            wrap.id = `pic-wrap-${pic.id}`;
+            wrap.innerHTML = `
+                <img src="${pic.url}" class="rounded border" style="width: 70px; height: 70px; object-fit: cover;">
+                <div class="delete-badge" onclick="toggleDeletion(${pic.id})">&times;</div>
+            `;
+            picContainer.appendChild(wrap);
+        });
+    }
+
+    function toggleDeletion(id) {
+        const wrap = document.getElementById(`pic-wrap-${id}`);
+        picturesToDelete.includes(id) ?
+            picturesToDelete = picturesToDelete.filter(i => i !== id) :
+            picturesToDelete.push(id);
+        wrap.classList.toggle('marked-for-delete');
+    }
+
+    async function saveData(e) {
+        e.preventDefault();
+        const formData = new FormData(e.target);
+        formData.set('text', quill.root.innerHTML);
+        picturesToDelete.forEach(id => formData.append('picturesToDelete', id));
+
+        if (currentEntity === 'courses' || currentEntity === 'items') {
+            formData.set('name', document.getElementById('entityTitle').value);
+        }
+        if (currentEntity === 'courses') {
+            formData.set('price', document.getElementById('coursePrice').value);
+            formData.set('level', document.getElementById('courseLevel').value);
+            formData.set('format', document.getElementById('courseFormat').value);
+            formData.set('type', document.getElementById('courseType').value);
+            formData.set('duration', document.getElementById('courseDuration').value);
+            formData.set('language', document.getElementById('courseLanguage').value);
+            formData.set('published', String(document.getElementById('entityPublished').checked));
+        } else if (currentEntity === 'items') {
+            formData.set('price', document.getElementById('itemPrice').value);
+            formData.set('amount', document.getElementById('itemAmount').value);
+            formData.set('available', String(document.getElementById('itemAvailable').value === 'true'));
+            formData.set('published', String(document.getElementById('entityPublished').checked));
+            // Send category — backend expects the enum name (e.g. "ELECTRONICS")
+            const categoryVal = document.getElementById('itemCategory').value;
+            if (categoryVal) {
+                formData.set('category', categoryVal);
+            } else {
+                formData.delete('category'); // don't send empty string
+            }
+        }
+
+        const id = document.getElementById('entityId').value;
+        const url = `/api/admin/${currentEntity}${id ? '/' + id : ''}`;
+
+        try {
+            const res = await fetch(url, { method: id ? 'PUT' : 'POST', body: formData });
+            if (res.ok) { modalInstance.hide(); loadData(); }
+        } catch (e) { console.error(e); }
+    }
+
+    async function deleteItem(id) {
+        if (confirm('Delete this entry permanently?')) {
+            await fetch(`/api/admin/${currentEntity}/${id}`, { method: 'DELETE' });
+            loadData();
+        }
+    }
+
+    function changePage(delta) {
+        if (currentPage + delta >= 0) { currentPage += delta; loadData(); }
+    }
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

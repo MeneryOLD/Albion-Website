@@ -1,111 +1,331 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Albion Mobile Friendly</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <style>
-        body { overflow-x: hidden; }
-
-        .nav-link-custom {
-            border: 1px solid #000;
-            border-radius: 25px;
-            margin: 5px;
-            padding: 8px 20px !important;
-            color: #000 !important;
-            text-align: center;
-            display: inline-block;
-            white-space: nowrap;
-        }
-
-        .pictures-placeholder {
-            background: #f8f9fa;
-            border: 1px solid #ddd;
-            margin: 20px 0;
-            min-height: 150px;
-            display: flex;
-            align-items: center;
-        }
-
-        .border-mobile { border-bottom: 1px solid #ddd; padding: 15px 0; }
-        @media (min-width: 768px) {
-            .border-mobile { border-bottom: none; border-right: 1px solid #ddd; }
-        }
-
-        footer {
-            background: #fff;
-            border-top: 3px solid #000;
-            padding: 30px 10px;
-            margin-top: 40px;
-        }
-
-        button, a { -webkit-tap-highlight-color: transparent; }
+        :root{ --primary-gray:#a9a9a9; --accent-yellow:#ffff33; --soft-bg:#f5f5f5; --dark-text:#1f1f1f; --white:#fff; --gray-text:#5f5f5f; --glass-bg:rgba(255,255,255,.75); --shadow-soft:0 10px 30px rgba(0,0,0,.08); --shadow-hover:0 20px 45px rgba(0,0,0,.12); --transition:all .45s cubic-bezier(.2,1,.3,1); } * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Roboto, sans-serif; } body{ background: radial-gradient(circle at top left,rgba(255,255,51,.08),transparent 30%), radial-gradient(circle at bottom right,rgba(169,169,169,.12),transparent 35%), #fff; color:var(--dark-text); line-height:1.6; overflow-x:hidden; } #about, #courses, .reviews-section, .premium-footer{ background:lightgray; } /* GLOBAL */ section{ width:100%; padding:80px 40px; } h1,h2{ text-align:center; font-weight:800; } h1{ font-size:3.5rem; margin-bottom:20px; } h2{ font-size:2.8rem; margin-bottom:50px; }
+        .reveal{ opacity:0; transform:translateY(30px); transition:var(--transition); } .reveal.active{ opacity:1; transform:translateY(0); } /* HEADER */ header{ background:rgba(180,180,180,.35); backdrop-filter:blur(16px); border-bottom:1px solid rgba(255,255,51,.25); position:sticky; top:0; z-index:1000; padding:15px 0; } .header-container{ width:100%; display:flex; justify-content:space-between; align-items:center; padding:0 40px; }
+        .logo-group{ display:flex; align-items:center; gap:12px; text-decoration:none; color:var(--dark-text); font-weight:800; font-size:1.4rem; } .logo-circle{ width:55px; height:55px; background:url('/img/logo.webp') center/cover no-repeat; border-radius:12px; transition:transform .3s ease; }
+        .logo-circle:hover{ transform:rotate(360deg); } .nav-links a{ text-decoration:none; color:var(--dark-text); padding:8px 20px; font-weight:600; transition:.3s; } .nav-links a:hover{ color:#d4d400; } /* HERO */ .hero{ background: linear-gradient(rgba(215,215,215,.72),rgba(235,235,235,.78)), url('/img/main-background.webp') center/cover no-repeat; text-align:center; padding:190px 40px; display:flex; flex-direction:column; align-items:center; }
+        .btn-group{ display:flex; gap:20px; margin-top:40px; flex-wrap:wrap; justify-content:center; } .btn{ padding:16px 38px; border-radius:60px; text-decoration:none; font-weight:700; letter-spacing:.5px; transition:var(--transition); } .btn-primary{ background:linear-gradient(135deg,#f7e7b0,#d4af37,#f3e2a0); color:#2a2a2a; font-weight:800; border:2px solid rgba(212,175,55,.5); box-shadow: 0 12px 25px rgba(212,175,55,.25), inset 0 1px 0 rgba(255,255,255,.6); }
+        .btn-primary:hover{ transform:translateY(-4px) scale(1.04); background:linear-gradient(135deg,#fff1c2,#e0c35a,#fff0b3); box-shadow: 0 18px 35px rgba(212,175,55,.35), 0 0 20px rgba(212,175,55,.25); } .btn-outline{ border:2px solid #a9a9a9; color:#333; background:rgba(255,255,255,.6); } .btn-outline:hover{ background:#a9a9a9; color:#fff; transform:translateY(-4px); }
+        /* FEATURES */ .features-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:25px; } .card-item{ background:linear-gradient(145deg,rgba(255,248,220,.95),rgba(245,235,200,.85)); border-radius:28px; padding:50px 30px; text-align:center; display:flex; flex-direction:column; align-items:center; position:relative; overflow:hidden; transition:var(--transition); border:1px solid rgba(212,175,55,.35); box-shadow: 0 12px 30px rgba(0,0,0,.1), inset 0 1px 0 rgba(255,255,255,.6); }
+        .card-item::before{ content:""; position:absolute; top:-80px; left:-80px; width:160px; height:160px; background:radial-gradient(circle,rgba(255,215,120,.25),transparent 70%); filter:blur(10px); transition:var(--transition); } .card-item:hover{ transform:translateY(-12px) scale(1.02); border-color:rgba(212,175,55,.6); box-shadow: 0 20px 45px rgba(0,0,0,.15), 0 0 25px rgba(212,175,55,.25); } .card-item:hover::before{ transform:scale(1.4); }
+        .card-item.highlight{ background:linear-gradient(145deg,rgba(255,250,235,.98),rgba(250,240,210,.9)); border:2px solid rgba(212,175,55,.55); } .card-icon-wrapper{ background:linear-gradient(145deg,#fffaf0,#f3e7c3); width:85px; height:85px; border-radius:24px; display:flex; align-items:center; justify-content:center; margin-bottom:30px; border:1px solid rgba(212,175,55,.25); box-shadow:0 10px 20px rgba(0,0,0,.08); }
+        .card-icon{ width:38px; height:38px; color:#7a7a7a; } .card-title{ font-size:1.4rem; font-weight:800; margin-bottom:15px; line-height:1.2; } .card-desc{ font-size:1rem; color:var(--gray-text); line-height:1.6; } /* COURSES */ .courses-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:34px; } .courses-slider-wrapper{ position:relative; width:100%; display:flex; flex-direction:column; align-items:center; }
+        .courses-slider{ display:flex; gap:34px; overflow-x:auto; scroll-behavior:smooth; scrollbar-width:none; width:100%; padding:10px; }
+        .courses-slider::-webkit-scrollbar{ display:none; } .premium-course-top-row{ position:absolute; top:18px; left:18px; right:18px; display:flex; justify-content:space-between; align-items:center; z-index:5; } .premium-course-card{ min-width:calc(33.333% - 23px); max-width:calc(33.333% - 23px); flex-shrink:0; display:flex; flex-direction:column; text-decoration:none; border-radius:30px; overflow:hidden; position:relative; background:linear-gradient(145deg,rgba(255,250,235,.98),rgba(250,240,210,.9)); border:1px solid rgba(212,175,55,.22); box-shadow:0 10px 30px rgba(0,0,0,.07); backdrop-filter:blur(10px); transition:var(--transition); }
+        .premium-course-card:hover{ transform:translateY(-10px); border-color:rgba(212,175,55,.45); box-shadow: 0 20px 45px rgba(0,0,0,.12), 0 0 28px rgba(212,175,55,.12); } .premium-course-image-wrapper{ position:relative; height:230px; overflow:hidden; } .premium-course-image{ width:100%; height:100%; object-fit:cover; transition:.7s ease; } .premium-course-card:hover .premium-course-image{ transform:scale(1.05); } .premium-course-overlay{ position:absolute; inset:0; background:linear-gradient(to top,rgba(20,20,20,.58),rgba(20,20,20,.08)); } .premium-course-price{ padding:10px 18px; border-radius:14px; background:linear-gradient(135deg,rgba(247,231,176,.95),rgba(212,175,55,.92)); color:#222; font-size:.92rem; font-weight:800; backdrop-filter:blur(10px); box-shadow:0 10px 25px rgba(212,175,55,.22); } .premium-course-content{ padding:28px; }
+        .premium-course-title{ font-size:1.45rem; font-weight:800; color:#222; line-height:1.3; margin-bottom:16px; } .premium-course-level, .premium-meta-pill{ border-radius:999px; backdrop-filter:blur(10px); } .premium-course-level{ padding:8px 15px; background:rgba(255,255,255,.18); border:1px solid rgba(255,255,255,.22); color:#fff; font-size:.82rem; font-weight:700; box-shadow:0 4px 18px rgba(0,0,0,.12); } .premium-course-meta{ display:flex; flex-wrap:wrap; gap:10px; margin-bottom:20px; } .premium-meta-pill{ padding:7px 12px; background:rgba(255,255,255,.42); border:1px solid rgba(212,175,55,.18); color:#555; font-size:.78rem; font-weight:600; } .premium-course-description{ width:70%; color:#4f4f4f; line-height:1.9; font-size:1.25rem; margin-bottom:24px; word-break:break-word; }
+        .premium-course-btn{ margin-top:30px; align-self:center; display:flex; align-items:center; justify-content:center; padding:15px 30px; border-radius:18px; background:linear-gradient(135deg,#f7e7b0,#d4af37,#f3e2a0); color:#222; font-size:.95rem; font-weight:800; letter-spacing:.4px; box-shadow:0 12px 28px rgba(212,175,55,.2); transition:.35s ease; position:relative; overflow:hidden; } .premium-course-btn::before{ content:""; position:absolute; top:0; left:-120%; width:100%; height:100%; background:linear-gradient(120deg,transparent,rgba(255,255,255,.45),transparent); transition:.7s; } .premium-course-card:hover .premium-course-btn::before{ left:120%; } .premium-course-card:hover .premium-course-btn{ transform:translateY(-4px) scale(1.03); box-shadow:0 20px 40px rgba(212,175,55,.28); }
+        /* REVIEWS */ .reviews-section{ position:relative; overflow:hidden; } .slider-container{ position:relative; width:100%; } .reviews-slider{ display:flex; gap:30px; overflow-x:auto; scroll-snap-type:x mandatory; padding:20px 0 40px; scrollbar-width:none; scroll-behavior:smooth; } .reviews-slider::-webkit-scrollbar{ display:none; } .review-card{ min-width:calc(33.333% - 20px); padding:40px; border-radius:28px; backdrop-filter:blur(12px); transition:var(--transition); background:linear-gradient(145deg,rgba(255,250,235,.98),rgba(250,240,210,.9)); border:2px solid rgba(212,175,55,.55); box-shadow:var(--shadow-soft); } .review-card:hover{ transform:translateY(-8px); box-shadow:var(--shadow-hover); } .slider-nav{ width:100%; display:flex; justify-content:center; gap:20px; margin-top:30px; } .nav-btn{ width:50px; height:50px; border-radius:50%; border:2px solid #d4af37; background:transparent; color:#d4af37; cursor:pointer; font-size:1.2rem; display:flex; align-items:center; justify-content:center; transition:.3s; }
+        .nav-btn:hover{ background:#d4af37; color:#fff; } /* FOOTER */ .premium-footer{ width:100%; position:relative; overflow:hidden; } .footer-container{ width:100%; display:grid; grid-template-columns:1.2fr .8fr; gap:80px; padding:70px; align-items:start; } .footer-left, .footer-right{ display:flex; flex-direction:column; } .footer-left{ gap:28px; } .footer-right{ gap:15px; padding-top:10px; } .footer-inline-row, .footer-contact-row, .footer-links, .footer-socials{ display:flex; flex-wrap:wrap; } .footer-inline-row{ align-items:center; gap:26px; margin-bottom:18px; } .footer-map{ width:88%; height:340px; border-radius:24px; overflow:hidden; border:1px solid rgba(212,175,55,.15); box-shadow:0 20px 50px rgba(0,0,0,.18); }
+        .footer-map iframe{ width:100%; height:100%; border:none; filter:grayscale(1) contrast(1.05) brightness(.9); } .footer-socials{ gap:14px; } .footer-social-circle{ width:54px; height:54px; border-radius:50%; display:flex; align-items:center; justify-content:center; text-decoration:none; color:#3a3a3a; background:rgba(255,255,255,.65); border:1px solid rgba(0,0,0,.08); transition:.35s; } .footer-social-circle:hover{ transform:translateY(-4px); background:linear-gradient(135deg,#f7e7b0,#d4af37); box-shadow:0 10px 25px rgba(212,175,55,.22); } .footer-social-circle svg{ width:22px; height:22px; } .footer-contact-row{ align-items:center; gap:16px; } .footer-contact-pill{ padding:15px 24px; border-radius:18px; text-decoration:none; color:#222; font-weight:600; background:rgba(255,255,255,.72); border:1px solid rgba(212,175,55,.18); transition:.35s; } .footer-contact-pill:hover{ transform:translateY(-4px); background:rgba(212,175,55,.14); border-color:rgba(212,175,55,.4); box-shadow:0 10px 25px rgba(212,175,55,.15); } .footer-links{ gap:24px; }
+        .footer-links a{ text-decoration:none; color:#2b2b2b; font-weight:500; transition:.3s; } .footer-links a:hover{ color:#b8922e; } .footer-newsletter h3{ font-size:1.95rem; font-weight:800; color:rgba(212,175,55,.55); } .footer-newsletter p{ color:#2b2b2b; line-height:1.8; font-size:1.05rem; max-width:480px; } .footer-form, .footer-checkboxes{ display:flex; flex-direction:column; } .footer-form{ gap:24px; } .footer-checkboxes{ gap:16px; } .footer-input{ width:100%; padding:20px 28px; border-radius:999px; border:1px solid rgba(212,175,55,.18); background:rgba(255,255,255,.75); color:#222; font-size:1rem; outline:none; transition:.3s; } .footer-input:focus{ border-color:rgba(212,175,55,.5); box-shadow:0 0 25px rgba(212,175,55,.15); }
+        .footer-input::placeholder{ color:rgba(0,0,0,.45); } .footer-checkbox{ display:flex; align-items:flex-start; gap:12px; cursor:pointer; color:#2b2b2b; line-height:1.6; font-size:.95rem; } .footer-checkbox input{ display:none; } .checkmark{ min-width:20px; height:20px; border-radius:6px; margin-top:3px; border:1px solid rgba(212,175,55,.4); background:rgba(255,255,255,.5); position:relative; transition:.3s; } .footer-checkbox input:checked + .checkmark{ background:linear-gradient(135deg,#f7e7b0,#d4af37); border-color:transparent; }
+        .footer-checkbox input:checked + .checkmark::after{ content:"✓"; position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); color:#222; font-size:.8rem; font-weight:800; } .footer-btn, .cta-btn{border: 2px solid rgba(212, 175, 55, .5); background: linear-gradient(135deg, #f7e7b0, #d4af37, #f3e2a0); cursor:pointer; font-weight:800; transition:.35s; text-decoration: none; }
+        .footer-btn{border: 2px solid rgba(212, 175, 55, .5); background: linear-gradient(135deg, #f7e7b0, #d4af37, #f3e2a0); width:fit-content; padding:18px 42px; border-radius:18px; font-size:1rem; color:#222;  } .footer-btn:hover{ transform:translateY(-4px); box-shadow:0 18px 40px rgba(212,175,55,.32); } /* ROADMAP */ .roadmap-section{ width:100%; padding:clamp(40px,5vw,90px) clamp(16px,3vw,40px); background:lightgray; overflow-x:auto; position:relative; } .board-header{ text-align:center; color:#1f1f1f; font-size:2.4rem; font-weight:500; letter-spacing:4px; text-transform:uppercase; margin-bottom:60px; }
+        .flowchart{ display:flex; align-items:center; justify-content:center; width:100%; gap:clamp(8px,1vw,18px); margin-bottom:45px; flex-wrap:nowrap; } .node-wrapper{ width:clamp(90px,10vw,170px); display:flex; flex-direction:column; align-items:center; flex-shrink:1; } .node{ width:clamp(42px,4vw,64px); height:clamp(42px,4vw,64px); font-size:clamp(.9rem,1vw,1.2rem); border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:800; color:#111; position:relative; z-index:2; background:linear-gradient(135deg,#ffe58f,#d6aa35,#9d720d); box-shadow:0 8px 22px rgba(190,145,28,.25); } .node-goal{ background:linear-gradient(135deg,#8de28f,#47bf4c,#2d8d31); color:#fff; }
+        .node-label{ margin-top:14px; text-align:center; } .node-label h4{ font-size:clamp(.75rem,1vw,1rem); font-weight:700; color:#1f1f1f; margin-bottom:6px; } .node-label p{ font-size:clamp(.62rem,.8vw,.82rem); line-height:1.45; color:#555; } .line{ width:clamp(16px,2vw,42px); height:2px; flex-shrink:1; background:linear-gradient(to right,rgba(214,170,53,.15),rgba(214,170,53,1),rgba(214,170,53,.15)); }
+        .cards-column{ display:flex; flex-direction:column; gap:18px; padding:0 10px; min-width:0; } .lang-card{ width:clamp(320px,42vw,620px); min-height:120px; padding:clamp(16px,2vw,30px); gap:clamp(12px,2vw,28px); flex-shrink:1; border-radius:24px; background:linear-gradient(145deg,rgba(255,250,235,.98),rgba(250,240,210,.9)); border:2px solid rgba(212,175,55,.55); display:flex; align-items:center; box-shadow:0 10px 28px rgba(180,130,10,.1); transition:.35s; } .lang-card:hover{ transform:translateY(-4px); box-shadow:0 18px 36px rgba(180,130,10,.18); } .card-header-block{ width:clamp(100px,14vw,180px); padding-right:16px; border-right:1px solid rgba(212,175,55,.35); flex-shrink:0; } .card-header-block h4{ font-size:clamp(1rem,1.4vw,1.35rem); font-weight:800; color:#1f1f1f; line-height:1.3; }
+        .subtitle{ margin-top:8px; font-size:.65rem; text-transform:uppercase; letter-spacing:1px; color:#9b7200; font-weight:800; }
+        .card-body-block{ flex-grow:1; } .card-body-block ul{ font-size:clamp(.72rem,.95vw,.92rem); line-height:1.6; padding-left:20px; color:#3d3d3d; } .card-body-block li{ margin-bottom:6px; } .card-body-block li::marker{ color:#c89d2a; } .button-wrap{ width:100%; display:flex; justify-content:center; margin-top:35px; } .cta-btn{ padding:18px 52px; border-radius:16px; background:linear-gradient(135deg,#ffe38c,#d5a42f,#9c710e); color:#111; font-size:.95rem; letter-spacing:1px; box-shadow:0 10px 25px rgba(180,130,10,.22); } .cta-btn:hover{ transform:translateY(-3px); box-shadow:0 16px 35px rgba(180,130,10,.32); }
+        /* RESPONSIVE */ @media(max-width:1200px){ .features-grid{ grid-template-columns:repeat(2,1fr); } .flowchart{ transform:scale(.92); transform-origin:top center; } } @media(max-width:1100px){ .courses-grid{ grid-template-columns:repeat(2,1fr); } .premium-course-card{ min-width:calc(50% - 17px); max-width:calc(50% - 17px); } .review-card{ min-width:calc(50% - 15px); } } @media(max-width:1000px){ .flowchart{ transform:scale(.82); } .footer-container{ grid-template-columns:1fr; gap:60px; padding:50px 24px; } .footer-inline-row{ flex-direction:column; align-items:flex-start; }
+        .footer-map{ width:100%; height:280px; } .footer-btn{ width:100%; } } @media(max-width:480px){ h1{ font-size:2rem; } h2{ font-size:1.7rem; } .card-item, .review-card, .premium-course-content{ padding:24px; } .footer-container{ padding:40px 16px; } .footer-contact-pill, .footer-btn, .cta-btn{ width:100%; text-align:center; } .nav-links{ display:flex; flex-wrap:wrap; justify-content:center; } } .menu-toggle{ display:none; background:none; border:none; font-size:2rem; cursor:pointer; color:var(--dark-text); } @media(max-width:768px){ section{ padding:60px 20px; } h1{ font-size:2.5rem; } h2{ font-size:2rem; } .header-container{ position:relative; padding:0 20px; flex-wrap:wrap; gap:15px; } .menu-toggle{ display:block; z-index:1001; } .nav-links{ position:absolute; top:130%; left:0; width:100%; background:rgba(255,255,255,.96); backdrop-filter:blur(14px); display:flex; flex-direction:column; align-items:center; gap:10px; padding:20px 0; border-radius:0 0 20px 20px; opacity:0; visibility:hidden; transform:translateY(-10px); transition:.35s ease; }
+        .nav-links.active{ opacity:1; visibility:visible; transform:translateY(0); } .nav-links a{ width:90%; text-align:center; padding:14px; border-radius:14px; } .nav-links a:hover{ background:rgba(212,175,55,.12); } .hero{ padding:140px 20px; } .btn-group{ flex-direction:column; width:100%; } .btn{ width:100%; text-align:center; } .features-grid, .courses-grid{ grid-template-columns:1fr; } .premium-course-card, .review-card{ min-width:100%; max-width:100%; } .premium-course-image-wrapper{ height:240px; } .premium-course-description{ width:100%; font-size:1rem; } .footer-newsletter h3{ font-size:2rem; }
+        /* ROADMAP MOBILE */ .roadmap-section{ overflow:hidden; padding:50px 16px; } .board-header{ font-size:1.6rem; letter-spacing:2px; margin-bottom:40px; } .flowchart{ min-width:100%; flex-direction:column; align-items:stretch; gap:20px; transform:none; } .line, .fork-in, .fork-out{ display:none; } .node-wrapper{ width:100%; } .node{ width:52px; height:52px; font-size:1rem; } .node-label{ margin-top:10px; } .cards-column{ width:100%; padding:0; } .lang-card{ width:100%; min-height:auto; flex-direction:column; align-items:flex-start; gap:18px; padding:22px; border-radius:22px; } .card-header-block{ width:100%; border-right:none; border-bottom:1px solid rgba(212,175,55,.3); padding-right:0; padding-bottom:14px; } .card-header-block h4{ font-size:1.1rem; } .subtitle{ font-size:.7rem; } .card-body-block{ width:100%; } .card-body-block ul{ padding-left:18px; font-size:.9rem; line-height:1.6; } .button-wrap{ margin-top:28px; } .cta-btn{ width:100%; padding:16px 20px; font-size:.9rem; } }
     </style>
-</head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Albion EDU | Excellence in Education</title></head>
 <body>
-
-<nav class="navbar navbar-light bg-white border-bottom pt-3 pb-3">
-    <div class="container d-flex justify-content-between align-items-center flex-nowrap">
-
-        <a class="navbar-brand d-flex align-items-center m-0" href="#">
-            <div class="rounded-circle border border-dark me-2" style="width: 25px; height: 25px; border-width: 2px !important;"></div>
-            <span style="font-size: 1.1rem; letter-spacing: 1px;">name</span>
-        </a>
-
-        <div class="d-flex align-items-center small">
-            <span>Eng.</span>
-            <div class="form-check form-switch ms-2 mt-1">
-                <input class="form-check-input" type="checkbox" role="switch" id="langSwitch">
+<header>
+    <div class="header-container">
+        <a th:href="@{/}" class="logo-group">
+            <div class="logo-circle"></div>
+            <span>Albion</span> </a>
+        <button class="menu-toggle" id="menuToggle"> ☰</button>
+        <nav class="nav-links" id="navMenu"><a th:href="@{/language-courses}">Courses</a> <a
+                th:href="@{/blog}">Blog</a> <a th:href="@{/store}">Store</a> <a th:href="@{/about-us}">About us</a>
+        </nav>
+    </div>
+</header>
+<main>
+    <section class="hero reveal"><h2>Learn a language that will change your life</h2>
+        <p style="font-size: 1.3rem; max-width: 730px;">Speak a foreign language fluently. Without barriers, stress, and
+            outdated rules.</p>
+        <div class="btn-group">
+            <a th:href="@{/language-courses}" class="btn btn-primary">Start Learning</a>
+            <a th:href="@{https://docs.google.com/forms/d/e/1FAIpQLSc5Ak4RftEAp0HsHsqh--xAgxzeBS6rvV1zhbORnANwutYo2g/viewform}" class="btn btn-outline">Take a test</a></div>
+    </section>
+    <section id="about"><h2 class="reveal">Why Students Love Us</h2>
+        <div class="features-grid">
+            <div class="card-item highlight reveal">
+                <div class="card-icon-wrapper">
+                    <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="9" cy="7" r="4"></circle>
+                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                    </svg>
+                </div>
+                <div class="card-title">Micro-Groups & <br>Personalized Focus</div>
+                <div class="card-desc">With a limit of 5 students per group, you enjoy a friendly atmosphere where every
+                    voice is heard and every question is answered.
+                </div>
             </div>
-            <span class="ms-1">Pl.</span>
+            <div class="card-item highlight reveal">
+                <div class="card-icon-wrapper">
+                    <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+                        <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+                    </svg>
+                </div>
+                <div class="card-title">Expert Tutors</div>
+                <div class="card-desc">Our educators bring 10+ years of pedagogical excellence and real-world experience
+                    from international corporations.
+                </div>
+            </div>
+            <div class="card-item highlight reveal">
+                <div class="card-icon-wrapper">
+                    <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                        <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                    </svg>
+                </div>
+                <div class="card-title">Precision Level<br>Assessment</div>
+                <div class="card-desc">Find your true starting point. Complete our high-accuracy online diagnostic and
+                    schedule a personal interview.
+                </div>
+            </div>
+            <div class="card-item highlight reveal">
+                <div class="card-icon-wrapper">
+                    <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                    </svg>
+                </div>
+                <div class="card-title">Free Native<br>Speaking Clubs</div>
+                <div class="card-desc">Immersion is the shortcut to progress. Complimentary access to native-led
+                    speaking clubs to shatter language barriers.
+                </div>
+            </div>
         </div>
-    </div>
-
-    <div class="container mt-3">
-        <div class="d-flex flex-wrap justify-content-center">
-            <a class="nav-link nav-link-custom" th:href="@{/language-courses/}">courses</a>
-            <a class="nav-link nav-link-custom" th:href="@{/blog/}">blog</a>
-            <a class="nav-link nav-link-custom" th:href="@{/about-us/}">About us</a>
-            <a class="nav-link nav-link-custom" th:href="@{/store/}">Store</a>
+    </section>
+    <section class="roadmap-section">
+        <div class="roadmap-board"><h2 class="board-header reveal"> How Your Learning Journey Works </h2>
+            <div class="flowchart"> <!-- STEP 1 -->
+                <div class="node-wrapper reveal">
+                    <div class="node">1</div>
+                    <div class="node-label"><h4>Placement Test</h4>
+                        <p> Take a quick test to check your current level </p></div>
+                </div>
+                <div class="line"></div> <!-- STEP 2 -->
+                <div class="node-wrapper reveal">
+                    <div class="node">2</div>
+                    <div class="node-label"><h4>Consultation</h4>
+                        <p> We select the perfect group & format for you </p></div>
+                </div>
+                <div class="line"></div> <!-- CENTER -->
+                <div class="split-container reveal">
+                    <div class="fork-in"></div>
+                    <div class="cards-column"> <!-- CARD -->
+                        <div class="lang-card">
+                            <div class="card-header-block"><h4>🇬🇧 English</h4>
+                                <div class="subtitle"> WORK • LIFE • TRAVEL</div>
+                            </div>
+                            <div class="card-body-block">
+                                <ul>
+                                    <li>Speaking practice from the very first lesson</li>
+                                    <li>For work, relocation, daily life and travel</li>
+                                    <li>IELTS, TOEFL, Language Certificate, Matura preparation</li>
+                                </ul>
+                            </div>
+                        </div> <!-- CARD -->
+                        <div class="lang-card">
+                            <div class="card-header-block"><h4>🇵🇱 Polish</h4>
+                                <div class="subtitle"> NATIVE SPEAKERS</div>
+                            </div>
+                            <div class="card-body-block">
+                                <ul>
+                                    <li>Teachers — native Polish speakers</li>
+                                    <li>Preparation for work and life in Poland</li>
+                                    <li>Understanding real everyday Polish</li>
+                                </ul>
+                            </div>
+                        </div> <!-- CARD -->
+                        <div class="lang-card">
+                            <div class="card-header-block"><h4>🇺🇦 Ukrainian</h4>
+                                <div class="subtitle"> WARSAW & ONLINE</div>
+                            </div>
+                            <div class="card-body-block">
+                                <ul>
+                                    <li>Ukrainian for foreigners</li>
+                                    <li>Simple explanations + real speaking practice</li>
+                                    <li>Real-life situations: shopping, doctor, work</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="fork-out"></div>
+                </div>
+                <div class="line"></div> <!-- STEP 3 -->
+                <div class="node-wrapper reveal">
+                    <div class="node">3</div>
+                    <div class="node-label"><h4>Immersion</h4>
+                        <p> Start speaking from your very first class </p></div>
+                </div>
+                <div class="line"></div> <!-- STEP 4 -->
+                <div class="node-wrapper reveal">
+                    <div class="node node-goal">✓</div>
+                    <div class="node-label"><h4 class="goal-title"> Fluency </h4>
+                        <p> Break language barriers and see results in 1–3 months </p></div>
+                </div>
+            </div>
+            <div class="button-wrap">
+                <a th:href="@{https://docs.google.com/forms/d/e/1FAIpQLSc5Ak4RftEAp0HsHsqh--xAgxzeBS6rvV1zhbORnANwutYo2g/viewform}" class="cta-btn"> TAKE THE PLACEMENT TEST</a>
+            </div>
         </div>
-    </div>
-</nav>
-
-<main class="container text-center mt-4">
-
-    <section class="py-4">
-        <h2 class="h4">info</h2>
-        <div class="text-muted w-75 mx-auto" style="border-top: 1px solid #ccc; height: 10px; margin-top: 10px;"></div>
     </section>
-
-    <section class="row pictures-placeholder mx-1 rounded">
-        <div class="col-12 col-md-4 border-mobile">Pictures L</div>
-        <div class="col-12 col-md-4 border-mobile"><strong>Pictures Center</strong></div>
-        <div class="col-12 col-md-4">Pictures R</div>
+    <section id="courses"><h2 class="reveal">Popular Courses</h2>
+        <div class="courses-slider-wrapper"> <!-- SLIDER -->
+            <div class="courses-slider" id="coursesSlider"><a th:each="course : ${courses}"
+                                                              th:href="@{'/language-courses'}"
+                                                              th:attr="data-name=${course.name},
+                                                                       data-description=${course.description},
+                                                                       data-price=${course.price},
+                                                                       data-level=${course.level},
+                                                                       data-language=${course.language},
+                                                                       data-format=${course.format},
+                                                                       data-type=${course.type},
+                                                                       data-image=${#lists.isEmpty(course.pictures) ? '/img/course-placeholder.webp' : course.pictures[0].url},
+                                                                       data-href=@{'/language-courses'}"
+                                                              onclick="return openCourseModal(event, this)"
+                                                              class="premium-course-card reveal"> <!-- IMAGE -->
+                <div class="premium-course-image-wrapper"> <img class="premium-course-image"
+                                                                th:src="${#lists.isEmpty(course.pictures)
+                                                                ? '/img/course-placeholder.webp'
+                                                                : course.pictures[0].url}">
+                    th:alt="${course.name}"> <!-- DARK OVERLAY -->
+                    <div class="premium-course-overlay"></div>
+                    <div class="premium-course-top-row">
+                        <div class="premium-course-price" th:text="${course.price + ' $'}"></div>
+                        <div class="premium-course-level" th:text="${course.level}"></div>
+                    </div>
+                </div> <!-- CONTENT -->
+                <div class="premium-course-content"> <!-- TITLE --> <h3 class="premium-course-title"
+                                                                        th:text="${course.name}"></h3>
+                    <!-- DESCRIPTION --> <p class="premium-course-description" th:text="${course.description}"></p>
+                    <!-- META -->
+                    <div class="premium-course-meta"><span class="premium-meta-pill"
+                                                           th:text="${course.language}"> </span> <span
+                            class="premium-meta-pill" th:text="${course.type}"> </span> <span class="premium-meta-pill"
+                                                                                              th:text="${course.format}"> </span>
+                    </div> <!-- BUTTON -->
+                    <div class="premium-course-btn"> Learn More</div>
+                </div>
+            </a></div>
+            <div class="slider-nav">
+                <button class="nav-btn" onclick="slideCourses('left')">←</button>
+                <button class="nav-btn" onclick="slideCourses('right')">→</button>
+            </div>
+        </div>
     </section>
-
-    <section class="py-5">
-        <div class="text-muted w-100 mb-3">〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰</div>
-        <h3 class="h4">information</h3>
-        <div class="text-muted w-100 mt-3">〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰</div>
+    <section id="reviews" class="reviews-section"><h2 class="reveal">Student Success Stories</h2>
+        <div class="slider-container reveal">
+            <div class="reviews-slider" id="slider">
+                <div class="review-card"><p style="color: #D4AF37; margin-bottom: 15px; font-size: 1.2rem;">★★★★★</p>
+                    <p class="card-desc">"I've tried 4 different schools, but this is the first one where I actually
+                        started speaking. The 5-person group limit is a miracle!"</p>
+                    <p style="margin-top: 25px; font-weight: 800; color: var(--dark-text);">— Alex Johnson</p></div>
+                <div class="review-card"><p style="color: #D4AF37; margin-bottom: 15px; font-size: 1.2rem;">★★★★★</p>
+                    <p class="card-desc">"Passed my IELTS with a 7.5 thanks to the intensive prep here. The instructors
+                        really know the exam's 'tricks'."</p>
+                    <p style="margin-top: 25px; font-weight: 800; color: var(--dark-text);">— Maria Garcia</p></div>
+                <div class="review-card"><p style="color: #D4AF37; margin-bottom: 15px; font-size: 1.2rem;">★★★★★</p>
+                    <p class="card-desc">"The business English course helped me land a job at a global tech company.
+                        Best investment in myself ever."</p>
+                    <p style="margin-top: 25px; font-weight: 800; color: var(--dark-text);">— Dmitry V.</p></div>
+                <div class="review-card"><p style="color: #D4AF37; margin-bottom: 15px; font-size: 1.2rem;">★★★★★</p>
+                    <p class="card-desc">"Native speaking clubs are so much fun! It's like hanging out with friends, but
+                        you're actually learning."</p>
+                    <p style="margin-top: 25px; font-weight: 800; color: var(--dark-text);">— Sophie Chen</p></div>
+            </div>
+            <div class="slider-nav">
+                <button class="nav-btn" onclick="slide('left')">←</button>
+                <button class="nav-btn" onclick="slide('right')">→</button>
+            </div>
+        </div>
     </section>
-
+    <footer class="premium-footer">
+        <div class="footer-container"> <!-- LEFT -->
+            <div class="footer-left">
+                <div class="footer-map">
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2443.9544086494325!2d21.01888171035901!3d52.22604610686692!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x690f8796d09929bb%3A0x4f9fc36d8097aa63!2sLC%20Albion%20Olena%20Kiriushkina!5e0!3m2!1sru!2sno!4v1779386940088!5m2!1sru!2sno"
+                            loading="lazy" allowfullscreen></iframe>
+                </div>
+                <div class="footer-bottom-left">
+                    <div class="footer-inline-row">
+                        <div class="footer-socials"><a href="https://www.instagram.com/albion_lc"
+                                                       class="footer-social-circle">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="2" y="2" width="20" height="20" rx="5"></rect>
+                                <circle cx="12" cy="12" r="4"></circle>
+                                <circle cx="18" cy="6" r="1"></circle>
+                            </svg>
+                        </a> <a href="https://www.facebook.com/albionhub" class="footer-social-circle">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
+                            </svg>
+                        </a></div>
+                        <div class="footer-contact-row"><a href="mailto:lc.albion@gmail.com" class="footer-contact-pill">
+                            lc.albion@gmail.com </a> <a href="tel:+48574065884" class="footer-contact-pill"> +48 574 065
+                            884 </a></div>
+                    </div>
+                    <div class="footer-links"><a href="#">Privacy Policy</a> <a href="#">Terms of Use</a> <a href="#">Refund
+                        Policy</a></div>
+                </div>
+            </div> <!-- RIGHT -->
+            <div class="footer-right">
+                <div class="footer-newsletter"><h3>Your Language Journey Starts Here ✨</h3></div>
+                <div class="footer-form">
+                    <div class="footer-newsletter-text"><p> Join our language learning community and receive practical tips,
+                        speaking hacks, useful phrases, cultural insights, and creative ways to improve your English,
+                        Polish, and Ukrainian naturally. </p>
+                        <p> No boring grammar overload — just useful content, motivation, and real language for everyday
+                            life ✨📩 </p></div>
+                    <input type="email" placeholder="Enter your email" class="footer-input">
+                    <div class="footer-checkboxes"><label class="footer-checkbox"> <input type="checkbox"> <span
+                            class="checkmark"></span> <span> I agree to receive language learning tips, updates, and special offers by email. </span>
+                    </label> <label class="footer-checkbox"> <input type="checkbox"> <span class="checkmark"></span> <span> I accept the Privacy Policy and consent to email communication. </span>
+                    </label></div>
+                    <button class="footer-btn"> JOIN THE NEWSLETTER</button>
+                </div>
+            </div>
+        </div>
+    </footer>
 </main>
-
-<footer class="text-center">
-    <div class="container">
-        <div class="mb-4">
-            <h5 class="fw-bold">Privacy policies and social media</h5>
-        </div>
-        <div class="row g-3 justify-content-center">
-            <div class="col-6 col-md-auto"><a th:href="@{/polices/contact-information/}" class="text-dark small text-decoration-none">Contact info</a></div>
-            <div class="col-6 col-md-auto"><a th:href="@{/polices/terms-of-service/}" class="text-dark small text-decoration-none">Terms of service</a></div>
-            <div class="col-6 col-md-auto"><a th:href="@{/polices/refund-policy/}" class="text-dark small text-decoration-none">Refund policy</a></div>
-            <div class="col-6 col-md-auto"><a th:href="@{/polices/privacy-policy/}" class="text-dark small text-decoration-none">Privacy policy</a></div>
-        </div>
-    </div>
-</footer>
-
+<script>
+    const observerOptions = { threshold: 0.1 };
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => { if (entry.isIntersecting) { entry.target.classList.add('active'); } });
+    }, observerOptions);
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    const slider = document.getElementById('slider');
+    function slide(direction) { const scrollAmount = slider.offsetWidth * 0.8;
+    if (direction === 'left') {
+        slider.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+    }
+    else { slider.scrollBy({ left: scrollAmount, behavior: 'smooth' }); } }
+    const coursesSlider = document.getElementById('coursesSlider');
+    function slideCourses(direction) {
+        const scrollAmount = coursesSlider.offsetWidth * 0.9;
+        if (direction === 'left') {
+            coursesSlider.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+        } else { coursesSlider.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+    }
+    }
+    const menuToggle=document.getElementById('menuToggle');
+    const navMenu=document.getElementById('navMenu');
+    menuToggle.addEventListener('click',()=>{ navMenu.classList.toggle('active'); });
+</script>
 </body>
 </html>

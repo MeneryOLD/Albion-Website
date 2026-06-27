@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Albion EDU | Blog</title>
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',Roboto,sans-serif}
+        :root{
+            --gold:#c8a95b;--gold-light:#e7d29a;--gold-dark:#9f7d2f;
+            --text:#1f1f1f;--text-soft:#5f5f5f;--border:#ddd6c5;
+            --shadow-soft:0 10px 30px rgba(0,0,0,.06);
+            --shadow-hover:0 18px 45px rgba(0,0,0,.1);
+            --transition:all .45s cubic-bezier(.2,1,.3,1);
+        }
+        body{background:lightgray}
+
+        /* HEADER */
+        header{width:100%;background:rgba(180,180,180,.35);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,255,51,.25);position:fixed;top:0;z-index:1000;padding:15px 0}
+        .header-container{padding:0 40px;flex-wrap:wrap;gap:15px;width:100%;display:flex;justify-content:space-between;align-items:center}
+        .logo-group{display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--text);font-weight:800;font-size:1.4rem}
+        .logo-circle{width:55px;height:55px;background:url('/img/logo.webp') center/cover no-repeat;border-radius:12px;transition:transform .3s ease}
+        .logo-circle:hover{transform:rotate(360deg)}
+        .nav-links{display:flex;align-items:center;gap:28px}
+        .nav-links a{text-decoration:none;color:#1f1f1f;padding:8px 20px;font-weight:600;transition:color .3s,background-color .3s;border-radius:20px}
+        .nav-links a:hover{color:#d4af37;background:rgba(212,175,55,.1)}
+        .menu-toggle{display:none;border:none;background:none;font-size:1.8rem;cursor:pointer;color:var(--text)}
+
+        /* HERO */
+        .blog-hero{
+            text-align: center;
+            padding: 150px 40px 80px;
+            position: relative;
+            min-height: 520px;
+            display: flex;
+            align-items: center;
+            background: linear-gradient(rgba(215, 215, 215, .72), rgba(235, 235, 235, .78)), url(/img/main-background.webp) center / cover no-repeat;
+            overflow: hidden;
+            flex-direction: column;
+        }
+        .hero-text-container h1{font-size:3rem;font-weight:800;letter-spacing:-1px;margin-bottom:14px;color:#1f1f1f}
+        .hero-text-container p{font-size:1.1rem;font-weight:400;max-width:680px;margin:0 auto;line-height:1.7;color:#4a4a4a}
+
+        /* BLOG LAYOUT */
+        .blog-main-layout{width:100%;padding:50px 5% 70px;display:grid;grid-template-columns:1fr 300px;gap:45px;align-items:start;background:lightgray}
+
+        /* ARTICLES */
+        .articles-column{display:flex;flex-direction:column;gap:32px}
+
+        .no-articles{text-align:center;padding:60px 40px;color:var(--text-soft);background:linear-gradient(145deg,rgba(255,250,235,.98),rgba(250,240,210,.9));border:2px solid rgba(212,175,55,.45);border-radius:22px;box-shadow:var(--shadow-soft)}
+        .no-articles p{font-size:1.1rem;font-weight:600}
+
+        .article-card{background:linear-gradient(145deg,rgba(255,250,235,.98),rgba(250,240,210,.9));border:2px solid rgba(212,175,55,.45);border-radius:22px;overflow:hidden;box-shadow:var(--shadow-soft);transition:var(--transition);display:grid;grid-template-columns:240px 1fr}
+        .article-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-hover);border-color:var(--gold-light)}
+
+        .article-picture-box{min-height:200px;background-size:cover;background-position:center;background-repeat:no-repeat;background-color:#e2d9c2;display:flex;align-items:center;justify-content:center}
+        .article-picture-box .placeholder-icon{font-size:3rem;opacity:.5}
+
+        .article-details-box{padding:28px 30px;display:flex;flex-direction:column;gap:12px;justify-content:center}
+        .article-date{font-size:.8rem;font-weight:700;color:var(--gold-dark);text-transform:uppercase;letter-spacing:.4px}
+        .article-headline{font-size:1.25rem;font-weight:700;color:var(--text);line-height:1.35;text-decoration:none;transition:color .3s}
+        .article-headline:hover{color:var(--gold-dark)}
+        .article-description{font-size:.92rem;color:var(--text-soft);line-height:1.65}
+        .article-footer-row{display:flex;align-items:center;justify-content:flex-end;margin-top:6px}
+        .read-link{font-size:.82rem;font-weight:700;color:var(--gold-dark);text-decoration:none;display:inline-flex;align-items:center;gap:4px;transition:gap .25s}
+        .read-link:hover{gap:8px}
+
+        /* SIDEBAR */
+        .sidebar-column{display:flex;flex-direction:column;gap:28px;position:sticky;top:100px}
+        .sidebar-block{background:linear-gradient(145deg,rgba(255,250,235,.98),rgba(250,240,210,.9));border:2px solid rgba(212,175,55,.45);border-radius:22px;padding:26px;box-shadow:var(--shadow-soft)}
+        .sidebar-block h3{font-size:1.1rem;font-weight:800;color:var(--text);margin-bottom:18px;padding-bottom:12px;border-bottom:1px solid rgba(200,169,91,.25);display:flex;align-items:center;gap:8px}
+        .sidebar-block h3::before{content:'';display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--gold);flex-shrink:0}
+
+        .popular-items-stack{display:flex;flex-direction:column;gap:16px}
+        .popular-item-row{display:flex;align-items:center;gap:12px;text-decoration:none}
+        .pop-num{width:24px;height:24px;border-radius:7px;background:rgba(200,169,91,.15);color:var(--gold-dark);font-size:.75rem;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+        .popular-mini-thumb{width:62px;height:62px;border-radius:11px;background-size:cover;background-position:center;flex-shrink:0;border:1px solid var(--border);background-color:#e2d9c2;display:flex;align-items:center;justify-content:center;font-size:1.3rem;color:#b0a080}
+        .popular-item-title{font-size:.85rem;font-weight:700;color:var(--text);line-height:1.35;transition:color .3s}
+        .popular-item-row:hover .popular-item-title{color:var(--gold-dark)}
+        .popular-item-date{font-size:.75rem;color:var(--text-soft);margin-top:3px}
+
+        /* FOOTER */
+        .premium-footer{width:100%;background:lightgray;}
+        .footer-container{width:100%;display:grid;grid-template-columns:1.2fr .8fr;gap:80px;padding:70px;align-items:start}
+        .footer-left,.footer-right{display:flex;flex-direction:column}
+        .footer-left{gap:28px}.footer-right{gap:15px;padding-top:10px}
+        .footer-inline-row,.footer-contact-row,.footer-links,.footer-socials{display:flex;flex-wrap:wrap}
+        .footer-inline-row{align-items:center;gap:26px;margin-bottom:18px}
+        .footer-map{width:88%;height:340px;border-radius:24px;overflow:hidden;border:1px solid rgba(212,175,55,.15);box-shadow:0 20px 50px rgba(0,0,0,.18)}
+        .footer-map iframe{width:100%;height:100%;border:none;filter:grayscale(1) contrast(1.05) brightness(.9)}
+        .footer-socials{gap:14px}
+        .footer-social-circle{width:54px;height:54px;border-radius:50%;display:flex;align-items:center;justify-content:center;text-decoration:none;color:#3a3a3a;background:rgba(255,255,255,.65);border:1px solid rgba(0,0,0,.08);transition:.35s}
+        .footer-social-circle:hover{transform:translateY(-4px);background:linear-gradient(135deg,#f7e7b0,#d4af37);box-shadow:0 10px 25px rgba(212,175,55,.22)}
+        .footer-social-circle svg{width:22px;height:22px}
+        .footer-contact-row{align-items:center;gap:16px}
+        .footer-contact-pill{padding:15px 24px;border-radius:18px;text-decoration:none;color:#222;font-weight:600;background:rgba(255,255,255,.72);border:1px solid rgba(212,175,55,.18);transition:.35s}
+        .footer-contact-pill:hover{transform:translateY(-4px);background:rgba(212,175,55,.14);border-color:rgba(212,175,55,.4);box-shadow:0 10px 25px rgba(212,175,55,.15)}
+        .footer-links{gap:24px}
+        .footer-links a{text-decoration:none;color:#2b2b2b;font-weight:500;transition:.3s}
+        .footer-links a:hover{color:#b8922e}
+        .footer-newsletter h3{font-size:1.95rem;font-weight:800;color:rgba(212,175,55,.65)}
+        .footer-newsletter p{color:#2b2b2b;line-height:1.8;font-size:1.05rem;max-width:480px}
+        .footer-form,.footer-checkboxes{display:flex;flex-direction:column}
+        .footer-form{gap:24px}.footer-checkboxes{gap:16px}
+        .footer-input{width:100%;padding:20px 28px;border-radius:999px;border:1px solid rgba(212,175,55,.18);background:rgba(255,255,255,.75);color:#222;font-size:1rem;outline:none;transition:.3s}
+        .footer-input:focus{border-color:rgba(212,175,55,.5);box-shadow:0 0 25px rgba(212,175,55,.15)}
+        .footer-input::placeholder{color:rgba(0,0,0,.45)}
+        .footer-checkbox{display:flex;align-items:flex-start;gap:12px;cursor:pointer;color:#2b2b2b;line-height:1.6;font-size:.95rem}
+        .footer-checkbox input{display:none}
+        .checkmark{min-width:20px;height:20px;border-radius:6px;margin-top:3px;border:1px solid rgba(212,175,55,.4);background:rgba(255,255,255,.5);position:relative;transition:.3s}
+        .footer-checkbox input:checked+.checkmark{background:linear-gradient(135deg,#f7e7b0,#d4af37);border-color:transparent}
+        .footer-checkbox input:checked+.checkmark::after{content:"✓";position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);color:#222;font-size:.8rem;font-weight:800}
+        .footer-btn{width:fit-content;padding:18px 42px;border-radius:18px;cursor:pointer;font-size:1rem;font-weight:800;color:#222;border: 2px solid rgba(212, 175, 55, .5);background: linear-gradient(135deg, #f7e7b0, #d4af37, #f3e2a0);transition:.35s}
+        .footer-btn:hover{transform:translateY(-4px);box-shadow:0 18px 40px rgba(212,175,55,.32)}
+
+        @media(max-width:900px){
+            .blog-main-layout{grid-template-columns:1fr}
+            .sidebar-column{position:static}
+            .article-card{grid-template-columns:1fr}
+            .article-picture-box{min-height:180px}
+            .footer-container{grid-template-columns:1fr;gap:60px;padding:50px 24px}
+            .footer-map{width:100%;height:280px}
+            .footer-btn{width:100%}
+        }
+        @media(max-width:600px){
+            .header-container{padding:0 20px}
+            .menu-toggle{display:block}
+            .nav-links{position:absolute;top:100%;left:0;width:100%;background:rgba(255,255,255,.96);backdrop-filter:blur(14px);flex-direction:column;align-items:center;gap:10px;padding:20px 0;border-radius:0 0 20px 20px;opacity:0;visibility:hidden;transform:translateY(-10px);transition:.35s ease}
+            .nav-links.active{opacity:1;visibility:visible;transform:translateY(0)}
+            .nav-links a{width:90%;text-align:center;padding:14px;border-radius:14px}
+            .blog-hero{padding:120px 20px 60px}
+            .hero-text-container h1{font-size:2.2rem}
+            .blog-main-layout{padding:24px 16px 50px}
+            .footer-container{padding:40px 16px}
+            .footer-contact-pill{width:100%;text-align:center}
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="header-container">
+        <a th:href="@{/}" class="logo-group">
+            <div class="logo-circle"></div>
+            <span>Albion</span>
+        </a>
+        <button class="menu-toggle" id="menuToggle">☰</button>
+        <nav class="nav-links" id="navMenu">
+            <a th:href="@{/language-courses}">Courses</a>
+            <a th:href="@{/blog}">Blog</a>
+            <a th:href="@{/store}">Store</a>
+            <a th:href="@{/about-us}">About us</a>
+        </nav>
+    </div>
+</header>
+
+<section class="blog-hero">
+    <div class="hero-text-container">
+        <h1>Albion Blog</h1>
+        <p>Learn English and understand life in an English-speaking environment. Expert articles on learning English, passing proficiency exams, meeting citizenship requirements, and adapting to everyday life.</p>
+    </div>
+</section>
+
+<div class="blog-main-layout">
+
+    <!-- ===== ARTICLES ===== -->
+    <div class="articles-column">
+
+        <!-- Пусто -->
+        <div th:if="${#lists.isEmpty(articles)}" class="no-articles">
+            <p>No articles published yet. Check back soon!</p>
+        </div>
+
+        <!-- Карточка статьи -->
+        <article class="article-card" th:each="article : ${articles}">
+
+            <!-- Картинка: если есть pictures[0].url — показываем, иначе плейсхолдер -->
+            <div class="article-picture-box"
+                 th:style="${not #lists.isEmpty(article.pictures)}
+                            ? 'background-image: url(' + ${article.pictures[0].url} + ');'
+                            : 'background-image: url(/img/article-placeholder.webp);'">
+                <span class="placeholder-icon" th:if="${#lists.isEmpty(article.pictures)}">📄</span>
+            </div>
+
+            <div class="article-details-box">
+
+                <span class="article-date"
+                      th:text="${#temporals.format(article.createdAt, 'MMMM dd, yyyy')}">
+                    June 01, 2026
+                </span>
+
+                <a class="article-headline"
+                   th:href="@{/blog/{slug}(slug=${article.slug})}"
+                   th:text="${article.title}">
+                    Article Title
+                </a>
+
+                <p class="article-description"
+                   th:if="${article.description != null and !article.description.isEmpty()}"
+                   th:text="${article.description}">
+                    Article description goes here...
+                </p>
+
+                <div class="article-footer-row">
+                    <a class="read-link"
+                       th:href="@{/blog/{slug}(slug=${article.slug})}">
+                        Read article →
+                    </a>
+                </div>
+
+            </div>
+        </article>
+
+    </div>
+
+    <!-- ===== SIDEBAR ===== -->
+    <aside class="sidebar-column">
+
+        <div class="sidebar-block">
+            <h3>Most Popular</h3>
+            <div class="popular-items-stack">
+
+                <a class="popular-item-row"
+                   th:each="popular, iterStat : ${popularArticles}"
+                   th:href="@{/blog/{slug}(slug=${popular.slug})}">
+
+                    <div class="pop-num" th:text="${iterStat.count}">1</div>
+
+                    <div class="popular-mini-thumb"
+                         th:style="${not #lists.isEmpty(popular.pictures)}
+                                    ? 'background-image: url(' + ${popular.pictures[0].url} + ');'
+                                    : 'background-image: url(/img/article-placeholder.webp);'">
+                        <span th:if="${#lists.isEmpty(popular.pictures)}">📄</span>
+                    </div>
+
+                    <div>
+                        <div class="popular-item-title" th:text="${popular.title}">Title</div>
+                        <div class="popular-item-date"
+                             th:text="${#temporals.format(popular.createdAt, 'MMMM dd, yyyy')}">
+                            June 01, 2026
+                        </div>
+                    </div>
+
+                </a>
+
+            </div>
+        </div>
+
+    </aside>
+</div>
+
+<footer class="premium-footer">
+    <div class="footer-container">
+        <div class="footer-left">
+            <div class="footer-map">
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2443.9544086494325!2d21.01888171035901!3d52.22604610686692!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x690f8796d09929bb%3A0x4f9fc36d8097aa63!2sLC%20Albion%20Olena%20Kiriushkina!5e0!3m2!1sru!2sno!4v1779386940088!5m2!1sru!2sno"
+                        loading="lazy" allowfullscreen></iframe>
+            </div>
+            <div class="footer-bottom-left">
+                <div class="footer-inline-row">
+                    <div class="footer-socials">
+                        <a href="https://www.instagram.com/albion_lc" class="footer-social-circle">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="2" y="2" width="20" height="20" rx="5"></rect>
+                                <circle cx="12" cy="12" r="4"></circle>
+                                <circle cx="18" cy="6" r="1"></circle>
+                            </svg>
+                        </a>
+                        <a href="https://www.facebook.com/albionhub" class="footer-social-circle">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
+                            </svg>
+                        </a>
+                    </div>
+                    <div class="footer-contact-row">
+                        <a href="mailto:lc.albion@gmail.com" class="footer-contact-pill">lc.albion@gmail.com</a>
+                        <a href="tel:+48574065884" class="footer-contact-pill">+48 574 065 884</a>
+                    </div>
+                </div>
+                <div class="footer-links">
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms of Use</a>
+                    <a href="#">Refund Policy</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-right">
+            <div class="footer-newsletter">
+                <h3>Your Language Journey Starts Here ✨</h3>
+            </div>
+            <div class="footer-form">
+                <div class="footer-newsletter-text">
+                    <p>Join our language learning community and receive practical tips, speaking hacks, useful phrases, cultural insights, and creative ways to improve your English, Polish, and Ukrainian naturally.</p>
+                    <p>No boring grammar overload — just useful content, motivation, and real language for everyday life ✨📩</p>
+                </div>
+                <input type="email" placeholder="Enter your email" class="footer-input">
+                <div class="footer-checkboxes">
+                    <label class="footer-checkbox">
+                        <input type="checkbox"> <span class="checkmark"></span>
+                        <span>I agree to receive language learning tips, updates, and special offers by email.</span>
+                    </label>
+                    <label class="footer-checkbox">
+                        <input type="checkbox"> <span class="checkmark"></span>
+                        <span>I accept the Privacy Policy and consent to email communication.</span>
+                    </label>
+                </div>
+                <button class="footer-btn">JOIN THE NEWSLETTER</button>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<script>
+    const menuToggle = document.getElementById('menuToggle');
+    const navMenu = document.getElementById('navMenu');
+    menuToggle.addEventListener('click', () => navMenu.classList.toggle('active'));
+</script>
+
+</body>
+</html>

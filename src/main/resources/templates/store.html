@@ -1,1 +1,457 @@
-Store for buy something
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Albion EDU | Store</title>
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',Roboto,sans-serif}
+        :root{
+            --gold:#c8a95b;--gold-light:#e7d29a;--gold-dark:#9f7d2f;
+            --text:#1f1f1f;--text-soft:#5f5f5f;--border:#ddd6c5;
+            --shadow-soft:0 10px 30px rgba(0,0,0,.06);
+            --shadow-hover:0 18px 45px rgba(0,0,0,.1);
+            --transition:all .45s cubic-bezier(.2,1,.3,1);
+        }
+        body{background:lightgray;color:var(--text)}
+
+        header{width:100%;background:rgba(180,180,180,.35);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,255,51,.25);position:fixed;top:0;z-index:1000;padding:15px 0}
+        .header-container{padding:0 40px;flex-wrap:wrap;gap:15px;width:100%;display:flex;justify-content:space-between;align-items:center}
+        .logo-group{display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--text);font-weight:800;font-size:1.4rem}
+        .logo-circle{width:55px;height:55px;background:url('/img/logo.webp') center/cover no-repeat;border-radius:12px;transition:transform .3s ease}
+        .logo-circle:hover{transform:rotate(360deg)}
+        .nav-links{display:flex;align-items:center;gap:28px}
+        .nav-links a{text-decoration:none;color:#1f1f1f;padding:8px 20px;font-weight:600;transition:color .3s,background-color .3s;border-radius:20px}
+        .nav-links a:hover{color:#d4af37;background:rgba(212,175,55,.1)}
+        .nav-links a.active{color:#d4af37}
+        .menu-toggle{display:none;border:none;background:none;font-size:1.8rem;cursor:pointer;color:var(--text)}
+
+        .store-hero{
+            position:relative;min-height:560px;display:flex;align-items:center;justify-content:center;
+            background:linear-gradient(rgba(200,200,200,.65),rgba(220,220,220,.72)),url(/img/main-background.webp) center/cover no-repeat;
+            overflow:hidden;padding:130px 40px 80px;text-align:center;
+        }
+        .store-hero::before{content:'';position:absolute;width:520px;height:520px;border-radius:50%;border:1.5px solid rgba(200,169,91,.18);top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none}
+        .store-hero::after{content:'';position:absolute;width:740px;height:740px;border-radius:50%;border:1px solid rgba(200,169,91,.09);top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none}
+        .store-hero-inner{position:relative;z-index:1;max-width:640px;margin:0 auto}
+        .hero-icon{width:68px;height:68px;border-radius:20px;background:rgba(255,255,255,.55);border:1.5px solid rgba(200,169,91,.35);display:inline-flex;align-items:center;justify-content:center;margin-bottom:26px;backdrop-filter:blur(8px);box-shadow:0 8px 24px rgba(200,169,91,.15)}
+        .hero-icon svg{width:30px;height:30px;stroke:var(--gold-dark);fill:none;stroke-width:1.6}
+        .store-hero h1{font-size:3.4rem;font-weight:800;letter-spacing:-1.5px;color:#1a1a1a;line-height:1.1;margin-bottom:16px}
+        .hero-accent{display:inline-block;position:relative}
+        .hero-accent::after{content:'';position:absolute;bottom:-4px;left:0;right:0;height:3px;border-radius:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent)}
+        .store-hero p{font-size:1.05rem;color:#4a4a4a;line-height:1.75;max-width:500px;margin:0 auto 36px}
+        .hero-stats{display:inline-flex;gap:0;background:rgba(255,255,255,.5);border:1px solid rgba(200,169,91,.25);border-radius:16px;backdrop-filter:blur(10px);overflow:hidden}
+        .hero-stat{padding:14px 28px;display:flex;flex-direction:column;align-items:center;gap:3px}
+        .hero-stat + .hero-stat{border-left:1px solid rgba(200,169,91,.2)}
+        .hero-stat-num{font-size:1.35rem;font-weight:800;color:var(--gold-dark)}
+        .hero-stat-label{font-size:.72rem;font-weight:600;color:var(--text-soft);text-transform:uppercase;letter-spacing:.6px}
+
+        /* ─── FILTER BAR ─── */
+        .filter-bar{
+            background:rgba(210,210,210,.6);padding:0 5%;display:flex;align-items:center;
+            gap:12px;flex-wrap:wrap;border-bottom:1px solid rgba(200,169,91,.2);
+            border-top:1px solid rgba(255,255,255,.5);position:sticky;top:85px;z-index:100;
+            backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);min-height:62px;
+        }
+        .filter-label{
+            display:inline-flex;align-items:center;gap:7px;font-size:.72rem;font-weight:800;
+            text-transform:uppercase;letter-spacing:1px;color:var(--gold-dark);flex-shrink:0;
+            padding:6px 12px;background:rgba(200,169,91,.1);border:1px solid rgba(200,169,91,.25);border-radius:8px;
+        }
+        .filter-label svg{width:12px;height:12px;stroke:var(--gold-dark);fill:none;stroke-width:2.5;flex-shrink:0}
+        .filter-divider{width:1px;height:22px;background:rgba(200,169,91,.25);flex-shrink:0}
+        .filter-tabs{display:flex;gap:4px;flex-wrap:wrap;padding:10px 0}
+        .filter-tab{
+            display:inline-flex;align-items:center;gap:6px;padding:7px 16px;
+            border-radius:10px;border:1px solid transparent;background:transparent;
+            color:var(--text-soft);font-weight:600;font-size:.83rem;cursor:pointer;
+            transition:.2s;text-decoration:none;white-space:nowrap;position:relative;
+        }
+        .filter-tab svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2;flex-shrink:0;opacity:.7}
+        .filter-tab:hover{color:var(--gold-dark);background:rgba(200,169,91,.1);border-color:rgba(200,169,91,.25)}
+        .filter-tab.active{color:var(--gold-dark);background:rgba(200,169,91,.14);border-color:rgba(200,169,91,.35);font-weight:700}
+        .filter-tab.active::after{content:'';position:absolute;bottom:-10px;left:12px;right:12px;height:2px;border-radius:2px;background:var(--gold)}
+        .filter-spacer{flex:1}
+        .filter-count{font-size:.78rem;font-weight:600;color:var(--text-soft);padding:5px 12px;background:rgba(255,255,255,.45);border:1px solid rgba(200,169,91,.2);border-radius:8px;white-space:nowrap;transition:.2s}
+        .filter-count strong{color:var(--gold-dark)}
+
+        /* ─── STORE MAIN ─── */
+        .store-main{padding:40px 5% 70px;background:lightgray}
+        .store-empty{display:none;text-align:center;padding:80px 40px;background:linear-gradient(145deg,rgba(255,250,235,.98),rgba(250,240,210,.9));border:2px solid rgba(212,175,55,.45);border-radius:22px;box-shadow:var(--shadow-soft)}
+        .store-empty p{font-size:1.1rem;font-weight:600;color:var(--text-soft)}
+        .products-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px}
+
+        /* карточки — анимация скрытия */
+        .product-card{
+            background:linear-gradient(145deg,rgba(255,250,235,.98),rgba(250,240,210,.9));
+            border:2px solid rgba(212,175,55,.4);border-radius:22px;overflow:hidden;
+            box-shadow:var(--shadow-soft);transition:var(--transition);
+            display:flex;flex-direction:column;text-decoration:none;color:inherit;
+        }
+        .product-card.hidden{
+            display:none;
+        }
+        .product-card:hover{transform:translateY(-6px);box-shadow:var(--shadow-hover);border-color:var(--gold-light)}
+
+        .product-image{width:100%;aspect-ratio:1/1;background-color:#e2d9c2;position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden}
+        .product-image img{width:100%;height:100%;object-fit:cover;display:block}
+        .product-image .img-placeholder{display:flex;align-items:center;justify-content:center;width:100%;height:100%;color:#c4b890}
+        .product-image.loading::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent 0%,rgba(255,255,255,.35) 50%,transparent 100%);background-size:200% 100%;animation:shimmer 1.4s infinite}
+        @keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+        .product-badge-out{position:absolute;top:12px;right:12px;background:rgba(160,100,60,.85);color:#fff;font-size:.7rem;font-weight:800;padding:4px 10px;border-radius:10px;text-transform:uppercase;letter-spacing:.4px;backdrop-filter:blur(4px);z-index:1}
+        .product-badge-low{position:absolute;top:12px;right:12px;background:rgba(180,140,30,.85);color:#fff;font-size:.7rem;font-weight:800;padding:4px 10px;border-radius:10px;text-transform:uppercase;letter-spacing:.4px;backdrop-filter:blur(4px);z-index:1}
+        .product-body{padding:18px 20px 20px;display:flex;flex-direction:column;gap:8px;flex:1}
+        .product-name{font-size:1rem;font-weight:700;color:var(--text);line-height:1.35}
+        .product-desc{font-size:.83rem;color:var(--text-soft);line-height:1.6;flex:1}
+        .product-footer{display:flex;align-items:center;justify-content:space-between;margin-top:10px;gap:8px}
+        .product-price{font-size:1.2rem;font-weight:800;color:var(--gold-dark)}
+        .product-price span{font-size:.78rem;font-weight:600;color:var(--text-soft);margin-left:2px}
+        .btn-add{padding:9px 18px;border:none;border-radius:12px;cursor:pointer;font-size:.82rem;font-weight:700;color:#3a2a00;background:linear-gradient(135deg,#f7e7b0,#d4af37);box-shadow:0 4px 14px rgba(212,175,55,.25);transition:.3s;white-space:nowrap;flex-shrink:0}
+        .btn-add:hover{box-shadow:0 8px 22px rgba(212,175,55,.4);transform:translateY(-2px)}
+        .btn-add:disabled{background:rgba(200,200,200,.6);color:#888;box-shadow:none;cursor:not-allowed;transform:none}
+
+        /* ─── FOOTER ─── */
+        .premium-footer{width:100%;background:lightgray}
+        .footer-container{width:100%;display:grid;grid-template-columns:1.2fr .8fr;gap:80px;padding:70px;align-items:start}
+        .footer-left,.footer-right{display:flex;flex-direction:column}
+        .footer-left{gap:28px}.footer-right{gap:15px;padding-top:10px}
+        .footer-inline-row,.footer-contact-row,.footer-links,.footer-socials{display:flex;flex-wrap:wrap}
+        .footer-inline-row{align-items:center;gap:26px;margin-bottom:18px}
+        .footer-map{width:88%;height:340px;border-radius:24px;overflow:hidden;border:1px solid rgba(212,175,55,.15);box-shadow:0 20px 50px rgba(0,0,0,.18)}
+        .footer-map iframe{width:100%;height:100%;border:none;filter:grayscale(1) contrast(1.05) brightness(.9)}
+        .footer-socials{gap:14px}
+        .footer-social-circle{width:54px;height:54px;border-radius:50%;display:flex;align-items:center;justify-content:center;text-decoration:none;color:#3a3a3a;background:rgba(255,255,255,.65);border:1px solid rgba(0,0,0,.08);transition:.35s}
+        .footer-social-circle:hover{transform:translateY(-4px);background:linear-gradient(135deg,#f7e7b0,#d4af37);box-shadow:0 10px 25px rgba(212,175,55,.22)}
+        .footer-social-circle svg{width:22px;height:22px}
+        .footer-contact-row{align-items:center;gap:16px}
+        .footer-contact-pill{padding:15px 24px;border-radius:18px;text-decoration:none;color:#222;font-weight:600;background:rgba(255,255,255,.72);border:1px solid rgba(212,175,55,.18);transition:.35s}
+        .footer-contact-pill:hover{transform:translateY(-4px);background:rgba(212,175,55,.14);border-color:rgba(212,175,55,.4);box-shadow:0 10px 25px rgba(212,175,55,.15)}
+        .footer-links{gap:24px}
+        .footer-links a{text-decoration:none;color:#2b2b2b;font-weight:500;transition:.3s}
+        .footer-links a:hover{color:#b8922e}
+        .footer-newsletter h3{font-size:1.95rem;font-weight:800;color:rgba(212,175,55,.65)}
+        .footer-newsletter p{color:#2b2b2b;line-height:1.8;font-size:1.05rem;max-width:480px}
+        .footer-form,.footer-checkboxes{display:flex;flex-direction:column}
+        .footer-form{gap:24px}.footer-checkboxes{gap:16px}
+        .footer-input{width:100%;padding:20px 28px;border-radius:999px;border:1px solid rgba(212,175,55,.18);background:rgba(255,255,255,.75);color:#222;font-size:1rem;outline:none;transition:.3s}
+        .footer-input:focus{border-color:rgba(212,175,55,.5);box-shadow:0 0 25px rgba(212,175,55,.15)}
+        .footer-input::placeholder{color:rgba(0,0,0,.45)}
+        .footer-checkbox{display:flex;align-items:flex-start;gap:12px;cursor:pointer;color:#2b2b2b;line-height:1.6;font-size:.95rem}
+        .footer-checkbox input{display:none}
+        .checkmark{min-width:20px;height:20px;border-radius:6px;margin-top:3px;border:1px solid rgba(212,175,55,.4);background:rgba(255,255,255,.5);position:relative;transition:.3s}
+        .footer-checkbox input:checked+.checkmark{background:linear-gradient(135deg,#f7e7b0,#d4af37);border-color:transparent}
+        .footer-checkbox input:checked+.checkmark::after{content:"✓";position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);color:#222;font-size:.8rem;font-weight:800}
+        .footer-btn{width:fit-content;padding:18px 42px;border-radius:18px;cursor:pointer;font-size:1rem;font-weight:800;color:#222;border: 2px solid rgba(212, 175, 55, .5);background: linear-gradient(135deg, #f7e7b0, #d4af37, #f3e2a0);transition:.35s}
+        .footer-btn:hover{transform:translateY(-4px);box-shadow:0 18px 40px rgba(212,175,55,.32)}
+
+        /* ─── RESPONSIVE ─── */
+        @media(max-width:1100px){.products-grid{grid-template-columns:repeat(3,1fr)}}
+        @media(max-width:800px){.products-grid{grid-template-columns:repeat(2,1fr)}}
+        @media(max-width:900px){.footer-container{grid-template-columns:1fr;gap:60px;padding:50px 24px}.footer-map{width:100%;height:280px}.footer-btn{width:100%}}
+        @media(max-width:600px){
+            .header-container{padding:0 20px}
+            .menu-toggle{display:block}
+            .nav-links{position:absolute;top:100%;left:0;width:100%;background:rgba(255,255,255,.96);backdrop-filter:blur(14px);flex-direction:column;align-items:center;gap:10px;padding:20px 0;border-radius:0 0 20px 20px;opacity:0;visibility:hidden;transform:translateY(-10px);transition:.35s ease}
+            .nav-links.active{opacity:1;visibility:visible;transform:translateY(0)}
+            .nav-links a{width:90%;text-align:center;padding:14px;border-radius:14px}
+            .store-hero{padding:120px 20px 60px;min-height:auto}
+            .store-hero h1{font-size:2.4rem}
+            .hero-stats{flex-wrap:wrap}
+            .hero-stat{padding:12px 20px}
+            .filter-bar{top:78px;padding:0 4%;min-height:54px}
+            .filter-label{display:none}
+            .filter-divider{display:none}
+            .filter-count{display:none}
+            .store-main{padding:24px 4% 50px}
+            .products-grid{grid-template-columns:repeat(2,1fr);gap:14px}
+            .footer-container{padding:40px 16px}
+            .footer-contact-pill{width:100%;text-align:center}
+        }
+        @media(max-width:400px){.products-grid{grid-template-columns:1fr}}
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="header-container">
+        <a th:href="@{/}" class="logo-group">
+            <div class="logo-circle"></div>
+            <span>Albion</span>
+        </a>
+        <button class="menu-toggle" id="menuToggle">☰</button>
+        <nav class="nav-links" id="navMenu">
+            <a th:href="@{/language-courses}">Courses</a>
+            <a th:href="@{/blog}">Blog</a>
+            <a th:href="@{/store}" class="active">Store</a>
+            <a th:href="@{/about-us}">About us</a>
+        </nav>
+    </div>
+</header>
+
+<!-- ─── HERO ─── -->
+<section class="store-hero">
+    <div class="store-hero-inner">
+        <div class="hero-icon">
+            <svg viewBox="0 0 24 24">
+                <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
+                <line x1="3" y1="6" x2="21" y2="6"/>
+                <path d="M16 10a4 4 0 01-8 0"/>
+            </svg>
+        </div>
+        <h1>Albion <span class="hero-accent">Store</span></h1>
+        <p>Books, materials, and resources to support your language learning journey — carefully selected by our teachers.</p>
+        <div class="hero-stats">
+            <div class="hero-stat">
+                <!-- Общее кол-во — считается из всех продуктов, не меняется при фильтре -->
+                <span class="hero-stat-num" id="heroTotalCount" th:text="${#lists.size(products)}">0</span>
+                <span class="hero-stat-label">Products</span>
+            </div>
+            <div class="hero-stat">
+                <span class="hero-stat-num">4</span>
+                <span class="hero-stat-label">Categories</span>
+            </div>
+            <div class="hero-stat">
+                <span class="hero-stat-num">🇬🇧 🇵🇱 🇺🇦</span>
+                <span class="hero-stat-label">Languages</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ─── FILTER BAR ─── -->
+<div class="filter-bar">
+
+    <span class="filter-label">
+        <svg viewBox="0 0 24 24"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
+        Explore
+    </span>
+
+    <div class="filter-divider"></div>
+
+    <!--
+        Табы — обычные кнопки, data-category="" означает "All".
+        JS навешивает слушатели и переключает класс active.
+        Thymeleaf здесь не нужен — страница перезагружаться не будет.
+    -->
+    <div class="filter-tabs">
+
+        <button class="filter-tab active" data-category="">
+            <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+            All
+        </button>
+
+        <button class="filter-tab" data-category="BOOKS">
+            <svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>
+            Books
+        </button>
+
+        <button class="filter-tab" data-category="COURSES">
+            <svg viewBox="0 0 24 24"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+            Courses
+        </button>
+
+        <button class="filter-tab" data-category="MATERIALS">
+            <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+            Materials
+        </button>
+
+        <button class="filter-tab" data-category="LECTURES">
+            <svg viewBox="0 0 24 24"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>
+            Lectures
+        </button>
+
+    </div>
+
+    <div class="filter-spacer"></div>
+
+    <!-- Счётчик — обновляется JS-ом -->
+    <div class="filter-count">
+        <strong id="visibleCount" th:text="${#lists.size(products)}">0</strong> items
+    </div>
+
+</div>
+
+<!-- ─── MAIN ─── -->
+<main class="store-main">
+
+    <!-- Показывается JS-ом если после фильтра ничего нет -->
+    <div class="store-empty" id="emptyState">
+        <p>No products in this category yet. Check back soon!</p>
+    </div>
+
+    <!--
+        Все карточки рендерятся Thymeleaf-ом сразу.
+        data-category хранит enum-значение из бэкенда — JS читает его для фильтрации.
+    -->
+    <div class="products-grid" id="productsGrid">
+
+        <a class="product-card"
+           th:each="product : ${products}"
+           th:href="@{/store/{slug}(slug=${product.slug})}"
+           th:data-id="${product.id}"
+           th:data-category="${product.category}">
+
+            <div class="product-image loading" th:id="'img-' + ${product.id}">
+                <div class="img-placeholder">
+                    <svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" opacity="0.45">
+                        <rect x="3" y="3" width="18" height="18" rx="3"/>
+                        <circle cx="8.5" cy="8.5" r="1.5"/>
+                        <polyline points="21 15 16 10 5 21"/>
+                    </svg>
+                </div>
+                <span class="product-badge-out"
+                      th:if="${product.amount != null and product.amount == 0}">Out of stock</span>
+                <span class="product-badge-low"
+                      th:if="${product.amount != null and product.amount > 0 and product.amount <= 5}"
+                      th:text="'Only ' + ${product.amount} + ' left'">Only 3 left</span>
+            </div>
+
+            <div class="product-body">
+                <div class="product-name" th:text="${product.name}">Product Name</div>
+                <p class="product-desc"
+                   th:if="${product.description != null and !product.description.isEmpty()}"
+                   th:text="${product.description}">Short description.</p>
+                <div class="product-footer">
+                    <div class="product-price">
+                        <th:block th:text="${#numbers.formatDecimal(product.price, 1, 2)}">0.00</th:block>
+                        <span>PLN</span>
+                    </div>
+                    <button class="btn-add"
+                            th:if="${product.published == true and product.amount > 0}"
+                            onclick="event.preventDefault(); event.stopPropagation();">
+                        Add to cart
+                    </button>
+                </div>
+            </div>
+
+        </a>
+    </div>
+</main>
+
+<!-- ─── FOOTER ─── -->
+<footer class="premium-footer">
+    <div class="footer-container">
+        <div class="footer-left">
+            <div class="footer-map">
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2443.9544086494325!2d21.01888171035901!3d52.22604610686692!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x690f8796d09929bb%3A0x4f9fc36d8097aa63!2sLC%20Albion%20Olena%20Kiriushkina!5e0!3m2!1sru!2sno!4v1779386940088!5m2!1sru!2sno"
+                        loading="lazy" allowfullscreen></iframe>
+            </div>
+            <div class="footer-bottom-left">
+                <div class="footer-inline-row">
+                    <div class="footer-socials">
+                        <a href="https://www.instagram.com/albion_lc" class="footer-social-circle">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="18" cy="6" r="1"/>
+                            </svg>
+                        </a>
+                        <a href="https://www.facebook.com/albionhub" class="footer-social-circle">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
+                            </svg>
+                        </a>
+                    </div>
+                    <div class="footer-contact-row">
+                        <a href="mailto:lc.albion@gmail.com" class="footer-contact-pill">lc.albion@gmail.com</a>
+                        <a href="tel:+48574065884" class="footer-contact-pill">+48 574 065 884</a>
+                    </div>
+                </div>
+                <div class="footer-links">
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms of Use</a>
+                    <a href="#">Refund Policy</a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-right">
+            <div class="footer-newsletter">
+                <h3>Your Language Journey Starts Here ✨</h3>
+            </div>
+            <div class="footer-form">
+                <div class="footer-newsletter-text">
+                    <p>Join our language learning community and receive practical tips, speaking hacks, useful phrases, cultural insights, and creative ways to improve your English, Polish, and Ukrainian naturally.</p>
+                    <p>No boring grammar overload — just useful content, motivation, and real language for everyday life ✨📩</p>
+                </div>
+                <input type="email" placeholder="Enter your email" class="footer-input">
+                <div class="footer-checkboxes">
+                    <label class="footer-checkbox">
+                        <input type="checkbox"><span class="checkmark"></span>
+                        <span>I agree to receive language learning tips, updates, and special offers by email.</span>
+                    </label>
+                    <label class="footer-checkbox">
+                        <input type="checkbox"><span class="checkmark"></span>
+                        <span>I accept the Privacy Policy and consent to email communication.</span>
+                    </label>
+                </div>
+                <button class="footer-btn">JOIN THE NEWSLETTER</button>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<script>
+    // ─── Мобильное меню ───
+    document.getElementById('menuToggle')
+        .addEventListener('click', () => document.getElementById('navMenu').classList.toggle('active'));
+
+    // ─── Загрузка картинок ───
+    async function loadProductImage(itemId) {
+        const container = document.getElementById('img-' + itemId);
+        if (!container) return;
+        try {
+            const res = await fetch('/api/pictures/entity/' + itemId + '?type=ITEM');
+            if (!res.ok) return;
+            const pics = await res.json();
+            if (pics && pics.length > 0) {
+                const badges = [...container.querySelectorAll('.product-badge-out, .product-badge-low')];
+                container.innerHTML = '';
+                const img = document.createElement('img');
+                img.src = pics[0].url;
+                img.alt = '';
+                container.appendChild(img);
+                badges.forEach(b => container.appendChild(b));
+            }
+        } catch (e) {}
+        finally { container.classList.remove('loading'); }
+    }
+
+    document.querySelectorAll('.product-card[data-id]').forEach(card => {
+        loadProductImage(card.dataset.id);
+    });
+
+    // ─── Фильтрация ───
+    const tabs        = document.querySelectorAll('.filter-tab');
+    const cards       = document.querySelectorAll('.product-card');
+    const emptyState  = document.getElementById('emptyState');
+    const countEl     = document.getElementById('visibleCount');
+
+    function applyFilter(category) {
+        let visible = 0;
+
+        cards.forEach(card => {
+            // data-category может быть null/undefined если у товара нет категории
+            const cardCat = (card.dataset.category || '').toUpperCase();
+            const show = !category || cardCat === category;
+            card.classList.toggle('hidden', !show);
+            if (show) visible++;
+        });
+
+        // Показываем/скрываем «пусто»
+        emptyState.style.display = visible === 0 ? 'block' : 'none';
+
+        // Обновляем счётчик
+        countEl.textContent = visible;
+    }
+
+    tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+            // Переключаем active
+            tabs.forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+
+            applyFilter(tab.dataset.category);
+        });
+    });
+</script>
+
+</body>
+</html>

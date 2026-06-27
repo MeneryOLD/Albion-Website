@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Albion EDU | Article View</title>
+    <style>
+        * {
+          margin: 0;
+          padding: 0;
+          box-sizing: border-box;
+          font-family: 'Segoe UI', Roboto, sans-serif;
+        }
+        :root {
+          --bg-main: #f5f5f3;
+          --bg-soft: #ecebe7;
+          --bg-card: rgba(255, 255, 255, 0.8);
+          --gold: #c8a95b;
+          --gold-light: #e7d29a;
+          --gold-dark: #9f7d2f;
+          --text: #1f1f1f;
+          --text-soft: #5f5f5f;
+          --border: #ddd6c5;
+          --glass-bg: rgba(255, 255, 255, 0.68);
+          --shadow-soft: 0 10px 30px rgba(0, 0, 0, 0.06);
+          --shadow-hover: 0 18px 45px rgba(0, 0, 0, 0.1);
+          --transition: all 0.45s cubic-bezier(0.2, 1, 0.3, 1);
+        }
+
+        /* ================= HEADER ================= */
+        header {
+          width: 100%;
+          background: rgba(180, 180, 180, 0.35);
+          backdrop-filter: blur(16px);
+          -webkit-backdrop-filter: blur(16px);
+          border-bottom: 1px solid rgba(255, 255, 51, 0.25);
+          position: fixed;
+          top: 0;
+          z-index: 1000;
+          padding: 15px 0;
+        }
+        .header-container {
+          padding: 0 40px;
+          flex-wrap: wrap;
+          gap: 15px;
+          width: 100%;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+        }
+        .logo-group {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          text-decoration: none;
+          color: var(--text);
+          font-weight: 800;
+          font-size: 1.4rem;
+        }
+        .logo-circle {
+          width: 55px;
+          height: 55px;
+          background: url('/img/logo.webp') center/cover no-repeat;
+          border-radius: 12px;
+          transition: transform 0.3s ease;
+        }
+        .logo-circle:hover {
+          transform: rotate(360deg);
+        }
+        .nav-links {
+          display: flex;
+          align-items: center;
+          gap: 28px;
+        }
+        .nav-links a {
+          text-decoration: none;
+          color: var(--text); /* Fixed color variable */
+          padding: 8px 20px;
+          font-weight: 600;
+          transition: color 0.3s ease, background-color 0.3s ease;
+        }
+        .nav-links a:hover {
+          color: #d4af37 !important;
+        }
+        .nav-links.active a:hover {
+          background: rgba(212, 175, 55, 0.12);
+        }
+        .menu-toggle {
+          display: none;
+          border: none;
+          background: none;
+          font-size: 1.8rem;
+          cursor: pointer;
+          color: var(--text);
+        }
+
+        /* ================= MAIN (ARTICLE LAYOUT) ================= */
+        main {
+            padding: 130px 40px 80px; /* Top padding clears fixed header */
+            background: var(--bg-main);
+            min-height: 70vh;
+        }
+        .article-container {
+            max-width: 1100px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+        }
+
+        /* Top Row: Picture + Side Info */
+        .article-top-row {
+            display: grid;
+            grid-template-columns: 1.3fr 1fr;
+            gap: 50px;
+            align-items: center;
+        }
+
+        /* Matches the thick border box from the wireframe */
+        .article-picture-box {
+            width: 100%;
+            border: 4px solid var(--text);
+            border-radius: 8px;
+            overflow: hidden;
+            background: #fff;
+            aspect-ratio: 4/3;
+        }
+        .article-picture-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .article-info-box {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .article-headline {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--text);
+            line-height: 1.2;
+        }
+        .article-description {
+            font-size: 1.1rem;
+            color: var(--text-soft);
+            line-height: 1.6;
+        }
+
+        /* Matches the thick bordered button from the wireframe */
+        .contact-btn-wireframe {
+            display: inline-block;
+            width: fit-content;
+            padding: 12px 32px;
+            border: 3px solid var(--text);
+            border-radius: 12px;
+            background: #fff;
+            color: var(--text);
+            font-weight: 700;
+            font-size: 1rem;
+            text-decoration: none;
+            transition: 0.3s;
+            margin-top: 10px;
+        }
+        .contact-btn-wireframe:hover {
+            background: var(--text);
+            color: #fff;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        /* Bottom Row: Text content */
+        .article-bottom-row {
+            margin-top: 20px;
+        }
+        .article-text-heading {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 15px;
+        }
+        .article-text-content {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: var(--text);
+        }
+        .article-text-content p {
+            margin-bottom: 15px;
+            /* Dashed underline styling to mimic wireframe text representation */
+            border-bottom: 1px dashed #ccc;
+            padding-bottom: 10px;
+        }
+
+        /* ================= FOOTER ================= */
+        .premium-footer {
+          width: 100%;
+          position: relative;
+          overflow: hidden;
+          background: lightgray;
+        }
+        .footer-container {
+          width: 100%;
+          display: grid;
+          grid-template-columns: 1.2fr 0.8fr;
+          gap: 80px;
+          padding: 70px;
+          align-items: start;
+        }
+        .footer-left, .footer-right {
+          display: flex;
+          flex-direction: column;
+        }
+        .footer-left { gap: 28px; }
+        .footer-right { gap: 15px; padding-top: 10px; }
+        .footer-inline-row, .footer-contact-row, .footer-links, .footer-socials {
+          display: flex;
+          flex-wrap: wrap;
+        }
+        .footer-inline-row {
+          align-items: center;
+          gap: 26px;
+          margin-bottom: 18px;
+        }
+        .footer-map {
+          width: 88%;
+          height: 340px;
+          border-radius: 24px;
+          overflow: hidden;
+          border: 1px solid rgba(212, 175, 55, 0.15);
+          box-shadow: 0 20px 50px rgba(0, 0, 0, 0.18);
+        }
+        .footer-map iframe {
+          width: 100%;
+          height: 100%;
+          border: none;
+          filter: grayscale(1) contrast(1.05) brightness(0.9);
+        }
+        .footer-socials { gap: 14px; }
+        .footer-social-circle {
+          width: 54px;
+          height: 54px;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          text-decoration: none;
+          color: #3a3a3a;
+          background: rgba(255, 255, 255, 0.65);
+          border: 1px solid rgba(0, 0, 0, 0.08);
+          transition: 0.35s;
+        }
+        .footer-social-circle:hover {
+          transform: translateY(-4px);
+          background: linear-gradient(135deg, #f7e7b0, #d4af37);
+          box-shadow: 0 10px 25px rgba(212, 175, 55, 0.22);
+        }
+        .footer-social-circle svg { width: 22px; height: 22px; }
+        .footer-contact-row {
+          align-items: center;
+          gap: 16px;
+        }
+        .footer-contact-pill {
+          padding: 15px 24px;
+          border-radius: 18px;
+          text-decoration: none;
+          color: #222;
+          font-weight: 600;
+          background: rgba(255, 255, 255, 0.72);
+          border: 1px solid rgba(212, 175, 55, 0.18);
+          transition: 0.35s;
+        }
+        .footer-contact-pill:hover {
+          transform: translateY(-4px);
+          background: rgba(212, 175, 55, 0.14);
+          border-color: rgba(212, 175, 55, 0.4);
+          box-shadow: 0 10px 25px rgba(212, 175, 55, 0.15);
+        }
+        .footer-links { gap: 24px; }
+        .footer-links a {
+          text-decoration: none;
+          color: #2b2b2b;
+          font-weight: 500;
+          transition: 0.3s;
+        }
+        .footer-links a:hover { color: #b8922e; }
+        .footer-newsletter h3 {
+          font-size: 1.95rem;
+          font-weight: 800;
+          color: rgba(212, 175, 55, 0.55);
+        }
+        .footer-newsletter p {
+          color: #2b2b2b;
+          line-height: 1.8;
+          font-size: 1.05rem;
+          max-width: 480px;
+        }
+        .footer-form, .footer-checkboxes {
+          display: flex;
+          flex-direction: column;
+        }
+        .footer-form { gap: 24px; }
+        .footer-checkboxes { gap: 16px; }
+        .footer-input {
+          width: 100%;
+          padding: 20px 28px;
+          border-radius: 999px;
+          border: 1px solid rgba(212, 175, 55, 0.18);
+          background: rgba(255, 255, 255, 0.75);
+          color: #222;
+          font-size: 1rem;
+          outline: none;
+          transition: 0.3s;
+        }
+        .footer-input:focus {
+          border-color: rgba(212, 175, 55, 0.5);
+          box-shadow: 0 0 25px rgba(212, 175, 55, 0.15);
+        }
+        .footer-input::placeholder { color: rgba(0, 0, 0, 0.45); }
+        .footer-checkbox {
+          display: flex;
+          align-items: flex-start;
+          gap: 12px;
+          cursor: pointer;
+          color: #2b2b2b;
+          line-height: 1.6;
+          font-size: 0.95rem;
+        }
+        .footer-checkbox input { display: none; }
+        .checkmark {
+          min-width: 20px;
+          height: 20px;
+          border-radius: 6px;
+          margin-top: 3px;
+          border: 1px solid rgba(212, 175, 55, 0.4);
+          background: rgba(255, 255, 255, 0.5);
+          position: relative;
+          transition: 0.3s;
+        }
+        .footer-checkbox input:checked + .checkmark {
+          background: linear-gradient(135deg, #f7e7b0, #d4af37);
+          border-color: transparent;
+        }
+        .footer-checkbox input:checked + .checkmark::after {
+          content: "✓";
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          color: #222;
+          font-size: 0.8rem;
+          font-weight: 800;
+        }
+        .footer-btn {
+          width: fit-content;
+          padding: 18px 42px;
+          border: none;
+          border-radius: 18px;
+          cursor: pointer;
+          font-size: 1rem;
+          font-weight: 800;
+          color: #222;
+          background: linear-gradient(135deg, #f7e7b0, #d4af37);
+          box-shadow: 0 12px 28px rgba(212, 175, 55, 0.24);
+          transition: 0.35s;
+        }
+        .footer-btn:hover {
+          transform: translateY(-4px);
+          box-shadow: 0 18px 40px rgba(212, 175, 55, 0.32);
+        }
+
+        /* ================= MEDIA QUERIES ================= */
+        @media (max-width: 1000px) {
+          .footer-container { grid-template-columns: 1fr; gap: 60px; padding: 50px 24px; }
+          .footer-inline-row { flex-direction: column; align-items: flex-start; }
+          .footer-map { width: 100%; height: 280px; }
+          .footer-btn { width: 100%; }
+          .article-top-row { grid-template-columns: 1fr; gap: 30px; }
+        }
+
+        @media (max-width: 768px) {
+          .menu-toggle { display: block; }
+          .nav-links {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, .96);
+            backdrop-filter: blur(14px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            padding: 20px 0;
+            border-radius: 0 0 20px 20px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: .35s ease;
+          }
+          .nav-links a { width: 90%; text-align: center; padding: 14px; border-radius: 14px; }
+          .nav-links.active { opacity: 1; visibility: visible; transform: translateY(0); }
+          main { padding: 100px 20px 40px; }
+          .article-headline { font-size: 2rem; }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="header-container">
+        <a th:href="@{/}" class="logo-group">
+            <div class="logo-circle"></div>
+            <span>Albion</span>
+        </a>
+        <button class="menu-toggle" id="menuToggle"> ☰ </button>
+        <nav class="nav-links" id="navMenu">
+            <a th:href="@{/language-courses}">Courses</a>
+            <a th:href="@{/blogs}">Blog</a>
+            <a th:href="@{/store}">Store</a>
+            <a th:href="@{/about-us}">About us</a>
+        </nav>
+    </div>
+</header>
+
+<main>
+    <div class="article-container">
+        <div class="article-top-row">
+
+            <div class="article-picture-box">
+                <img th:if="${article.pictures == null or article.pictures.isEmpty()}"
+                     src="https://via.placeholder.com/800x600?text=No+Picture" alt="Placeholder">
+
+                <img th:if="${article.pictures != null and !article.pictures.isEmpty()}"
+                     th:src="${article.pictures[0].url}" alt="Article Picture">
+            </div>
+
+            <div class="article-info-box">
+                <h1 class="article-headline" th:text="${article.title}">Headline Title Example</h1>
+
+                <div class="article-description" th:text="${article.description}">
+                    This is the description text shown to the right of the picture container. It explains what the article is about based on the wireframe layout.
+                </div>
+
+                <a href="/contact" class="contact-btn-wireframe">Contact us</a>
+            </div>
+        </div>
+
+        <div class="article-bottom-row">
+            <div class="article-text-content" th:utext="${article.text}">
+                <p>Default paragraph simulating the dashed lines on your wireframe representation. Your actual article text will be rendered here dynamically.</p>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+            </div>
+        </div>
+    </div>
+</main>
+
+<footer class="premium-footer">
+    <div class="footer-container">
+        <div class="footer-left">
+            <div class="footer-map">
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2443.9544086494325!2d21.01888171035901!3d52.22604610686692!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x690f8796d09929bb%3A0x4f9fc36d8097aa63!2sLC%20Albion%20Olena%20Kiriushkina!5e0!3m2!1sru!2sno!4v1779386940088!5m2!1sru!2sno" loading="lazy" allowfullscreen></iframe>
+            </div>
+            <div class="footer-bottom-left">
+                <div class="footer-inline-row">
+                    <div class="footer-socials">
+                        <a href="https://www.instagram.com/albion_lc" class="footer-social-circle">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="2" y="2" width="20" height="20" rx="5"></rect>
+                                <circle cx="12" cy="12" r="4"></circle>
+                                <circle cx="18" cy="6" r="1"></circle>
+                            </svg>
+                        </a>
+                        <a href="https://www.facebook.com/albionhub" class="footer-social-circle">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
+                            </svg>
+                        </a>
+                    </div>
+                    <div class="footer-contact-row">
+                        <a href="mailto:lc.albion@gmail.com" class="footer-contact-pill">lc.albion@gmail.com</a>
+                        <a href="tel:+48574065884" class="footer-contact-pill">+48 574 065 884</a>
+                    </div>
+                </div>
+                <div class="footer-links">
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms of Use</a>
+                    <a href="#">Refund Policy</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-right">
+            <div class="footer-newsletter">
+                <h3>Your Language Journey Starts Here ✨</h3>
+            </div>
+            <div class="footer-form">
+                <div class="footer-newsletter-text">
+                    <p>Join our language learning community and receive practical tips, speaking hacks, useful phrases, cultural insights, and creative ways to improve your English, Polish, and Ukrainian naturally.</p>
+                    <p>No boring grammar overload — just useful content, motivation, and real language for everyday life ✨📩</p>
+                </div>
+                <input type="email" placeholder="Enter your email" class="footer-input">
+                <div class="footer-checkboxes">
+                    <label class="footer-checkbox">
+                        <input type="checkbox"> <span class="checkmark"></span>
+                        <span>I agree to receive language learning tips, updates, and special offers by email.</span>
+                    </label>
+                    <label class="footer-checkbox">
+                        <input type="checkbox"> <span class="checkmark"></span>
+                        <span>I accept the Privacy Policy and consent to email communication.</span>
+                    </label>
+                </div>
+                <button class="footer-btn">JOIN THE NEWSLETTER</button>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<script>
+    const observerOptions = { threshold: 0.1 };
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => { if (entry.isIntersecting) { entry.target.classList.add('active'); } });
+    }, observerOptions);
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+    const menuToggle = document.getElementById('menuToggle');
+    const navMenu = document.getElementById('navMenu');
+    if (menuToggle && navMenu) {
+        menuToggle.addEventListener('click', () => { navMenu.classList.toggle('active'); });
+    }
+</script>
+</body>
+</html>
