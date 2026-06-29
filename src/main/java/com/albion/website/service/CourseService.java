@@ -32,12 +32,12 @@ public class CourseService {
 
     @Cacheable(value = "courses", key = "#slug")
     @Transactional(readOnly = true)
-    public CourseDto getBySlug(String slug) {
+    public Course getBySlug(String slug) {
         Course course = courseRepository
                 .findBySlugAndPublishedTrue(slug)
                 .orElseThrow(() -> new NotFoundException("Course not found"));
 
-        return mapToDto(course);
+        return course;
     }
 
     @Transactional(readOnly = true)
@@ -74,7 +74,7 @@ public class CourseService {
 
                     return new CourseCardDto(
                             course.getId(),
-                            course.getName(),
+                            course.getTitle(),
                             course.getSlug(),
                             course.getDescription(),
                             course.getPrice(),
@@ -102,17 +102,17 @@ public class CourseService {
     @Transactional
     public Course create(CourseRequestDto request) {
         String slug;
-        if (request.getSlug().isEmpty()) {
+        if (request.getSlug() == null || request.getSlug().isBlank()) {
             slug = slugService.generateUniqueSlug(
                     request.getName(),
                     courseRepository::existsBySlug
             );
         } else {
-            slug = request.getSlug();
+            slug = request.getSlug().trim();
         }
 
         Course course = new Course();
-        course.setName(request.getName());
+        course.setTitle(request.getName());
         course.setSlug(slug);
         course.setDescription(request.getDescription());
         course.setText(request.getText());
@@ -149,7 +149,7 @@ public class CourseService {
         Course course = courseRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Course not found"));
 
-        course.setName(request.getName());
+        course.setTitle(request.getName());
         course.setDescription(request.getDescription());
         course.setText(request.getText());
         course.setPrice(request.getPrice());
@@ -203,7 +203,7 @@ public class CourseService {
         );
 
         return new CourseDto(
-                course.getName(),
+                course.getTitle(),
                 course.getSlug(),
                 course.getDescription(),
                 course.getText(),
@@ -219,9 +219,22 @@ public class CourseService {
                 );
     }
 
+    public void savePage(Long id, String html) {
+        Course course = courseRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Course not found: " + id));
+        course.setPageHtml(html);
+        courseRepository.save(course);
+    }
+
+    public String getPageHtml(Long id) {
+        Course course = courseRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Course not found: " + id));
+        return course.getPageHtml();
+    }
+
     private CoursePreviewDto mapToPreviewDto(Course course) {
         return new CoursePreviewDto(
-                course.getName(),
+                course.getTitle(),
                 course.getSlug(),
                 course.getDescription(),
                 course.getCreatedAt()

@@ -30,6 +30,7 @@ public class SecurityConfig {
                                 "/api/pictures/**", "/", "/blog/**", "/language-courses/**",
                                 "/store/**", "/about-us/**", "/polices/**"
                         ).permitAll()
+                        .requestMatchers("/api/admin/course-page/**").hasRole("ADMIN")
                         .requestMatchers("/api/admin/**", "/admin/stats/**").hasAnyRole("ADMIN")
                         .requestMatchers("/login", "/register").permitAll()
                         .anyRequest().authenticated()

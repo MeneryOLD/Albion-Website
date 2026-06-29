@@ -1,8 +1,9 @@
 <!DOCTYPE html>
-<html lang="ru" th="http://www.thymeleaf.org">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/grapesjs@0.21.7/dist/css/grapes.min.css"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Admin Panel | Modern Dashboard</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -25,6 +26,7 @@
             -webkit-font-smoothing: antialiased;
         }
 
+        /* ─── Sidebar ─── */
         .sidebar {
             height: 100vh;
             background: var(--sidebar-bg);
@@ -36,152 +38,78 @@
             border-right: 1px solid #e2e8f0;
             transition: all 0.3s ease;
         }
-
         .sidebar-brand {
-            display: flex;
-            align-items: center;
-            gap: 12px;
+            display: flex; align-items: center; gap: 12px;
             padding: 0 12px 32px 12px;
-            font-weight: 700;
-            font-size: 1.25rem;
-            color: #0f172a;
-            letter-spacing: -0.025em;
+            font-weight: 700; font-size: 1.25rem;
+            color: #0f172a; letter-spacing: -0.025em;
         }
-
         .sidebar-brand-icon {
-            width: 32px;
-            height: 32px;
-            background: var(--accent);
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
+            width: 32px; height: 32px;
+            background: var(--accent); border-radius: 8px;
+            display: flex; align-items: center; justify-content: center; color: white;
         }
-
         .menu-label {
-            font-size: 0.75rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            color: #94a3b8;
-            padding: 0 12px 12px 12px;
+            font-size: 0.75rem; font-weight: 600; text-transform: uppercase;
+            letter-spacing: 0.05em; color: #94a3b8; padding: 0 12px 12px 12px;
         }
-
         .sidebar a {
-            color: var(--sidebar-text);
-            padding: 10px 12px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            border-radius: 10px;
-            margin-bottom: 4px;
-            transition: all 0.2s ease;
-            text-decoration: none;
-            cursor: pointer;
-            font-weight: 500;
+            color: var(--sidebar-text); padding: 10px 12px;
+            display: flex; align-items: center; gap: 12px;
+            border-radius: 10px; margin-bottom: 4px;
+            transition: all 0.2s ease; text-decoration: none; cursor: pointer; font-weight: 500;
         }
-
-        .sidebar a:hover {
-            background: var(--sidebar-active-bg);
-            color: var(--sidebar-active-text);
-        }
-
-        .sidebar a.active {
-            background: var(--sidebar-active-bg);
-            color: var(--accent);
-            position: relative;
-        }
-
+        .sidebar a:hover { background: var(--sidebar-active-bg); color: var(--sidebar-active-text); }
+        .sidebar a.active { background: var(--sidebar-active-bg); color: var(--accent); position: relative; }
         .sidebar a.active::after {
-            content: '';
-            position: absolute;
-            right: 12px;
-            width: 6px;
-            height: 6px;
-            background: var(--accent);
-            border-radius: 50%;
+            content: ''; position: absolute; right: 12px;
+            width: 6px; height: 6px; background: var(--accent); border-radius: 50%;
         }
 
-        .content {
-            margin-left: 260px;
-            padding: 40px;
-            transition: all 0.3s ease;
-        }
-
+        /* ─── Content ─── */
+        .content { margin-left: 260px; padding: 40px; transition: all 0.3s ease; }
         .top-bar { margin-bottom: 32px; }
+        .page-title { font-size: 1.875rem; font-weight: 700; color: #0f172a; letter-spacing: -0.025em; }
 
-        .page-title {
-            font-size: 1.875rem;
-            font-weight: 700;
-            color: #0f172a;
-            letter-spacing: -0.025em;
-        }
-
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 24px;
-        }
-
+        /* ─── Cards grid ─── */
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 24px; }
         .card-item {
-            background: white;
-            border-radius: 16px;
-            padding: 16px;
+            background: white; border-radius: 16px; padding: 16px;
             box-shadow: var(--card-shadow);
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            border: 1px solid #f1f5f9;
-            display: flex;
-            flex-direction: column;
-            height: 100%;
+            border: 1px solid #f1f5f9; display: flex; flex-direction: column; height: 100%;
         }
-
-        .card-item:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1);
-        }
-
+        .card-item:hover { transform: translateY(-4px); box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1); }
         .card-img-placeholder {
-            position: relative;
-            width: 100%;
-            height: 180px;
-            margin-bottom: 16px;
-            overflow: hidden;
-            border-radius: 12px;
-            background: #f1f5f9;
+            position: relative; width: 100%; height: 180px; margin-bottom: 16px;
+            overflow: hidden; border-radius: 12px; background: #f1f5f9;
         }
-
         .card-img-top { width: 100%; height: 100%; object-fit: cover; }
-
         .status-badge {
             position: absolute; top: 12px; right: 12px;
             padding: 6px 12px; border-radius: 8px;
-            font-size: 0.65rem; font-weight: 700;
-            text-transform: uppercase; z-index: 2;
+            font-size: 0.65rem; font-weight: 700; text-transform: uppercase; z-index: 2;
             backdrop-filter: blur(4px);
         }
-
         .bg-success { background-color: rgba(34, 197, 94, 0.9) !important; }
         .bg-secondary { background-color: rgba(100, 116, 139, 0.9) !important; }
-
         .price-tag {
             position: absolute; bottom: 12px; left: 12px;
             background: #0f172a; color: white;
             padding: 6px 12px; border-radius: 8px;
             font-weight: 600; font-size: 0.875rem; z-index: 2;
         }
-
         .btn-primary { background-color: var(--accent); border: none; }
         .btn-primary:hover { background-color: #2563eb; }
         .btn-round { border-radius: 12px; padding: 12px 24px; font-weight: 600; font-size: 0.875rem; }
 
+        /* ─── Modal ─── */
         .modal-content { border-radius: 24px; border: none; }
         .form-control, .form-select {
             border-radius: 10px; padding: 10px 14px;
             border: 1px solid #e2e8f0; font-size: 0.935rem;
         }
         .form-control:focus { border-color: var(--accent); box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1); }
-
         .preview-container { position: relative; margin: 4px; }
         .delete-badge {
             position: absolute; top: -6px; right: -6px; background: #ef4444; color: white;
@@ -191,6 +119,297 @@
         }
         .marked-for-delete { opacity: 0.3; filter: grayscale(1); }
 
+        /* ── Image upload for new course modal ── */
+        .border-dashed { border-style: dashed !important; }
+        #ncImagePreviews .nc-pic-wrap { position: relative; }
+        #ncImagePreviews .nc-pic-wrap .nc-del {
+            position: absolute; top: -5px; right: -5px;
+            background: #ef4444; color: white; border: 2px solid white;
+            border-radius: 50%; width: 20px; height: 20px;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer; font-size: 11px; line-height: 1;
+        }
+
+        /* ─────────────────────────────────────────
+           PAGE BUILDER — полноэкранный режим
+        ──────────────────────────────────────────── */
+        #pageBuilderView { display: none; }
+        #pageBuilderView.active { display: flex; flex-direction: column; }
+        #mainListView.hidden { display: none; }
+
+        /* Верхняя панель билдера */
+        .builder-topbar {
+            display: flex; align-items: center; gap: 12px;
+            background: white; border-bottom: 1px solid #e2e8f0;
+            padding: 10px 20px; position: sticky; top: 0; z-index: 200;
+            flex-wrap: wrap;
+        }
+        .builder-topbar-left { display: flex; align-items: center; gap: 10px; flex: 1; min-width: 0; }
+        .builder-topbar-right { display: flex; align-items: center; gap: 8px; }
+        .builder-back-btn {
+            display: flex; align-items: center; gap: 6px;
+            background: #f1f5f9; color: #334155;
+            border: 1px solid #e2e8f0; border-radius: 10px;
+            padding: 8px 14px; font-size: 0.85rem; font-weight: 600;
+            font-family: 'Inter', sans-serif; cursor: pointer; text-decoration: none;
+            transition: all 0.2s;
+        }
+        .builder-back-btn:hover { background: #e2e8f0; color: #1e293b; }
+
+        .builder-divider {
+            width: 1px; height: 28px; background: #e2e8f0; margin: 0 4px;
+        }
+
+        .builder-course-select {
+            min-width: 220px; max-width: 320px;
+            border-radius: 10px; padding: 8px 12px;
+            border: 1px solid #e2e8f0; font-size: 0.875rem;
+            font-family: 'Inter', sans-serif; color: #1e293b;
+            background: #f8fafc; cursor: pointer; flex: 1;
+        }
+        .builder-course-select:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(59,130,246,0.1); }
+
+        .btn-builder-load {
+            background: #f1f5f9; color: #334155;
+            border: 1px solid #e2e8f0; border-radius: 10px;
+            padding: 8px 16px; font-size: 0.85rem; font-weight: 600;
+            font-family: 'Inter', sans-serif; cursor: pointer; transition: all 0.2s; white-space: nowrap;
+            display: flex; align-items: center; gap: 5px;
+        }
+        .btn-builder-load:hover:not(:disabled) { background: #e2e8f0; }
+        .btn-builder-load:disabled { opacity: 0.45; cursor: not-allowed; }
+
+        .btn-builder-save {
+            background: var(--accent); color: white; border: none;
+            border-radius: 10px; padding: 8px 18px;
+            font-size: 0.85rem; font-weight: 600; font-family: 'Inter', sans-serif;
+            cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 6px;
+            white-space: nowrap;
+        }
+        .btn-builder-save:hover:not(:disabled) { background: #2563eb; }
+        .btn-builder-save:disabled { background: #93c5fd; cursor: not-allowed; }
+
+        .btn-builder-preview {
+            background: white; color: #334155;
+            border: 1px solid #e2e8f0; border-radius: 10px;
+            padding: 8px 14px; font-size: 0.85rem; font-weight: 600;
+            font-family: 'Inter', sans-serif; cursor: pointer; transition: all 0.2s;
+            text-decoration: none; display: flex; align-items: center; gap: 5px; white-space: nowrap;
+        }
+        .btn-builder-preview:hover { background: #f1f5f9; color: #1e293b; }
+
+        .builder-status {
+            font-size: 0.8rem; font-weight: 500;
+            padding: 5px 11px; border-radius: 8px; display: none; white-space: nowrap;
+        }
+        .builder-status.success { background: rgba(34,197,94,0.1); color: #15803d; display: inline-block; }
+        .builder-status.error   { background: rgba(239,68,68,0.1); color: #dc2626; display: inline-block; }
+        .builder-status.loading { background: rgba(59,130,246,0.1); color: #1d4ed8; display: inline-block; }
+
+        /* Режимы viewport */
+        .viewport-btns { display: flex; gap: 2px; background: #f1f5f9; border-radius: 8px; padding: 3px; }
+        .vp-btn {
+            border: none; background: transparent; border-radius: 6px;
+            padding: 5px 10px; font-size: 0.8rem; cursor: pointer; color: #64748b;
+            transition: all 0.15s; line-height: 1;
+        }
+        .vp-btn.active { background: white; color: var(--accent); box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        .vp-btn:hover:not(.active) { color: #334155; }
+
+        /* Undo/redo */
+        .undo-redo-btns { display: flex; gap: 2px; }
+        .ur-btn {
+            border: 1px solid #e2e8f0; background: white; border-radius: 8px;
+            padding: 5px 10px; font-size: 0.9rem; cursor: pointer; color: #64748b;
+            transition: all 0.15s; line-height: 1;
+        }
+        .ur-btn:hover { background: #f1f5f9; color: #334155; }
+        .ur-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+
+        /* Layout: основной редактор */
+        .builder-workspace {
+            display: flex; flex: 1; overflow: hidden;
+            height: calc(100vh - 57px); /* topbar height */
+        }
+
+        /* Левая панель: слои + секции */
+        .builder-left-panel {
+            width: 240px; min-width: 200px; max-width: 280px;
+            background: white; border-right: 1px solid #e2e8f0;
+            display: flex; flex-direction: column; overflow: hidden;
+            flex-shrink: 0;
+        }
+        .panel-tabs {
+            display: flex; border-bottom: 1px solid #e2e8f0;
+        }
+        .panel-tab {
+            flex: 1; padding: 10px 8px; font-size: 0.75rem; font-weight: 600;
+            text-align: center; cursor: pointer; color: #94a3b8;
+            border-bottom: 2px solid transparent; transition: all 0.15s;
+            background: none; border-top: none; border-left: none; border-right: none;
+            font-family: 'Inter', sans-serif; text-transform: uppercase; letter-spacing: 0.04em;
+        }
+        .panel-tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+        .panel-tab:hover:not(.active) { color: #334155; background: #f8fafc; }
+
+        .panel-section { display: none; flex: 1; overflow-y: auto; padding: 12px; }
+        .panel-section.active { display: block; }
+
+        /* Блоки */
+        .blocks-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+        .block-item {
+            background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px;
+            padding: 12px 8px; text-align: center; cursor: grab;
+            transition: all 0.2s; user-select: none;
+        }
+        .block-item:hover { background: #eff6ff; border-color: #bfdbfe; transform: translateY(-1px); }
+        .block-item:active { cursor: grabbing; }
+        .block-icon { font-size: 1.4rem; margin-bottom: 4px; }
+        .block-label { font-size: 0.7rem; font-weight: 600; color: #475569; line-height: 1.2; }
+
+        /* Секция категорий блоков */
+        .blocks-cat-label {
+            font-size: 0.68rem; font-weight: 700; text-transform: uppercase;
+            letter-spacing: 0.07em; color: #94a3b8; padding: 8px 2px 6px;
+        }
+
+        /* Слои */
+        .layers-wrap { padding: 0; }
+        #gjs-layers { font-size: 0.8rem; }
+
+        /* Стили — правая панель */
+        .builder-right-panel {
+            width: 260px; min-width: 220px;
+            background: white; border-left: 1px solid #e2e8f0;
+            display: flex; flex-direction: column; overflow: hidden;
+            flex-shrink: 0;
+        }
+        .style-panel-content { flex: 1; overflow-y: auto; }
+
+        /* GrapesJS canvas область */
+        .builder-canvas-wrap {
+            flex: 1; overflow: hidden; background: #e8eef5;
+            display: flex; flex-direction: column;
+        }
+
+        /* ── Override GrapesJS default styles ── */
+        .gjs-editor { border: none !important; }
+        .gjs-pn-panels { display: none !important; } /* Скрываем дефолтные панели GJS */
+        .gjs-cv-canvas { top: 0 !important; width: 100% !important; height: 100% !important; }
+        .gjs-frame-wrapper { background: #e8eef5; }
+
+        /* Слои — тема */
+        .gjs-layer { font-family: 'Inter', sans-serif !important; font-size: 0.8rem !important; }
+        .gjs-layer.gjs-selected > .gjs-layer-title { background: #eff6ff !important; color: var(--accent) !important; }
+
+        /* Traits/styles panel overrides */
+        .gjs-sm-sector__title {
+            font-family: 'Inter', sans-serif !important;
+            font-size: 0.72rem !important; font-weight: 700 !important;
+            text-transform: uppercase !important; letter-spacing: 0.05em !important;
+            background: #f8fafc !important; color: #64748b !important;
+            padding: 8px 12px !important;
+        }
+        .gjs-sm-properties { padding: 8px 10px !important; }
+        .gjs-sm-label { font-size: 0.75rem !important; font-family: 'Inter', sans-serif !important; color: #475569 !important; }
+        .gjs-sm-field input, .gjs-sm-field select {
+            font-family: 'Inter', sans-serif !important; font-size: 0.8rem !important;
+            border-radius: 6px !important;
+        }
+        .gjs-trt-trait__field input, .gjs-trt-trait__field select, .gjs-trt-trait__field textarea {
+            font-family: 'Inter', sans-serif !important; font-size: 0.8rem !important;
+            border-radius: 6px !important;
+        }
+        .gjs-field { border-radius: 6px !important; }
+
+        /* Right panel tabs */
+        .right-panel-tabs { display: flex; border-bottom: 1px solid #e2e8f0; }
+        .right-tab {
+            flex: 1; padding: 9px 6px; font-size: 0.7rem; font-weight: 600;
+            text-align: center; cursor: pointer; color: #94a3b8;
+            border-bottom: 2px solid transparent; transition: all 0.15s;
+            background: none; border-top: none; border-left: none; border-right: none;
+            font-family: 'Inter', sans-serif; text-transform: uppercase; letter-spacing: 0.04em;
+        }
+        .right-tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+        .right-tab:hover:not(.active) { color: #334155; background: #f8fafc; }
+
+        .right-panel-section { display: none; flex: 1; overflow: hidden; }
+        .right-panel-section.active { display: flex; flex-direction: column; overflow: hidden; }
+
+        /* Code editor modal */
+        .code-modal {
+            display: none; position: fixed; inset: 0; z-index: 2000;
+            background: rgba(0,0,0,0.6); backdrop-filter: blur(4px);
+            align-items: center; justify-content: center;
+        }
+        .code-modal.open { display: flex; }
+        .code-modal-content {
+            background: white; border-radius: 20px; width: 90vw; max-width: 820px;
+            max-height: 85vh; display: flex; flex-direction: column; overflow: hidden;
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.3);
+        }
+        .code-modal-header {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 16px 20px; border-bottom: 1px solid #e2e8f0;
+        }
+        .code-modal-header h3 { margin: 0; font-size: 1rem; font-weight: 700; color: #0f172a; }
+        .code-modal-tabs { display: flex; gap: 4px; }
+        .code-tab-btn {
+            padding: 5px 14px; border-radius: 8px; border: 1px solid #e2e8f0;
+            background: #f8fafc; font-size: 0.8rem; font-weight: 600; cursor: pointer;
+            font-family: 'Inter', sans-serif; color: #64748b; transition: all 0.15s;
+        }
+        .code-tab-btn.active { background: var(--accent); color: white; border-color: var(--accent); }
+        .code-modal-body { flex: 1; overflow: hidden; display: flex; flex-direction: column; }
+        .code-editor-area {
+            flex: 1; font-family: 'Fira Code', 'Courier New', monospace;
+            font-size: 0.82rem; padding: 16px; border: none;
+            resize: none; outline: none; line-height: 1.6;
+            background: #1e293b; color: #e2e8f0; overflow-y: auto;
+        }
+        .code-modal-footer {
+            padding: 12px 20px; border-top: 1px solid #e2e8f0;
+            display: flex; justify-content: flex-end; gap: 8px;
+        }
+        .code-cancel-btn {
+            padding: 8px 18px; border-radius: 10px; border: 1px solid #e2e8f0;
+            background: #f8fafc; font-size: 0.85rem; font-weight: 600; cursor: pointer;
+            font-family: 'Inter', sans-serif; transition: all 0.15s;
+        }
+        .code-apply-btn {
+            padding: 8px 20px; border-radius: 10px; border: none;
+            background: var(--accent); color: white; font-size: 0.85rem; font-weight: 600;
+            cursor: pointer; font-family: 'Inter', sans-serif; transition: all 0.15s;
+        }
+        .code-apply-btn:hover { background: #2563eb; }
+
+        /* Canvas size info */
+        .canvas-size-badge {
+            position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%);
+            background: rgba(15,23,42,0.7); color: white; font-size: 0.72rem; font-weight: 600;
+            padding: 4px 10px; border-radius: 6px; pointer-events: none; z-index: 10;
+            font-family: 'Inter', sans-serif; backdrop-filter: blur(4px);
+        }
+
+        /* Empty state in builder */
+        .builder-empty-state {
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            height: 100%; color: #94a3b8; text-align: center; padding: 40px;
+        }
+        .builder-empty-state .icon { font-size: 3rem; margin-bottom: 12px; }
+        .builder-empty-state p { font-size: 0.9rem; max-width: 260px; line-height: 1.5; }
+
+        /* Tooltip */
+        [data-tip] { position: relative; }
+        [data-tip]:hover::after {
+            content: attr(data-tip); position: absolute; bottom: calc(100% + 6px); left: 50%;
+            transform: translateX(-50%); background: #0f172a; color: white;
+            font-size: 0.72rem; padding: 4px 8px; border-radius: 6px; white-space: nowrap;
+            font-family: 'Inter', sans-serif; pointer-events: none; z-index: 999;
+        }
+
+        /* Responsive */
         @media (max-width: 991px) {
             .sidebar { width: 80px; padding: 24px 8px; }
             .sidebar-brand-text, .menu-label, .link-text { display: none; }
@@ -199,15 +418,10 @@
             .sidebar a.active::after { display: none; }
             .content { margin-left: 80px; padding: 30px 20px; }
         }
-
         @media (max-width: 767px) {
-            body {
-                padding-bottom: 70px;
-                background-color: white;
-            }
+            body { padding-bottom: 70px; background-color: white; }
             .sidebar {
-                width: 100%; height: 70px;
-                top: auto; bottom: 0;
+                width: 100%; height: 70px; top: auto; bottom: 0;
                 display: flex; flex-direction: row; justify-content: space-around; align-items: center;
                 padding: 0 10px; border-right: none; border-top: 1px solid #e2e8f0;
                 box-shadow: 0 -4px 10px rgba(0,0,0,0.03);
@@ -220,25 +434,17 @@
             .sidebar a:hover { background: transparent; }
             .sidebar a.active { background: transparent; color: var(--accent); }
             .sidebar a span:first-child { font-size: 1.3rem; }
-            .link-text { display: block !important; font-size: 0.65rem; font-weight: 600; margin-top: 2px;}
-
+            .link-text { display: block !important; font-size: 0.65rem; font-weight: 600; margin-top: 2px; }
             .content { margin-left: 0; padding: 20px 15px; }
-
-            .top-bar {
-                flex-direction: column;
-                align-items: flex-start !important;
-                gap: 16px;
-                margin-bottom: 24px;
-            }
+            .top-bar { flex-direction: column; align-items: flex-start !important; gap: 16px; margin-bottom: 24px; }
             .top-bar .btn { width: 100%; }
-
             .grid { grid-template-columns: 1fr; gap: 16px; }
             .card-img-placeholder { height: 220px; }
-
             .modal-content { border-radius: 16px; }
             .modal-body { padding: 15px; }
             .modal-footer { flex-direction: column; gap: 10px; padding: 15px; }
             .modal-footer .btn { width: 100%; margin: 0; }
+            .builder-left-panel, .builder-right-panel { display: none; }
         }
     </style>
 </head>
@@ -250,7 +456,6 @@
         <div class="sidebar-brand-icon">M</div>
         <span class="sidebar-brand-text">Manager</span>
     </div>
-
     <div class="menu-label">Main Menu</div>
     <a onclick="switchEntity('articles', this)" class="menu-link active">
         <span>📝</span> <span class="link-text">Articles</span>
@@ -261,37 +466,256 @@
     <a onclick="switchEntity('items', this)" class="menu-link">
         <span>📦</span> <span class="link-text">Items</span>
     </a>
+    <div class="menu-label" id="builderMenuLabel" style="margin-top: 16px; display: none;">Page Builder</div>
+    <a onclick="openPageBuilder(this)" class="menu-link builder-nav" id="builderNavLink" style="display: none;">
+        <span>🎨</span> <span class="link-text">Course Pages</span>
+    </a>
 </aside>
 
 <main class="content">
-    <div class="top-bar d-flex justify-content-between align-items-end">
-        <div>
-            <nav aria-label="breadcrumb">
-                <ol class="breadcrumb mb-1">
-                    <li class="breadcrumb-item small text-muted">Admin</li>
-                    <li class="breadcrumb-item small text-muted active" aria-current="page">Dashboard</li>
-                </ol>
-            </nav>
-            <h2 id="pageTitle" class="page-title m-0 text-capitalize">Articles</h2>
+    <!-- ─── Стандартный вид ─── -->
+    <div id="mainListView">
+        <div class="top-bar d-flex justify-content-between align-items-end">
+            <div>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb mb-1">
+                        <li class="breadcrumb-item small text-muted">Admin</li>
+                        <li class="breadcrumb-item small text-muted active" aria-current="page">Dashboard</li>
+                    </ol>
+                </nav>
+                <h2 id="pageTitle" class="page-title m-0 text-capitalize">Articles</h2>
+            </div>
+            <div class="d-flex gap-2">
+                <button id="openBuilderBtn" class="btn btn-light border btn-round shadow-sm"
+                        style="display: none;" onclick="openPageBuilderFromBtn()">
+                    🎨 Page Builder
+                </button>
+                <button id="newEntryBtn" class="btn btn-primary btn-round shadow-sm" onclick="openModal()">
+                    <span class="me-1">+</span> New Entry
+                </button>
+            </div>
         </div>
-        <button class="btn btn-primary btn-round shadow-sm" onclick="openModal()">
-            <span class="me-1">+</span> New Entry
-        </button>
+        <div id="cardContainer" class="grid"></div>
+        <div class="d-flex justify-content-center align-items-center mt-5 gap-3">
+            <button class="btn btn-white border shadow-sm btn-sm px-4 py-2" style="border-radius: 10px"
+                    onclick="changePage(-1)">Previous</button>
+            <span id="pageInfo" class="small fw-600 text-muted">PAGE 0</span>
+            <button class="btn btn-white border shadow-sm btn-sm px-4 py-2" style="border-radius: 10px"
+                    onclick="changePage(1)">Next</button>
+        </div>
     </div>
 
-    <div id="cardContainer" class="grid"></div>
+    <!-- ─── Page Builder ─── -->
+    <div id="pageBuilderView">
+        <!-- Top bar -->
+        <div class="builder-topbar">
+            <div class="builder-topbar-left">
+                <button class="builder-back-btn" onclick="closePageBuilder()">← Courses</button>
+                <div class="builder-divider"></div>
+                <select id="builderCourseSelect" class="builder-course-select" onchange="onBuilderCourseChange()">
+                    <option value="">— Select a course —</option>
+                </select>
+                <button class="btn-builder-load" onclick="createNewCourse()" data-tip="Create a brand new course">
+                    + New
+                </button>
+                <button class="btn-builder-load" id="btnLoad" disabled onclick="loadPageIntoBuilder()" data-tip="Load saved page into editor">
+                    ↓ Load
+                </button>
+                <span id="builderStatus" class="builder-status"></span>
+            </div>
+            <div class="builder-topbar-right">
+                <!-- Viewport switcher -->
+                <div class="viewport-btns" id="viewportBtns">
+                    <button class="vp-btn active" data-tip="Desktop" onclick="setViewport('desktop', this)">🖥</button>
+                    <button class="vp-btn" data-tip="Tablet" onclick="setViewport('tablet', this)">📱</button>
+                    <button class="vp-btn" data-tip="Mobile" onclick="setViewport('mobile', this)">📲</button>
+                </div>
+                <div class="builder-divider"></div>
+                <!-- Undo/Redo -->
+                <div class="undo-redo-btns">
+                    <button class="ur-btn" id="btnUndo" data-tip="Undo" onclick="editorUndo()">↩</button>
+                    <button class="ur-btn" id="btnRedo" data-tip="Redo" onclick="editorRedo()">↪</button>
+                </div>
+                <div class="builder-divider"></div>
+                <!-- Code editor -->
+                <button class="ur-btn" data-tip="Edit HTML/CSS code" onclick="openCodeModal()">⟨/⟩</button>
+                <!-- Clear canvas -->
+                <button class="ur-btn" data-tip="Clear canvas" onclick="clearCanvas()" style="color: #ef4444;">🗑</button>
+                <div class="builder-divider"></div>
+                <a id="btnPreview" class="btn-builder-preview" href="#" target="_blank"
+                   style="pointer-events: none; opacity: 0.4;" data-tip="Open preview">
+                    👁 Preview
+                </a>
+                <button class="btn-builder-save" onclick="savePageFromBuilder()" id="btnSave" disabled>
+                    💾 Save
+                </button>
+            </div>
+        </div>
 
-    <div class="d-flex justify-content-center align-items-center mt-5 gap-3">
-        <button class="btn btn-white border shadow-sm btn-sm px-4 py-2" style="border-radius: 10px"
-                onclick="changePage(-1)">Previous
-        </button>
-        <span id="pageInfo" class="small fw-600 text-muted">PAGE 0</span>
-        <button class="btn btn-white border shadow-sm btn-sm px-4 py-2" style="border-radius: 10px"
-                onclick="changePage(1)">Next
-        </button>
+        <!-- Workspace -->
+        <div class="builder-workspace">
+            <!-- Left panel: blocks + layers -->
+            <div class="builder-left-panel">
+                <div class="panel-tabs">
+                    <button class="panel-tab active" onclick="switchLeftTab('blocks', this)">Blocks</button>
+                    <button class="panel-tab" onclick="switchLeftTab('layers', this)">Layers</button>
+                </div>
+                <div class="panel-section active" id="panel-blocks">
+                    <div id="custom-blocks-container"></div>
+                </div>
+                <div class="panel-section" id="panel-layers">
+                    <div id="gjs-layers" class="layers-wrap"></div>
+                </div>
+            </div>
+
+            <!-- Canvas -->
+            <div class="builder-canvas-wrap" style="position: relative;">
+                <div id="gjs" style="height: 100%; flex: 1;"></div>
+                <div class="canvas-size-badge" id="canvasSizeBadge">1280px</div>
+            </div>
+
+            <!-- Right panel: styles + traits -->
+            <div class="builder-right-panel">
+                <div class="right-panel-tabs">
+                    <button class="right-tab active" onclick="switchRightTab('styles', this)">Style</button>
+                    <button class="right-tab" onclick="switchRightTab('course', this)">Course</button>
+                    <button class="right-tab" onclick="switchRightTab('traits', this)">Settings</button>
+                    <button class="right-tab" onclick="switchRightTab('seo', this)">SEO</button>
+                </div>
+                <div class="right-panel-section active" id="rpanel-styles" style="overflow-y: auto;">
+                    <div id="gjs-styles"></div>
+                </div>
+                <div class="right-panel-section" id="rpanel-course" style="overflow-y: auto; padding: 16px;">
+                    <div id="courseInfoPanel">
+                        <p class="text-muted small mb-3">Core course data — saved together with the page when you click Save.</p>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold small text-uppercase text-muted" style="font-size: 0.7rem;">Name</label>
+                            <input type="text" class="form-control" id="ciName" placeholder="Course name" style="font-size: 0.85rem; padding: 8px 12px;">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold small text-uppercase text-muted" style="font-size: 0.7rem;">Slug (URL)</label>
+                            <input type="text" class="form-control" id="ciSlug" placeholder="course-url-slug" style="font-size: 0.85rem; padding: 8px 12px;">
+                        </div>
+                        <div class="row g-2 mb-3">
+                            <div class="col-6">
+                                <label class="form-label fw-semibold small text-uppercase text-muted" style="font-size: 0.7rem;">Price</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light" style="font-size: 0.8rem; padding: 6px 8px;">$</span>
+                                    <input type="number" step="0.01" class="form-control" id="ciPrice" style="font-size: 0.85rem; padding: 8px 8px;">
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <label class="form-label fw-semibold small text-uppercase text-muted" style="font-size: 0.7rem;">Duration</label>
+                                <input type="text" class="form-control" id="ciDuration" placeholder="12 weeks" style="font-size: 0.85rem; padding: 8px 10px;">
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold small text-uppercase text-muted" style="font-size: 0.7rem;">Level</label>
+                            <select class="form-select" id="ciLevel" style="font-size: 0.85rem; padding: 8px 12px;">
+                                <option value="Beginner">Beginner</option>
+                                <option value="Intermediate">Intermediate</option>
+                                <option value="Advanced">Advanced</option>
+                            </select>
+                        </div>
+                        <div class="row g-2 mb-3">
+                            <div class="col-6">
+                                <label class="form-label fw-semibold small text-uppercase text-muted" style="font-size: 0.7rem;">Format</label>
+                                <select class="form-select" id="ciFormat" style="font-size: 0.78rem; padding: 8px 6px;">
+                                    <option value="ONLINE">Online</option>
+                                    <option value="OFFLINE">Offline</option>
+                                    <option value="HYBRID">Hybrid</option>
+                                </select>
+                            </div>
+                            <div class="col-6">
+                                <label class="form-label fw-semibold small text-uppercase text-muted" style="font-size: 0.7rem;">Type</label>
+                                <select class="form-select" id="ciType" style="font-size: 0.78rem; padding: 8px 6px;">
+                                    <option value="INDIVIDUAL">Individual</option>
+                                    <option value="GROUP">Group</option>
+                                    <option value="WEBINAR">Webinar</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold small text-uppercase text-muted" style="font-size: 0.7rem;">Language</label>
+                            <select class="form-select" id="ciLanguage" style="font-size: 0.85rem; padding: 8px 12px;">
+                                <option value="">— Select —</option>
+                                <option value="English">English</option>
+                                <option value="Polish">Polish</option>
+                                <option value="Ukrainian">Ukrainian</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold small text-uppercase text-muted" style="font-size: 0.7rem;">Short Description</label>
+                            <textarea class="form-control" id="ciDescription" rows="3" style="font-size: 0.85rem; padding: 8px 12px; resize: vertical;"></textarea>
+                        </div>
+                        <div class="mb-3 p-2 border rounded-3 bg-light d-flex align-items-center justify-content-between">
+                            <span class="small fw-semibold">Published</span>
+                            <div class="form-check form-switch m-0">
+                                <input class="form-check-input" type="checkbox" id="ciPublished" style="width: 2.6em; height: 1.3em; cursor: pointer;">
+                            </div>
+                        </div>
+                        <div class="mb-2">
+                            <label class="form-label fw-semibold small text-uppercase text-muted" style="font-size: 0.7rem;">Gallery</label>
+                            <div id="ciExistingPictures" class="d-flex flex-wrap gap-2 mb-2"></div>
+                            <input type="file" class="form-control form-control-sm" id="ciPictureInput" multiple accept="image/*" style="font-size: 0.78rem;">
+                        </div>
+                    </div>
+                </div>
+                <div class="right-panel-section" id="rpanel-traits" style="overflow-y: auto;">
+                    <div id="gjs-traits"></div>
+                </div>
+                <div class="right-panel-section" id="rpanel-seo" style="overflow-y: auto; padding: 16px;">
+                    <div id="seoPanel">
+                        <p class="text-muted small mb-3">Fill in the SEO meta-data for this course page. Saved together with the page HTML.</p>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold small text-uppercase text-muted" style="font-size: 0.7rem;">Page Title</label>
+                            <input type="text" class="form-control" id="seoTitle" placeholder="Course name — Site" style="font-size: 0.85rem; padding: 8px 12px;">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold small text-uppercase text-muted" style="font-size: 0.7rem;">Meta Description</label>
+                            <textarea class="form-control" id="seoDescription" rows="3" placeholder="Short description (150-160 chars)" style="font-size: 0.85rem; padding: 8px 12px; resize: vertical;"></textarea>
+                            <div id="seoDescCount" class="text-muted" style="font-size: 0.72rem; text-align: right; margin-top: 3px;">0 / 160</div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold small text-uppercase text-muted" style="font-size: 0.7rem;">OG Image URL</label>
+                            <input type="text" class="form-control" id="seoOgImage" placeholder="https://..." style="font-size: 0.85rem; padding: 8px 12px;">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold small text-uppercase text-muted" style="font-size: 0.7rem;">Keywords</label>
+                            <input type="text" class="form-control" id="seoKeywords" placeholder="course, language, beginner" style="font-size: 0.85rem; padding: 8px 12px;">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </main>
 
+<!-- ─── Code Editor Modal ─── -->
+<div class="code-modal" id="codeModal">
+    <div class="code-modal-content">
+        <div class="code-modal-header">
+            <h3>Edit Source Code</h3>
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <div class="code-modal-tabs">
+                    <button class="code-tab-btn active" onclick="switchCodeTab('html', this)">HTML</button>
+                    <button class="code-tab-btn" onclick="switchCodeTab('css', this)">CSS</button>
+                </div>
+                <button onclick="closeCodeModal()" style="background: none; border: none; font-size: 1.2rem; cursor: pointer; color: #64748b;">✕</button>
+            </div>
+        </div>
+        <div class="code-modal-body">
+            <textarea class="code-editor-area" id="codeEditorHtml" placeholder="<!-- HTML code -->" spellcheck="false"></textarea>
+            <textarea class="code-editor-area" id="codeEditorCss" placeholder="/* CSS code */" spellcheck="false" style="display: none;"></textarea>
+        </div>
+        <div class="code-modal-footer">
+            <button class="code-cancel-btn" onclick="closeCodeModal()">Cancel</button>
+            <button class="code-apply-btn" onclick="applyCode()">Apply changes</button>
+        </div>
+    </div>
+</div>
+
+<!-- ─── Entity Modal ─── -->
 <div class="modal fade" id="entityModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content shadow-lg">
@@ -302,7 +726,6 @@
                 </div>
                 <div class="modal-body px-4">
                     <input type="hidden" id="entityId" name="id">
-
                     <div class="row g-3">
                         <div class="col-md-8">
                             <label class="form-label fw-semibold small text-uppercase text-muted">Title / Name</label>
@@ -312,7 +735,6 @@
                             <label class="form-label fw-semibold small text-uppercase text-muted">Slug (URL)</label>
                             <input type="text" class="form-control" id="entitySlug" name="slug">
                         </div>
-
                         <div class="col-md-4 course-only">
                             <label class="form-label fw-semibold small text-uppercase text-muted">Price</label>
                             <div class="input-group">
@@ -322,8 +744,7 @@
                         </div>
                         <div class="col-md-4 course-only">
                             <label class="form-label fw-semibold small text-uppercase text-muted">Duration</label>
-                            <input type="text" class="form-control" id="courseDuration" name="duration"
-                                   placeholder="e.g. 12 weeks">
+                            <input type="text" class="form-control" id="courseDuration" name="duration" placeholder="e.g. 12 weeks">
                         </div>
                         <div class="col-md-4 course-only">
                             <label class="form-label fw-semibold small text-uppercase text-muted">Level</label>
@@ -350,13 +771,9 @@
                             </select>
                         </div>
                         <div class="col-md-4 course-only">
-                            <label class="form-label fw-semibold small text-uppercase text-muted">
-                                Language
-                            </label>
+                            <label class="form-label fw-semibold small text-uppercase text-muted">Language</label>
                             <input type="text" class="form-control" id="courseLanguage" name="language">
                         </div>
-
-                        <!-- ITEM FIELDS -->
                         <div class="col-md-4 item-only">
                             <label class="form-label fw-semibold small text-uppercase text-muted">Price</label>
                             <div class="input-group">
@@ -375,7 +792,6 @@
                                 <option value="false">Out of Stock</option>
                             </select>
                         </div>
-                        <!-- NEW: Category field for items -->
                         <div class="col-md-12 item-only">
                             <label class="form-label fw-semibold small text-uppercase text-muted">Category</label>
                             <select class="form-select" id="itemCategory" name="category">
@@ -386,24 +802,18 @@
                                 <option value="LECTURES">Lectures</option>
                             </select>
                         </div>
-
                         <div class="col-md-12">
-                            <label class="form-label fw-semibold small text-uppercase text-muted">Short
-                                Description</label>
-                            <textarea class="form-control" id="entityDescription" name="description"
-                                      rows="2"></textarea>
+                            <label class="form-label fw-semibold small text-uppercase text-muted">Short Description</label>
+                            <textarea class="form-control" id="entityDescription" name="description" rows="2"></textarea>
                         </div>
-
                         <div class="col-md-12" id="textContainer">
                             <label class="form-label fw-semibold small text-uppercase text-muted">Full Content</label>
                             <div id="editor" style="height: 300px;"></div>
                         </div>
-
                         <div class="col-md-12">
                             <div class="p-3 border rounded-4 bg-light d-flex align-items-center justify-content-between">
                                 <div>
-                                    <label class="form-check-label fw-bold d-block mb-0" for="entityPublished">Public
-                                        Status</label>
+                                    <label class="form-check-label fw-bold d-block mb-0" for="entityPublished">Public Status</label>
                                     <small class="text-muted">Set visibility for end users</small>
                                 </div>
                                 <div class="form-check form-switch m-0">
@@ -412,7 +822,6 @@
                                 </div>
                             </div>
                         </div>
-
                         <div class="col-md-12">
                             <label class="form-label fw-semibold small text-uppercase text-muted">Gallery</label>
                             <div id="existingPictures" class="d-flex flex-wrap gap-2 mb-2"></div>
@@ -421,8 +830,7 @@
                     </div>
                 </div>
                 <div class="modal-footer border-0 px-4 pb-4">
-                    <button type="button" class="btn btn-light rounded-3 px-4 py-2" data-bs-dismiss="modal">Cancel
-                    </button>
+                    <button type="button" class="btn btn-light rounded-3 px-4 py-2" data-bs-dismiss="modal">Cancel</button>
                     <button type="submit" class="btn btn-primary rounded-3 px-4 py-2 shadow">Save Changes</button>
                 </div>
             </form>
@@ -430,16 +838,135 @@
     </div>
 </div>
 
+<!-- ─── New Course Modal ─── -->
+<div class="modal fade" id="newCourseModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content shadow-lg">
+            <form id="newCourseForm">
+                <div class="modal-header border-0 px-4 pt-4">
+                    <div>
+                        <h5 class="modal-title fw-bold mb-1">New Course</h5>
+                        <p class="text-muted small m-0">Just the required fields — everything else (description, level, gallery, page design...) is filled in afterwards in the builder.</p>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body px-4">
+                    <div id="ncError" class="alert alert-danger small py-2 mb-3" style="display: none; border-radius: 10px;"></div>
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold small text-uppercase text-muted">Course Name</label>
+                        <input type="text" class="form-control" id="ncName" placeholder="e.g. Spanish for Beginners" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold small text-uppercase text-muted">Slug (URL)</label>
+                        <input type="text" class="form-control" id="ncSlug" placeholder="spanish-for-beginners"
+                               pattern="[a-z0-9]+(-[a-z0-9]+)*" title="Lowercase letters, numbers and hyphens only" required>
+                        <div class="form-text" style="font-size: 0.72rem;">Auto-filled from the name — edit if you'd like a different URL.</div>
+                    </div>
+                    <div class="row g-3">
+                        <div class="col-6">
+                            <label class="form-label fw-semibold small text-uppercase text-muted">Price</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light">$</span>
+                                <input type="number" step="0.01" min="0" class="form-control" id="ncPrice" required>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <label class="form-label fw-semibold small text-uppercase text-muted">Format</label>
+                            <select class="form-select" id="ncFormat" required>
+                                <option value="ONLINE">Online</option>
+                                <option value="OFFLINE">Offline</option>
+                                <option value="HYBRID">Hybrid</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row g-3 mt-3">
+                        <div class="col-6">
+                            <label class="form-label fw-semibold small text-uppercase text-muted">Type</label>
+                            <select class="form-select" id="ncType" required>
+                                <option value="INDIVIDUAL">Individual</option>
+                                <option value="GROUP">Group</option>
+                                <option value="WEBINAR">Webinar</option>
+                            </select>
+                        </div>
+                        <div class="col-6">
+                            <label class="form-label fw-semibold small text-uppercase text-muted">Level</label>
+                            <select class="form-select" id="ncLevel">
+                                <option value="Beginner">Beginner</option>
+                                <option value="Intermediate">Intermediate</option>
+                                <option value="Advanced">Advanced</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row g-3 mt-3">
+                        <div class="col-6">
+                            <label class="form-label fw-semibold small text-uppercase text-muted">Language</label>
+                            <select class="form-select" id="ncLanguage">
+                                <option value="">— Select —</option>
+                                <option value="English">English</option>
+                                <option value="Polish">Polish</option>
+                                <option value="Ukrainian">Ukrainian</option>
+                            </select>
+                        </div>
+                        <div class="col-6">
+                            <label class="form-label fw-semibold small text-uppercase text-muted">Duration</label>
+                            <input type="text" class="form-control" id="ncDuration" placeholder="e.g. 12 weeks">
+                        </div>
+                    </div>
+                    <div class="mt-3 p-2 border rounded-3 bg-light d-flex align-items-center justify-content-between">
+                        <div>
+                            <span class="small fw-semibold d-block">Published</span>
+                            <span class="text-muted" style="font-size: 0.72rem;">Make it visible to visitors right away</span>
+                        </div>
+                        <div class="form-check form-switch m-0">
+                            <input class="form-check-input" type="checkbox" id="ncPublished" style="width: 2.8em; height: 1.4em; cursor: pointer;">
+                        </div>
+                    </div>
+
+                    <!-- ── Image upload (NEW) ── -->
+                    <div class="mt-3">
+                        <label class="form-label fw-semibold small text-uppercase text-muted" style="font-size: 0.7rem;">Gallery (images)</label>
+                        <label for="ncPictureInput"
+                               class="d-flex align-items-center justify-content-center gap-2 border rounded-3 bg-light text-muted border-dashed"
+                               style="cursor:pointer; padding:16px; font-size:0.82rem; transition:background 0.2s;"
+                               onmouseenter="this.style.background='#eff6ff'" onmouseleave="this.style.background=''">
+                            <span style="font-size:1.1rem;">🖼️</span>
+                            <span id="ncPictureLabel">Click to select images</span>
+                        </label>
+                        <input type="file" id="ncPictureInput" multiple accept="image/*"
+                               style="display:none;" onchange="previewNcImages(this)">
+                        <div id="ncImagePreviews" class="d-flex flex-wrap gap-2 mt-2"></div>
+                    </div>
+                </div>
+                <div class="modal-footer border-0 px-4 pb-4">
+                    <button type="button" class="btn btn-light rounded-3 px-4 py-2" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary rounded-3 px-4 py-2 shadow" id="ncSubmitBtn">Create &amp; Continue</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://unpkg.com/grapesjs@0.21.7/dist/grapes.min.js"></script>
+
 <script>
-    let currentEntity = 'articles';
-    let currentPage = 0;
-    const pageSize = 9;
-    let modalInstance = null;
+    // ─── State ───────────────────────────────────────────────
+    let currentEntity    = 'articles';
+    let currentPage      = 0;
+    const pageSize       = 9;
+    let modalInstance    = null;
+    let newCourseModal   = null;
+    let ncSlugEdited      = false;
     let picturesToDelete = [];
     let quill;
+    let editor;
+    let builderCourseId  = null;
+    let allCourses       = [];
+    let currentCodeTab   = 'html';
 
+    // ─── Init ─────────────────────────────────────────────────
     document.addEventListener("DOMContentLoaded", () => {
-        modalInstance = new bootstrap.Modal(document.getElementById('entityModal'));
+        modalInstance  = new bootstrap.Modal(document.getElementById('entityModal'));
+        newCourseModal = new bootstrap.Modal(document.getElementById('newCourseModal'));
         quill = new Quill('#editor', {
             theme: 'snow',
             placeholder: 'Write content here...',
@@ -448,34 +975,1007 @@
                     [{ header: [1, 2, 3, false] }],
                     ['bold', 'italic', 'underline'],
                     [{ list: 'ordered' }, { list: 'bullet' }],
-                    ['link'],
-                    ['clean']
+                    ['link'], ['clean']
                 ]
             }
         });
+        initGrapesJS();
         loadData();
         document.getElementById('entityForm').addEventListener('submit', saveData);
+        document.getElementById('newCourseForm').addEventListener('submit', submitNewCourse);
+
+        // Auto-fill the slug from the course name until the user edits it manually
+        document.getElementById('ncSlug').addEventListener('input', () => { ncSlugEdited = true; });
+        document.getElementById('ncName').addEventListener('input', function() {
+            if (!ncSlugEdited) document.getElementById('ncSlug').value = slugify(this.value);
+        });
+
+        // SEO description counter
+        document.getElementById('seoDescription').addEventListener('input', function() {
+            document.getElementById('seoDescCount').textContent = this.value.length + ' / 160';
+        });
     });
 
+    function slugify(str) {
+        return str.toString().toLowerCase().trim()
+            .replace(/[^a-z0-9\s-]/g, '')
+            .replace(/\s+/g, '-')
+            .replace(/-+/g, '-')
+            .replace(/^-|-$/g, '');
+    }
+
+    // ─── GrapesJS init ─────────────────────────────────────────
+    function initGrapesJS() {
+        editor = grapesjs.init({
+            container: '#gjs',
+            height: '100%',
+            storageManager: false,
+            noticeOnUnload: false,
+
+            // Mount panels into our custom DOM
+            panels: { defaults: [] },
+            layerManager: { appendTo: '#gjs-layers' },
+            styleManager: {
+                appendTo: '#gjs-styles',
+                sectors: [
+                    { name: 'Layout', open: true, properties: [
+                        'display', 'flex-direction', 'justify-content', 'align-items',
+                        'float', 'position', 'top', 'right', 'bottom', 'left'
+                    ]},
+                    { name: 'Dimension', open: false, properties: [
+                        'width', 'height', 'max-width', 'min-height',
+                        'margin', 'padding'
+                    ]},
+                    { name: 'Typography', open: false, properties: [
+                        'font-family', 'font-size', 'font-weight', 'letter-spacing', 'line-height',
+                        'color', 'text-align', 'text-decoration', 'text-shadow'
+                    ]},
+                    { name: 'Background', open: false, properties: [
+                        'background-color', 'background-image', 'background-size',
+                        'background-repeat', 'background-position'
+                    ]},
+                    { name: 'Border', open: false, properties: [
+                        'border-radius', 'border', 'border-color', 'border-style', 'border-width', 'box-shadow'
+                    ]},
+                    { name: 'Extra', open: false, properties: [
+                        'opacity', 'transition', 'cursor', 'overflow', 'z-index'
+                    ]},
+                ]
+            },
+            traitManager: { appendTo: '#gjs-traits' },
+            blockManager: {
+                appendTo: '#custom-blocks-container',
+                blocks: []
+            },
+            assetManager: {
+                upload: '/api/admin/picture/upload',
+                uploadName: 'file',
+                multiUpload: false,
+                autoAdd: true,
+            },
+            canvas: {
+                styles: [
+                    'https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css',
+                    'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap'
+                ],
+            },
+            deviceManager: {
+                devices: [
+                    { name: 'Desktop', width: '' },
+                    { name: 'Tablet', width: '768px', widthMedia: '768px' },
+                    { name: 'Mobile', width: '375px', widthMedia: '480px' },
+                ]
+            },
+        });
+
+        // Register custom course blocks
+        registerCourseBlocks(editor);
+
+        // Update canvas size badge on resize
+        editor.on('change:device', () => {
+            const dev = editor.getDevice();
+            const badge = document.getElementById('canvasSizeBadge');
+            if (dev === 'Desktop') badge.textContent = '1280px';
+            else if (dev === 'Tablet') badge.textContent = '768px';
+            else badge.textContent = '375px';
+        });
+    }
+
+    // ─── Custom Course Blocks ──────────────────────────────────
+    function registerCourseBlocks(editor) {
+        const bm = editor.BlockManager;
+
+        const blocks = [
+            // ── Layout
+            {
+                id: 'section-hero', label: 'Hero Section', category: '📐 Layout',
+                icon: '🎯',
+                content: `<section style="background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); padding: 80px 40px; text-align: center; color: white;">
+      <p style="font-size: 14px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: #60a5fa; margin-bottom: 12px;">Course</p>
+      <h1 style="font-size: 48px; font-weight: 700; margin-bottom: 16px; line-height: 1.2;">Course Title Here</h1>
+      <p style="font-size: 18px; color: #94a3b8; max-width: 560px; margin: 0 auto 32px;">A compelling one-liner that explains who this course is for and what they'll achieve.</p>
+      <a href="#enroll" style="display: inline-block; background: #3b82f6; color: white; padding: 14px 36px; border-radius: 10px; font-weight: 700; font-size: 16px; text-decoration: none;">Enroll Now</a>
+    </section>`,
+            },
+            {
+                id: 'section-2col', label: '2 Columns', category: '📐 Layout',
+                icon: '⬜',
+                content: `<div style="display: flex; gap: 24px; padding: 40px;">
+      <div style="flex: 1; background: #f8fafc; border-radius: 12px; padding: 24px;">Column 1</div>
+      <div style="flex: 1; background: #f8fafc; border-radius: 12px; padding: 24px;">Column 2</div>
+    </div>`,
+            },
+            {
+                id: 'section-3col', label: '3 Columns', category: '📐 Layout',
+                icon: '▦',
+                content: `<div style="display: flex; gap: 20px; padding: 40px;">
+      <div style="flex: 1; background: #f8fafc; border-radius: 12px; padding: 20px;">Column 1</div>
+      <div style="flex: 1; background: #f8fafc; border-radius: 12px; padding: 20px;">Column 2</div>
+      <div style="flex: 1; background: #f8fafc; border-radius: 12px; padding: 20px;">Column 3</div>
+    </div>`,
+            },
+            {
+                id: 'section-container', label: 'Container', category: '📐 Layout',
+                icon: '📦',
+                content: `<div style="max-width: 1100px; margin: 0 auto; padding: 60px 24px;">
+      <p>Your content here</p>
+    </div>`,
+            },
+
+            // ── Course components
+            {
+                id: 'course-info-bar', label: 'Info Bar', category: '🎓 Course',
+                icon: '📊',
+                content: `<div style="background: white; border: 1px solid #e2e8f0; border-radius: 16px; padding: 24px; display: flex; gap: 32px; flex-wrap: wrap; justify-content: center; box-shadow: 0 1px 3px rgba(0,0,0,0.07);">
+      <div style="text-align: center;">
+        <div style="font-size: 28px; font-weight: 700; color: #0f172a;">12 weeks</div>
+        <div style="font-size: 13px; color: #64748b; margin-top: 2px;">Duration</div>
+      </div>
+      <div style="width: 1px; background: #e2e8f0;"></div>
+      <div style="text-align: center;">
+        <div style="font-size: 28px; font-weight: 700; color: #0f172a;">Beginner</div>
+        <div style="font-size: 13px; color: #64748b; margin-top: 2px;">Level</div>
+      </div>
+      <div style="width: 1px; background: #e2e8f0;"></div>
+      <div style="text-align: center;">
+        <div style="font-size: 28px; font-weight: 700; color: #0f172a;">Online</div>
+        <div style="font-size: 13px; color: #64748b; margin-top: 2px;">Format</div>
+      </div>
+      <div style="width: 1px; background: #e2e8f0;"></div>
+      <div style="text-align: center;">
+        <div style="font-size: 28px; font-weight: 700; color: #3b82f6;">$299</div>
+        <div style="font-size: 13px; color: #64748b; margin-top: 2px;">Price</div>
+      </div>
+    </div>`,
+            },
+            {
+                id: 'course-syllabus', label: 'Syllabus', category: '🎓 Course',
+                icon: '📋',
+                content: `<section style="padding: 60px 40px; background: #f8fafc;">
+      <h2 style="font-size: 32px; font-weight: 700; color: #0f172a; margin-bottom: 32px;">What You'll Learn</h2>
+      <div style="display: flex; flex-direction: column; gap: 12px;">
+        <div style="background: white; border-radius: 12px; padding: 18px 22px; display: flex; align-items: center; gap: 16px; border: 1px solid #e2e8f0;">
+          <span style="background: #eff6ff; color: #3b82f6; border-radius: 8px; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px; flex-shrink: 0;">01</span>
+          <div>
+            <div style="font-weight: 600; color: #0f172a; margin-bottom: 2px;">Introduction to the Language</div>
+            <div style="font-size: 13px; color: #64748b;">Alphabet, basic phrases, pronunciation fundamentals</div>
+          </div>
+          <span style="margin-left: auto; font-size: 12px; color: #94a3b8; white-space: nowrap;">3 hours</span>
+        </div>
+        <div style="background: white; border-radius: 12px; padding: 18px 22px; display: flex; align-items: center; gap: 16px; border: 1px solid #e2e8f0;">
+          <span style="background: #eff6ff; color: #3b82f6; border-radius: 8px; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px; flex-shrink: 0;">02</span>
+          <div>
+            <div style="font-weight: 600; color: #0f172a; margin-bottom: 2px;">Grammar Foundations</div>
+            <div style="font-size: 13px; color: #64748b;">Core grammar rules and sentence structure</div>
+          </div>
+          <span style="margin-left: auto; font-size: 12px; color: #94a3b8; white-space: nowrap;">5 hours</span>
+        </div>
+        <div style="background: white; border-radius: 12px; padding: 18px 22px; display: flex; align-items: center; gap: 16px; border: 1px solid #e2e8f0;">
+          <span style="background: #eff6ff; color: #3b82f6; border-radius: 8px; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px; flex-shrink: 0;">03</span>
+          <div>
+            <div style="font-weight: 600; color: #0f172a; margin-bottom: 2px;">Everyday Vocabulary</div>
+            <div style="font-size: 13px; color: #64748b;">500 essential words and conversational practice</div>
+          </div>
+          <span style="margin-left: auto; font-size: 12px; color: #94a3b8; white-space: nowrap;">6 hours</span>
+        </div>
+      </div>
+    </section>`,
+            },
+            {
+                id: 'course-cta', label: 'Enroll CTA', category: '🎓 Course',
+                icon: '🚀',
+                content: `<section style="background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); padding: 72px 40px; text-align: center; color: white;">
+      <h2 style="font-size: 36px; font-weight: 700; margin-bottom: 12px;">Ready to Start Learning?</h2>
+      <p style="font-size: 17px; color: rgba(255,255,255,0.8); max-width: 480px; margin: 0 auto 32px; line-height: 1.6;">Join thousands of students who have already transformed their language skills.</p>
+      <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+        <a href="#" style="background: white; color: #2563eb; padding: 14px 36px; border-radius: 10px; font-weight: 700; font-size: 16px; text-decoration: none; display: inline-block;">Enroll Now — $299</a>
+        <a href="#" style="background: rgba(255,255,255,0.15); color: white; padding: 14px 36px; border-radius: 10px; font-weight: 600; font-size: 16px; text-decoration: none; display: inline-block; border: 1px solid rgba(255,255,255,0.3);">See Curriculum</a>
+      </div>
+    </section>`,
+            },
+            {
+                id: 'course-instructor', label: 'Instructor', category: '🎓 Course',
+                icon: '👤',
+                content: `<section style="padding: 60px 40px; max-width: 900px; margin: 0 auto;">
+      <h2 style="font-size: 28px; font-weight: 700; color: #0f172a; margin-bottom: 32px;">Your Instructor</h2>
+      <div style="display: flex; gap: 28px; align-items: flex-start;">
+        <div style="width: 96px; height: 96px; border-radius: 50%; background: linear-gradient(135deg, #bfdbfe, #93c5fd); flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 32px;">👩‍🏫</div>
+        <div>
+          <h3 style="font-size: 20px; font-weight: 700; color: #0f172a; margin: 0 0 4px;">Dr. Jane Doe</h3>
+          <p style="color: #3b82f6; font-weight: 600; font-size: 14px; margin: 0 0 14px;">Senior Language Instructor · 10+ years experience</p>
+          <p style="color: #475569; line-height: 1.7; margin: 0;">Former linguist at the Institute of Applied Languages. Passionate about making language learning practical and enjoyable for adult learners of all backgrounds.</p>
+        </div>
+      </div>
+    </section>`,
+            },
+            {
+                id: 'course-faq', label: 'FAQ', category: '🎓 Course',
+                icon: '❓',
+                content: `<section style="padding: 60px 40px; background: #f8fafc;">
+      <h2 style="font-size: 28px; font-weight: 700; color: #0f172a; margin-bottom: 32px;">Frequently Asked Questions</h2>
+      <div style="display: flex; flex-direction: column; gap: 12px; max-width: 700px;">
+        <details style="background: white; border-radius: 12px; border: 1px solid #e2e8f0; padding: 18px 22px;">
+          <summary style="font-weight: 600; color: #0f172a; cursor: pointer; list-style: none;">Do I need any prior knowledge?</summary>
+          <p style="margin-top: 12px; color: #475569; line-height: 1.6;">No prior experience is required. This course starts from complete basics and builds your skills step by step.</p>
+        </details>
+        <details style="background: white; border-radius: 12px; border: 1px solid #e2e8f0; padding: 18px 22px;">
+          <summary style="font-weight: 600; color: #0f172a; cursor: pointer; list-style: none;">How long do I have access?</summary>
+          <p style="margin-top: 12px; color: #475569; line-height: 1.6;">Lifetime access — once you enroll, the course is yours forever including any future updates.</p>
+        </details>
+        <details style="background: white; border-radius: 12px; border: 1px solid #e2e8f0; padding: 18px 22px;">
+          <summary style="font-weight: 600; color: #0f172a; cursor: pointer; list-style: none;">Is there a certificate?</summary>
+          <p style="margin-top: 12px; color: #475569; line-height: 1.6;">Yes, upon completion you'll receive a digital certificate that you can share on LinkedIn.</p>
+        </details>
+      </div>
+    </section>`,
+            },
+            {
+                id: 'course-testimonials', label: 'Testimonials', category: '🎓 Course',
+                icon: '⭐',
+                content: `<section style="padding: 60px 40px;">
+      <h2 style="font-size: 28px; font-weight: 700; color: #0f172a; text-align: center; margin-bottom: 40px;">What Students Say</h2>
+      <div style="display: flex; gap: 20px; flex-wrap: wrap;">
+        <div style="flex: 1; min-width: 240px; background: white; border-radius: 16px; padding: 28px; border: 1px solid #e2e8f0; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+          <div style="color: #f59e0b; font-size: 18px; margin-bottom: 12px;">★★★★★</div>
+          <p style="color: #334155; line-height: 1.7; margin-bottom: 20px; font-style: italic;">"This course completely changed my approach to language learning. The structure is perfect."</p>
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <div style="width: 40px; height: 40px; border-radius: 50%; background: #dbeafe; display: flex; align-items: center; justify-content: center; font-size: 18px;">👨</div>
+            <div><div style="font-weight: 600; font-size: 14px; color: #0f172a;">Alex M.</div><div style="font-size: 12px; color: #94a3b8;">Student</div></div>
+          </div>
+        </div>
+        <div style="flex: 1; min-width: 240px; background: white; border-radius: 16px; padding: 28px; border: 1px solid #e2e8f0; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+          <div style="color: #f59e0b; font-size: 18px; margin-bottom: 12px;">★★★★★</div>
+          <p style="color: #334155; line-height: 1.7; margin-bottom: 20px; font-style: italic;">"I went from zero to conversational in 3 months. Incredible value for the price."</p>
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <div style="width: 40px; height: 40px; border-radius: 50%; background: #fce7f3; display: flex; align-items: center; justify-content: center; font-size: 18px;">👩</div>
+            <div><div style="font-weight: 600; font-size: 14px; color: #0f172a;">Maria K.</div><div style="font-size: 12px; color: #94a3b8;">Student</div></div>
+          </div>
+        </div>
+      </div>
+    </section>`,
+            },
+            {
+                id: 'course-benefits', label: 'Benefits', category: '🎓 Course',
+                icon: '✅',
+                content: `<section style="padding: 60px 40px; background: #f8fafc;">
+      <h2 style="font-size: 28px; font-weight: 700; color: #0f172a; margin-bottom: 32px;">Why This Course</h2>
+      <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px;">
+        <div style="background: white; border-radius: 14px; padding: 24px; border: 1px solid #e2e8f0;">
+          <div style="font-size: 28px; margin-bottom: 12px;">🎯</div>
+          <h3 style="font-size: 16px; font-weight: 700; color: #0f172a; margin-bottom: 6px;">Structured Learning</h3>
+          <p style="font-size: 14px; color: #64748b; line-height: 1.5; margin: 0;">Clear, step-by-step curriculum built by language experts.</p>
+        </div>
+        <div style="background: white; border-radius: 14px; padding: 24px; border: 1px solid #e2e8f0;">
+          <div style="font-size: 28px; margin-bottom: 12px;">⏱</div>
+          <h3 style="font-size: 16px; font-weight: 700; color: #0f172a; margin-bottom: 6px;">Learn at Your Pace</h3>
+          <p style="font-size: 14px; color: #64748b; line-height: 1.5; margin: 0;">Access lessons anytime, replay as many times as you need.</p>
+        </div>
+        <div style="background: white; border-radius: 14px; padding: 24px; border: 1px solid #e2e8f0;">
+          <div style="font-size: 28px; margin-bottom: 12px;">💬</div>
+          <h3 style="font-size: 16px; font-weight: 700; color: #0f172a; margin-bottom: 6px;">Live Practice</h3>
+          <p style="font-size: 14px; color: #64748b; line-height: 1.5; margin: 0;">Weekly live sessions to practice speaking with real people.</p>
+        </div>
+        <div style="background: white; border-radius: 14px; padding: 24px; border: 1px solid #e2e8f0;">
+          <div style="font-size: 28px; margin-bottom: 12px;">🏆</div>
+          <h3 style="font-size: 16px; font-weight: 700; color: #0f172a; margin-bottom: 6px;">Certificate</h3>
+          <p style="font-size: 14px; color: #64748b; line-height: 1.5; margin: 0;">Earn a verified certificate upon course completion.</p>
+        </div>
+      </div>
+    </section>`,
+            },
+
+            // ── Text & Media
+            {
+                id: 'text-heading', label: 'Heading', category: '✍️ Text',
+                icon: 'H',
+                content: `<h2 style="font-size: 36px; font-weight: 700; color: #0f172a; margin: 0; letter-spacing: -0.02em;">Your Heading Here</h2>`,
+            },
+            {
+                id: 'text-paragraph', label: 'Paragraph', category: '✍️ Text',
+                icon: 'P',
+                content: `<p style="font-size: 16px; line-height: 1.7; color: #475569; margin: 0;">Write your paragraph content here. This is a comfortable reading size with good line-height for long-form text.</p>`,
+            },
+            {
+                id: 'text-quote', label: 'Quote', category: '✍️ Text',
+                icon: '❝',
+                content: `<blockquote style="border-left: 4px solid #3b82f6; padding: 16px 24px; margin: 0; background: #eff6ff; border-radius: 0 10px 10px 0;">
+      <p style="font-size: 18px; font-style: italic; color: #1e40af; margin: 0; line-height: 1.6;">"Your inspirational quote or highlight here."</p>
+      <cite style="display: block; margin-top: 10px; font-size: 13px; color: #3b82f6; font-style: normal; font-weight: 600;">— Source Name</cite>
+    </blockquote>`,
+            },
+            {
+                id: 'media-image', label: 'Image', category: '✍️ Text',
+                icon: '🖼',
+                content: { type: 'image' },
+            },
+            {
+                id: 'media-video', label: 'Video', category: '✍️ Text',
+                icon: '▶️',
+                content: `<div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 14px; background: #1e293b;">
+      <iframe style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none;"
+              src="https://www.youtube.com/embed/dQw4w9WgXcQ" allowfullscreen></iframe>
+    </div>`,
+            },
+            {
+                id: 'media-divider', label: 'Divider', category: '✍️ Text',
+                icon: '—',
+                content: `<hr style="border: none; border-top: 1px solid #e2e8f0; margin: 40px 0;">`,
+            },
+
+            // ── UI Elements
+            {
+                id: 'ui-button', label: 'Button', category: '🔘 UI',
+                icon: '🔵',
+                content: `<a href="#" style="display: inline-block; background: #3b82f6; color: white; padding: 12px 28px; border-radius: 10px; font-weight: 600; font-size: 15px; text-decoration: none; cursor: pointer;">Click Here</a>`,
+            },
+            {
+                id: 'ui-badge', label: 'Badge', category: '🔘 UI',
+                icon: '🏷',
+                content: `<span style="display: inline-block; background: #eff6ff; color: #3b82f6; border: 1px solid #bfdbfe; border-radius: 6px; padding: 4px 12px; font-size: 13px; font-weight: 600;">Tag Label</span>`,
+            },
+            {
+                id: 'ui-card', label: 'Card', category: '🔘 UI',
+                icon: '🃏',
+                content: `<div style="background: white; border-radius: 16px; border: 1px solid #e2e8f0; padding: 28px; box-shadow: 0 1px 3px rgba(0,0,0,0.07);">
+      <h3 style="font-size: 20px; font-weight: 700; color: #0f172a; margin: 0 0 8px;">Card Title</h3>
+      <p style="color: #64748b; margin: 0; line-height: 1.6;">Card description content goes here.</p>
+    </div>`,
+            },
+            {
+                id: 'ui-countdown', label: 'Countdown', category: '🔘 UI',
+                icon: '⏳',
+                content: `<div style="background: #0f172a; color: white; border-radius: 16px; padding: 32px; text-align: center;">
+      <p style="font-size: 13px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: #60a5fa; margin: 0 0 20px;">Enrollment closes in</p>
+      <div style="display: flex; justify-content: center; gap: 16px;">
+        <div><div style="font-size: 36px; font-weight: 700;">03</div><div style="font-size: 11px; color: #94a3b8; margin-top: 4px;">DAYS</div></div>
+        <div style="font-size: 36px; font-weight: 700; color: #3b82f6;">:</div>
+        <div><div style="font-size: 36px; font-weight: 700;">12</div><div style="font-size: 11px; color: #94a3b8; margin-top: 4px;">HOURS</div></div>
+        <div style="font-size: 36px; font-weight: 700; color: #3b82f6;">:</div>
+        <div><div style="font-size: 36px; font-weight: 700;">47</div><div style="font-size: 11px; color: #94a3b8; margin-top: 4px;">MINS</div></div>
+      </div>
+    </div>`,
+            },
+
+            // ── Navigation
+            {
+                id: 'nav-header', label: 'Page Header', category: '🔗 Nav',
+                icon: '🧭',
+                content: `<header style="background: white; border-bottom: 1px solid #e2e8f0; padding: 16px 40px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100;">
+      <div style="font-size: 20px; font-weight: 700; color: #0f172a;">Logo</div>
+      <nav style="display: flex; gap: 24px;">
+        <a href="#" style="color: #475569; text-decoration: none; font-weight: 500; font-size: 14px;">About</a>
+        <a href="#" style="color: #475569; text-decoration: none; font-weight: 500; font-size: 14px;">Curriculum</a>
+        <a href="#" style="color: #475569; text-decoration: none; font-weight: 500; font-size: 14px;">FAQ</a>
+      </nav>
+      <a href="#enroll" style="background: #3b82f6; color: white; padding: 9px 22px; border-radius: 9px; font-weight: 600; font-size: 14px; text-decoration: none;">Enroll</a>
+    </header>`,
+            },
+            {
+                id: 'nav-footer', label: 'Page Footer', category: '🔗 Nav',
+                icon: '📌',
+                content: `<footer style="background: #0f172a; color: #94a3b8; padding: 40px; text-align: center;">
+      <p style="margin: 0 0 8px; font-size: 14px;">© 2024 Your School. All rights reserved.</p>
+      <div style="display: flex; gap: 20px; justify-content: center; margin-top: 12px;">
+        <a href="#" style="color: #64748b; text-decoration: none; font-size: 13px;">Privacy Policy</a>
+        <a href="#" style="color: #64748b; text-decoration: none; font-size: 13px;">Terms</a>
+        <a href="#" style="color: #64748b; text-decoration: none; font-size: 13px;">Contact</a>
+      </div>
+    </footer>`,
+            },
+
+            // ── Layout extra
+            {
+                id: 'layout-image-text', label: 'Image + Text', category: '📐 Layout',
+                icon: '🖼',
+                content: `<div style="display: flex; align-items: center; gap: 32px; padding: 40px; flex-wrap: wrap;">
+      <div style="flex: 1; min-width: 220px; height: 200px; background: #f1f5f9; border-radius: 14px; display: flex; align-items: center; justify-content: center; color: #94a3b8; font-size: 13px;">Image</div>
+      <div style="flex: 1; min-width: 220px;">
+        <h3 style="font-size: 20px; font-weight: 700; color: #0f172a; margin: 0 0 10px;">Heading goes here</h3>
+        <p style="color: #64748b; line-height: 1.6; margin: 0;">Describe this section. Replace the image placeholder and edit this text to match your content.</p>
+      </div>
+    </div>`,
+            },
+            {
+                id: 'hero-split', label: 'Hero — Split', category: '🎓 Course',
+                icon: '🧩',
+                content: `<section style="background: #ffffff; padding: 70px 40px; display: flex; align-items: center; gap: 48px; flex-wrap: wrap;">
+      <div style="flex: 1; min-width: 280px;">
+        <p style="font-size: 13px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #3b82f6; margin-bottom: 14px;">New Course</p>
+        <h1 style="font-size: 42px; font-weight: 700; color: #0f172a; line-height: 1.15; margin-bottom: 18px;">Master a New Skill, One Lesson at a Time</h1>
+        <p style="font-size: 17px; color: #64748b; line-height: 1.6; margin-bottom: 28px; max-width: 460px;">A practical, structured course designed to take you from the basics to real confidence — at your own pace.</p>
+        <a href="#enroll" style="display: inline-block; background: #0f172a; color: white; padding: 14px 32px; border-radius: 10px; font-weight: 700; font-size: 15px; text-decoration: none;">Start Learning →</a>
+      </div>
+      <div style="flex: 1; min-width: 280px; min-height: 320px; background: linear-gradient(135deg, #dbeafe, #bfdbfe); border-radius: 20px; display: flex; align-items: center; justify-content: center; font-size: 64px;">🎓</div>
+    </section>`,
+            },
+            {
+                id: 'hero-gradient', label: 'Hero — Gradient', category: '🎓 Course',
+                icon: '🌈',
+                content: `<section style="background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #ec4899 100%); padding: 90px 40px; text-align: center; color: white;">
+      <p style="font-size: 14px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.85); margin-bottom: 14px;">Limited Cohort</p>
+      <h1 style="font-size: 50px; font-weight: 800; margin-bottom: 18px; line-height: 1.15;">Learn It. Live It. Love It.</h1>
+      <p style="font-size: 18px; color: rgba(255,255,255,0.85); max-width: 540px; margin: 0 auto 34px; line-height: 1.6;">Join a vibrant community of learners and instructors guiding you every step of the way.</p>
+      <a href="#enroll" style="display: inline-block; background: white; color: #7c3aed; padding: 15px 38px; border-radius: 12px; font-weight: 800; font-size: 16px; text-decoration: none;">Join the Cohort</a>
+    </section>`,
+            },
+            {
+                id: 'syllabus-timeline', label: 'Syllabus — Timeline', category: '🎓 Course',
+                icon: '🛤',
+                content: `<section style="padding: 60px 40px; max-width: 760px; margin: 0 auto;">
+      <h2 style="font-size: 30px; font-weight: 700; color: #0f172a; margin-bottom: 36px;">Course Roadmap</h2>
+      <div style="position: relative; padding-left: 32px; border-left: 2px solid #e2e8f0;">
+        <div style="position: relative; margin-bottom: 32px;">
+          <span style="position: absolute; left: -41px; top: 0; width: 18px; height: 18px; background: #3b82f6; border-radius: 50%; border: 3px solid white; box-shadow: 0 0 0 2px #3b82f6;"></span>
+          <div style="font-size: 12px; font-weight: 700; color: #3b82f6; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px;">Module 1</div>
+          <h3 style="font-size: 18px; font-weight: 700; color: #0f172a; margin: 0 0 6px;">Getting Started</h3>
+          <p style="color: #64748b; font-size: 14px; line-height: 1.6; margin: 0;">Set up your environment and learn the fundamentals before diving deeper.</p>
+        </div>
+        <div style="position: relative; margin-bottom: 32px;">
+          <span style="position: absolute; left: -41px; top: 0; width: 18px; height: 18px; background: #3b82f6; border-radius: 50%; border: 3px solid white; box-shadow: 0 0 0 2px #3b82f6;"></span>
+          <div style="font-size: 12px; font-weight: 700; color: #3b82f6; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px;">Module 2</div>
+          <h3 style="font-size: 18px; font-weight: 700; color: #0f172a; margin: 0 0 6px;">Building Core Skills</h3>
+          <p style="color: #64748b; font-size: 14px; line-height: 1.6; margin: 0;">Hands-on exercises that build muscle memory and real understanding.</p>
+        </div>
+        <div style="position: relative;">
+          <span style="position: absolute; left: -41px; top: 0; width: 18px; height: 18px; background: #3b82f6; border-radius: 50%; border: 3px solid white; box-shadow: 0 0 0 2px #3b82f6;"></span>
+          <div style="font-size: 12px; font-weight: 700; color: #3b82f6; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px;">Module 3</div>
+          <h3 style="font-size: 18px; font-weight: 700; color: #0f172a; margin: 0 0 6px;">Final Project</h3>
+          <p style="color: #64748b; font-size: 14px; line-height: 1.6; margin: 0;">Apply everything you've learned to a project you can showcase.</p>
+        </div>
+      </div>
+    </section>`,
+            },
+            {
+                id: 'syllabus-accordion', label: 'Syllabus — Accordion', category: '🎓 Course',
+                icon: '📂',
+                content: `<section style="padding: 60px 40px; background: #f8fafc;">
+      <h2 style="font-size: 30px; font-weight: 700; color: #0f172a; margin-bottom: 28px;">Full Curriculum</h2>
+      <div style="display: flex; flex-direction: column; gap: 10px; max-width: 760px;">
+        <details open style="background: white; border-radius: 14px; border: 1px solid #e2e8f0; padding: 4px;">
+          <summary style="padding: 16px 20px; font-weight: 700; color: #0f172a; cursor: pointer; list-style: none;">Module 1 — Foundations <span style="color: #94a3b8; font-weight: 500; font-size: 13px;">(4 lessons)</span></summary>
+          <div style="padding: 0 20px 16px 20px; color: #64748b; font-size: 14px; line-height: 1.8;">
+            1.1 Welcome &amp; setup<br>1.2 Core concepts<br>1.3 Hands-on practice<br>1.4 Quiz
+          </div>
+        </details>
+        <details style="background: white; border-radius: 14px; border: 1px solid #e2e8f0; padding: 4px;">
+          <summary style="padding: 16px 20px; font-weight: 700; color: #0f172a; cursor: pointer; list-style: none;">Module 2 — Intermediate Skills <span style="color: #94a3b8; font-weight: 500; font-size: 13px;">(5 lessons)</span></summary>
+          <div style="padding: 0 20px 16px 20px; color: #64748b; font-size: 14px; line-height: 1.8;">
+            2.1 Building on basics<br>2.2 Real-world examples<br>2.3 Practice set<br>2.4 Common mistakes<br>2.5 Quiz
+          </div>
+        </details>
+        <details style="background: white; border-radius: 14px; border: 1px solid #e2e8f0; padding: 4px;">
+          <summary style="padding: 16px 20px; font-weight: 700; color: #0f172a; cursor: pointer; list-style: none;">Module 3 — Mastery <span style="color: #94a3b8; font-weight: 500; font-size: 13px;">(3 lessons)</span></summary>
+          <div style="padding: 0 20px 16px 20px; color: #64748b; font-size: 14px; line-height: 1.8;">
+            3.1 Advanced techniques<br>3.2 Final project<br>3.3 Certification
+          </div>
+        </details>
+      </div>
+    </section>`,
+            },
+            {
+                id: 'cta-split', label: 'CTA — Split', category: '🎓 Course',
+                icon: '🪧',
+                content: `<section style="background: #0f172a; padding: 0; display: flex; flex-wrap: wrap; align-items: stretch; color: white;">
+      <div style="flex: 1; min-width: 280px; padding: 64px 48px; display: flex; flex-direction: column; justify-content: center;">
+        <h2 style="font-size: 32px; font-weight: 700; margin-bottom: 14px;">Seats are limited this term</h2>
+        <p style="color: #94a3b8; line-height: 1.6; margin-bottom: 0; max-width: 380px;">Enroll now to lock in your spot and get instant access to the first module.</p>
+      </div>
+      <div style="flex: 1; min-width: 280px; background: #1e293b; padding: 48px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
+        <div style="font-size: 40px; font-weight: 800; margin-bottom: 4px;">$299</div>
+        <div style="color: #64748b; font-size: 13px; margin-bottom: 20px;">one-time payment</div>
+        <a href="#" style="background: #3b82f6; color: white; padding: 13px 36px; border-radius: 10px; font-weight: 700; font-size: 15px; text-decoration: none;">Enroll Now</a>
+      </div>
+    </section>`,
+            },
+            {
+                id: 'cta-minimal', label: 'CTA — Minimal', category: '🎓 Course',
+                icon: '➖',
+                content: `<section style="background: white; padding: 70px 40px; text-align: center; border-top: 1px solid #e2e8f0; border-bottom: 1px solid #e2e8f0;">
+      <h2 style="font-size: 28px; font-weight: 700; color: #0f172a; margin-bottom: 10px;">Still deciding?</h2>
+      <p style="color: #64748b; font-size: 15px; margin-bottom: 24px;">Try the first lesson for free — no card required.</p>
+      <a href="#" style="display: inline-block; color: #0f172a; font-weight: 700; font-size: 15px; padding-bottom: 3px; border-bottom: 2px solid #0f172a; text-decoration: none;">Watch Free Lesson →</a>
+    </section>`,
+            },
+            {
+                id: 'testimonials-quote', label: 'Testimonials — Big Quote', category: '🎓 Course',
+                icon: '💬',
+                content: `<section style="padding: 70px 40px; background: #f8fafc; text-align: center;">
+      <div style="max-width: 680px; margin: 0 auto;">
+        <div style="font-size: 48px; color: #bfdbfe; line-height: 1; margin-bottom: 8px;">"</div>
+        <p style="font-size: 24px; font-weight: 600; color: #0f172a; line-height: 1.5; margin-bottom: 28px;">This course gave me the confidence to finally use what I learned in real conversations — not just in theory.</p>
+        <div style="display: flex; align-items: center; justify-content: center; gap: 12px;">
+          <div style="width: 44px; height: 44px; border-radius: 50%; background: #dbeafe; display: flex; align-items: center; justify-content: center; font-size: 20px;">👩</div>
+          <div style="text-align: left;">
+            <div style="font-weight: 700; font-size: 14px; color: #0f172a;">Sofia R.</div>
+            <div style="font-size: 12px; color: #94a3b8;">Graduated, Spring Cohort</div>
+          </div>
+        </div>
+      </div>
+    </section>`,
+            },
+            {
+                id: 'testimonials-video', label: 'Testimonials — Video Cards', category: '🎓 Course',
+                icon: '🎥',
+                content: `<section style="padding: 60px 40px;">
+      <h2 style="font-size: 28px; font-weight: 700; color: #0f172a; text-align: center; margin-bottom: 36px;">Hear From Our Students</h2>
+      <div style="display: flex; gap: 20px; flex-wrap: wrap;">
+        <div style="flex: 1; min-width: 220px;">
+          <div style="position: relative; border-radius: 14px; overflow: hidden; background: #1e293b; height: 160px; display: flex; align-items: center; justify-content: center;">
+            <div style="width: 52px; height: 52px; border-radius: 50%; background: rgba(255,255,255,0.9); display: flex; align-items: center; justify-content: center; font-size: 20px; color: #0f172a;">▶</div>
+          </div>
+          <p style="margin-top: 12px; font-size: 14px; font-weight: 600; color: #0f172a;">"Best decision I made this year"</p>
+          <p style="font-size: 12px; color: #94a3b8; margin: 2px 0 0;">— David T.</p>
+        </div>
+        <div style="flex: 1; min-width: 220px;">
+          <div style="position: relative; border-radius: 14px; overflow: hidden; background: #1e293b; height: 160px; display: flex; align-items: center; justify-content: center;">
+            <div style="width: 52px; height: 52px; border-radius: 50%; background: rgba(255,255,255,0.9); display: flex; align-items: center; justify-content: center; font-size: 20px; color: #0f172a;">▶</div>
+          </div>
+          <p style="margin-top: 12px; font-size: 14px; font-weight: 600; color: #0f172a;">"Clear, practical, no fluff"</p>
+          <p style="font-size: 12px; color: #94a3b8; margin: 2px 0 0;">— Priya N.</p>
+        </div>
+        <div style="flex: 1; min-width: 220px;">
+          <div style="position: relative; border-radius: 14px; overflow: hidden; background: #1e293b; height: 160px; display: flex; align-items: center; justify-content: center;">
+            <div style="width: 52px; height: 52px; border-radius: 50%; background: rgba(255,255,255,0.9); display: flex; align-items: center; justify-content: center; font-size: 20px; color: #0f172a;">▶</div>
+          </div>
+          <p style="margin-top: 12px; font-size: 14px; font-weight: 600; color: #0f172a;">"Worth every penny"</p>
+          <p style="font-size: 12px; color: #94a3b8; margin: 2px 0 0;">— Marcus L.</p>
+        </div>
+      </div>
+    </section>`,
+            },
+            {
+                id: 'faq-grid', label: 'FAQ — Grid', category: '🎓 Course',
+                icon: '🗂',
+                content: `<section style="padding: 60px 40px;">
+      <h2 style="font-size: 28px; font-weight: 700; color: #0f172a; margin-bottom: 32px; text-align: center;">Common Questions</h2>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 28px; max-width: 900px; margin: 0 auto;">
+        <div>
+          <h3 style="font-size: 15px; font-weight: 700; color: #0f172a; margin-bottom: 6px;">What if I miss a live session?</h3>
+          <p style="font-size: 14px; color: #64748b; line-height: 1.6; margin: 0;">All sessions are recorded and added to your dashboard within 24 hours.</p>
+        </div>
+        <div>
+          <h3 style="font-size: 15px; font-weight: 700; color: #0f172a; margin-bottom: 6px;">Can I get a refund?</h3>
+          <p style="font-size: 14px; color: #64748b; line-height: 1.6; margin: 0;">Yes, we offer a 14-day no-questions-asked money-back guarantee.</p>
+        </div>
+        <div>
+          <h3 style="font-size: 15px; font-weight: 700; color: #0f172a; margin-bottom: 6px;">Do I need any software?</h3>
+          <p style="font-size: 14px; color: #64748b; line-height: 1.6; margin: 0;">No — everything runs in your browser, on any device.</p>
+        </div>
+        <div>
+          <h3 style="font-size: 15px; font-weight: 700; color: #0f172a; margin-bottom: 6px;">Is support included?</h3>
+          <p style="font-size: 14px; color: #64748b; line-height: 1.6; margin: 0;">Yes, you'll have direct access to instructors via our community channel.</p>
+        </div>
+      </div>
+    </section>`,
+            },
+            {
+                id: 'instructor-team', label: 'Instructor — Team Grid', category: '🎓 Course',
+                icon: '👥',
+                content: `<section style="padding: 60px 40px; background: #f8fafc;">
+      <h2 style="font-size: 28px; font-weight: 700; color: #0f172a; text-align: center; margin-bottom: 36px;">Meet Your Instructors</h2>
+      <div style="display: flex; gap: 20px; flex-wrap: wrap; justify-content: center;">
+        <div style="flex: 1; min-width: 200px; max-width: 240px; background: white; border-radius: 16px; padding: 24px; text-align: center; border: 1px solid #e2e8f0;">
+          <div style="width: 72px; height: 72px; border-radius: 50%; background: linear-gradient(135deg, #bfdbfe, #93c5fd); margin: 0 auto 14px; display: flex; align-items: center; justify-content: center; font-size: 26px;">👩‍🏫</div>
+          <h3 style="font-size: 15px; font-weight: 700; color: #0f172a; margin: 0 0 2px;">Dr. Jane Doe</h3>
+          <p style="font-size: 12px; color: #3b82f6; font-weight: 600; margin: 0;">Lead Instructor</p>
+        </div>
+        <div style="flex: 1; min-width: 200px; max-width: 240px; background: white; border-radius: 16px; padding: 24px; text-align: center; border: 1px solid #e2e8f0;">
+          <div style="width: 72px; height: 72px; border-radius: 50%; background: linear-gradient(135deg, #fbcfe8, #f9a8d4); margin: 0 auto 14px; display: flex; align-items: center; justify-content: center; font-size: 26px;">👨‍🏫</div>
+          <h3 style="font-size: 15px; font-weight: 700; color: #0f172a; margin: 0 0 2px;">Mark Evans</h3>
+          <p style="font-size: 12px; color: #3b82f6; font-weight: 600; margin: 0;">Curriculum Designer</p>
+        </div>
+        <div style="flex: 1; min-width: 200px; max-width: 240px; background: white; border-radius: 16px; padding: 24px; text-align: center; border: 1px solid #e2e8f0;">
+          <div style="width: 72px; height: 72px; border-radius: 50%; background: linear-gradient(135deg, #bbf7d0, #86efac); margin: 0 auto 14px; display: flex; align-items: center; justify-content: center; font-size: 26px;">🧑‍🏫</div>
+          <h3 style="font-size: 15px; font-weight: 700; color: #0f172a; margin: 0 0 2px;">Lina Kowalski</h3>
+          <p style="font-size: 12px; color: #3b82f6; font-weight: 600; margin: 0;">Teaching Assistant</p>
+        </div>
+      </div>
+    </section>`,
+            },
+            {
+                id: 'benefits-alternating', label: 'Benefits — Alternating', category: '🎓 Course',
+                icon: '🔁',
+                content: `<section style="padding: 60px 40px; max-width: 1000px; margin: 0 auto;">
+      <div style="display: flex; align-items: center; gap: 40px; flex-wrap: wrap; margin-bottom: 56px;">
+        <div style="flex: 1; min-width: 240px; height: 220px; background: #eff6ff; border-radius: 18px; display: flex; align-items: center; justify-content: center; font-size: 48px;">🎯</div>
+        <div style="flex: 1; min-width: 240px;">
+          <h3 style="font-size: 22px; font-weight: 700; color: #0f172a; margin-bottom: 10px;">Built around real outcomes</h3>
+          <p style="color: #64748b; line-height: 1.7; margin: 0;">Every lesson maps to a skill you'll actually use — no filler, no theory for theory's sake.</p>
+        </div>
+      </div>
+      <div style="display: flex; align-items: center; gap: 40px; flex-wrap: wrap-reverse;">
+        <div style="flex: 1; min-width: 240px;">
+          <h3 style="font-size: 22px; font-weight: 700; color: #0f172a; margin-bottom: 10px;">Feedback that actually helps</h3>
+          <p style="color: #64748b; line-height: 1.7; margin: 0;">Get personal feedback on your work from instructors who've been in your shoes.</p>
+        </div>
+        <div style="flex: 1; min-width: 240px; height: 220px; background: #fef3c7; border-radius: 18px; display: flex; align-items: center; justify-content: center; font-size: 48px;">💬</div>
+      </div>
+    </section>`,
+            },
+            {
+                id: 'benefits-icon-row', label: 'Benefits — Icon Row', category: '🎓 Course',
+                icon: '✨',
+                content: `<section style="padding: 40px 40px; background: white; border-top: 1px solid #f1f5f9; border-bottom: 1px solid #f1f5f9;">
+      <div style="display: flex; justify-content: center; gap: 48px; flex-wrap: wrap; max-width: 900px; margin: 0 auto;">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <span style="font-size: 22px;">⚡</span>
+          <span style="font-size: 14px; font-weight: 600; color: #334155;">Self-paced</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <span style="font-size: 22px;">🔒</span>
+          <span style="font-size: 14px; font-weight: 600; color: #334155;">Lifetime access</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <span style="font-size: 22px;">📜</span>
+          <span style="font-size: 14px; font-weight: 600; color: #334155;">Certificate included</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <span style="font-size: 22px;">💬</span>
+          <span style="font-size: 14px; font-weight: 600; color: #334155;">Community support</span>
+        </div>
+      </div>
+    </section>`,
+            },
+            {
+                id: 'info-bar-cards', label: 'Info Bar — Cards', category: '🎓 Course',
+                icon: '🧾',
+                content: `<div style="display: flex; gap: 16px; padding: 0 40px; flex-wrap: wrap;">
+      <div style="flex: 1; min-width: 140px; background: white; border-radius: 14px; padding: 20px; text-align: center; border: 1px solid #e2e8f0;">
+        <div style="font-size: 24px; margin-bottom: 6px;">⏱</div>
+        <div style="font-size: 18px; font-weight: 700; color: #0f172a;">12 weeks</div>
+        <div style="font-size: 12px; color: #94a3b8;">Duration</div>
+      </div>
+      <div style="flex: 1; min-width: 140px; background: white; border-radius: 14px; padding: 20px; text-align: center; border: 1px solid #e2e8f0;">
+        <div style="font-size: 24px; margin-bottom: 6px;">📈</div>
+        <div style="font-size: 18px; font-weight: 700; color: #0f172a;">Beginner</div>
+        <div style="font-size: 12px; color: #94a3b8;">Level</div>
+      </div>
+      <div style="flex: 1; min-width: 140px; background: white; border-radius: 14px; padding: 20px; text-align: center; border: 1px solid #e2e8f0;">
+        <div style="font-size: 24px; margin-bottom: 6px;">💻</div>
+        <div style="font-size: 18px; font-weight: 700; color: #0f172a;">Online</div>
+        <div style="font-size: 12px; color: #94a3b8;">Format</div>
+      </div>
+      <div style="flex: 1; min-width: 140px; background: #0f172a; border-radius: 14px; padding: 20px; text-align: center;">
+        <div style="font-size: 24px; margin-bottom: 6px;">💳</div>
+        <div style="font-size: 18px; font-weight: 700; color: white;">$299</div>
+        <div style="font-size: 12px; color: #94a3b8;">Price</div>
+      </div>
+    </div>`,
+            },
+
+            // ── Pricing
+            {
+                id: 'pricing-single', label: 'Pricing — Single Plan', category: '💰 Pricing',
+                icon: '💳',
+                content: `<section style="padding: 60px 40px; display: flex; justify-content: center;">
+      <div style="background: white; border: 2px solid #3b82f6; border-radius: 20px; padding: 40px; max-width: 360px; width: 100%; text-align: center; box-shadow: 0 10px 30px rgba(59,130,246,0.15);">
+        <div style="display: inline-block; background: #eff6ff; color: #3b82f6; font-size: 12px; font-weight: 700; padding: 5px 14px; border-radius: 20px; margin-bottom: 16px;">FULL ACCESS</div>
+        <div style="font-size: 44px; font-weight: 800; color: #0f172a;">$299</div>
+        <div style="color: #94a3b8; font-size: 13px; margin-bottom: 24px;">one-time, lifetime access</div>
+        <div style="text-align: left; display: flex; flex-direction: column; gap: 10px; margin-bottom: 28px;">
+          <div style="font-size: 14px; color: #334155;">✓ All course modules &amp; materials</div>
+          <div style="font-size: 14px; color: #334155;">✓ Live Q&amp;A sessions</div>
+          <div style="font-size: 14px; color: #334155;">✓ Certificate of completion</div>
+          <div style="font-size: 14px; color: #334155;">✓ Private community access</div>
+        </div>
+        <a href="#" style="display: block; background: #3b82f6; color: white; padding: 13px; border-radius: 10px; font-weight: 700; font-size: 15px; text-decoration: none;">Get Started</a>
+      </div>
+    </section>`,
+            },
+            {
+                id: 'pricing-tiers', label: 'Pricing — 3 Plans', category: '💰 Pricing',
+                icon: '📶',
+                content: `<section style="padding: 60px 40px;">
+      <h2 style="font-size: 28px; font-weight: 700; color: #0f172a; text-align: center; margin-bottom: 36px;">Choose Your Plan</h2>
+      <div style="display: flex; gap: 20px; flex-wrap: wrap; justify-content: center; align-items: flex-start;">
+        <div style="flex: 1; min-width: 220px; max-width: 280px; background: white; border: 1px solid #e2e8f0; border-radius: 16px; padding: 28px;">
+          <h3 style="font-size: 16px; font-weight: 700; color: #0f172a; margin: 0 0 4px;">Basic</h3>
+          <div style="font-size: 30px; font-weight: 800; color: #0f172a; margin-bottom: 18px;">$99</div>
+          <div style="font-size: 13px; color: #64748b; line-height: 2;">✓ Core lessons<br>✓ Self-paced<br>✗ Live sessions<br>✗ Certificate</div>
+          <a href="#" style="display: block; margin-top: 20px; text-align: center; background: #f1f5f9; color: #334155; padding: 11px; border-radius: 9px; font-weight: 600; font-size: 14px; text-decoration: none;">Choose Basic</a>
+        </div>
+        <div style="flex: 1; min-width: 220px; max-width: 280px; background: #0f172a; border-radius: 16px; padding: 28px; transform: translateY(-10px); box-shadow: 0 20px 40px rgba(15,23,42,0.25);">
+          <div style="display: inline-block; background: #3b82f6; color: white; font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 6px; margin-bottom: 10px;">POPULAR</div>
+          <h3 style="font-size: 16px; font-weight: 700; color: white; margin: 0 0 4px;">Standard</h3>
+          <div style="font-size: 30px; font-weight: 800; color: white; margin-bottom: 18px;">$299</div>
+          <div style="font-size: 13px; color: #94a3b8; line-height: 2;">✓ Core lessons<br>✓ Live Q&amp;A<br>✓ Certificate<br>✗ 1-on-1 mentoring</div>
+          <a href="#" style="display: block; margin-top: 20px; text-align: center; background: #3b82f6; color: white; padding: 11px; border-radius: 9px; font-weight: 700; font-size: 14px; text-decoration: none;">Choose Standard</a>
+        </div>
+        <div style="flex: 1; min-width: 220px; max-width: 280px; background: white; border: 1px solid #e2e8f0; border-radius: 16px; padding: 28px;">
+          <h3 style="font-size: 16px; font-weight: 700; color: #0f172a; margin: 0 0 4px;">Premium</h3>
+          <div style="font-size: 30px; font-weight: 800; color: #0f172a; margin-bottom: 18px;">$599</div>
+          <div style="font-size: 13px; color: #64748b; line-height: 2;">✓ Everything in Standard<br>✓ 1-on-1 mentoring<br>✓ Career guidance<br>✓ Priority support</div>
+          <a href="#" style="display: block; margin-top: 20px; text-align: center; background: #f1f5f9; color: #334155; padding: 11px; border-radius: 9px; font-weight: 600; font-size: 14px; text-decoration: none;">Choose Premium</a>
+        </div>
+      </div>
+    </section>`,
+            },
+            {
+                id: 'pricing-guarantee', label: 'Money-Back Guarantee', category: '💰 Pricing',
+                icon: '🛡',
+                content: `<section style="padding: 48px 40px; display: flex; justify-content: center;">
+      <div style="background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 18px; padding: 32px 40px; display: flex; align-items: center; gap: 20px; max-width: 640px;">
+        <div style="font-size: 40px; flex-shrink: 0;">🛡️</div>
+        <div>
+          <h3 style="font-size: 17px; font-weight: 700; color: #14532d; margin: 0 0 4px;">14-Day Money-Back Guarantee</h3>
+          <p style="font-size: 14px; color: #166534; line-height: 1.6; margin: 0;">Not the right fit? Get a full refund within 14 days, no questions asked.</p>
+        </div>
+      </div>
+    </section>`,
+            },
+
+            // ── Social Proof
+            {
+                id: 'stats-numbers', label: 'Stats Numbers', category: '📊 Social Proof',
+                icon: '📈',
+                content: `<section style="padding: 50px 40px; background: #0f172a;">
+      <div style="display: flex; justify-content: center; gap: 56px; flex-wrap: wrap; text-align: center;">
+        <div>
+          <div style="font-size: 36px; font-weight: 800; color: white;">5,200+</div>
+          <div style="font-size: 13px; color: #94a3b8; margin-top: 4px;">Students Taught</div>
+        </div>
+        <div>
+          <div style="font-size: 36px; font-weight: 800; color: white;">4.9 / 5</div>
+          <div style="font-size: 13px; color: #94a3b8; margin-top: 4px;">Average Rating</div>
+        </div>
+        <div>
+          <div style="font-size: 36px; font-weight: 800; color: white;">38</div>
+          <div style="font-size: 13px; color: #94a3b8; margin-top: 4px;">Countries Reached</div>
+        </div>
+        <div>
+          <div style="font-size: 36px; font-weight: 800; color: white;">92%</div>
+          <div style="font-size: 13px; color: #94a3b8; margin-top: 4px;">Completion Rate</div>
+        </div>
+      </div>
+    </section>`,
+            },
+            {
+                id: 'partner-logos', label: 'Partner Logos Bar', category: '📊 Social Proof',
+                icon: '🏢',
+                content: `<section style="padding: 36px 40px; background: white; border-top: 1px solid #f1f5f9; border-bottom: 1px solid #f1f5f9;">
+      <p style="text-align: center; font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #94a3b8; margin-bottom: 22px;">As Seen In</p>
+      <div style="display: flex; justify-content: center; align-items: center; gap: 48px; flex-wrap: wrap; opacity: 0.6;">
+        <div style="font-size: 18px; font-weight: 800; color: #475569;">FORBES</div>
+        <div style="font-size: 18px; font-weight: 800; color: #475569;">TechCrunch</div>
+        <div style="font-size: 18px; font-weight: 800; color: #475569;">EdWeek</div>
+        <div style="font-size: 18px; font-weight: 800; color: #475569;">Mashable</div>
+      </div>
+    </section>`,
+            },
+            {
+                id: 'rating-badge', label: 'Rating Badge', category: '📊 Social Proof',
+                icon: '⭐',
+                content: `<div style="display: flex; justify-content: center; align-items: center; gap: 10px; padding: 16px;">
+      <span style="color: #f59e0b; font-size: 18px;">★★★★★</span>
+      <span style="font-size: 14px; color: #334155; font-weight: 600;">4.9 out of 5</span>
+      <span style="font-size: 13px; color: #94a3b8;">(1,240 reviews)</span>
+    </div>`,
+            },
+
+            // ── Forms
+            {
+                id: 'form-newsletter', label: 'Newsletter Signup', category: '📝 Forms',
+                icon: '📧',
+                content: `<section style="padding: 56px 40px; background: #eff6ff;">
+      <div style="max-width: 480px; margin: 0 auto; text-align: center;">
+        <h3 style="font-size: 22px; font-weight: 700; color: #0f172a; margin-bottom: 8px;">Get free language tips weekly</h3>
+        <p style="font-size: 14px; color: #64748b; margin-bottom: 22px;">Join 8,000+ learners getting bite-sized lessons in their inbox.</p>
+        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+          <input type="email" placeholder="you@email.com" style="flex: 1; min-width: 180px; padding: 12px 16px; border-radius: 10px; border: 1px solid #cbd5e1; font-size: 14px; font-family: inherit;">
+          <button style="background: #3b82f6; color: white; border: none; padding: 12px 24px; border-radius: 10px; font-weight: 700; font-size: 14px; cursor: pointer;">Subscribe</button>
+        </div>
+      </div>
+    </section>`,
+            },
+            {
+                id: 'form-contact', label: 'Contact / Inquiry Form', category: '📝 Forms',
+                icon: '✉️',
+                content: `<section style="padding: 60px 40px; background: #f8fafc;">
+      <div style="max-width: 520px; margin: 0 auto;">
+        <h2 style="font-size: 26px; font-weight: 700; color: #0f172a; margin-bottom: 6px; text-align: center;">Have a Question?</h2>
+        <p style="font-size: 14px; color: #64748b; text-align: center; margin-bottom: 28px;">Send us a message and we'll get back to you within a day.</p>
+        <div style="display: flex; flex-direction: column; gap: 12px;">
+          <input type="text" placeholder="Your name" style="padding: 12px 16px; border-radius: 10px; border: 1px solid #e2e8f0; font-size: 14px; font-family: inherit; background: white;">
+          <input type="email" placeholder="Your email" style="padding: 12px 16px; border-radius: 10px; border: 1px solid #e2e8f0; font-size: 14px; font-family: inherit; background: white;">
+          <textarea placeholder="Your message" rows="4" style="padding: 12px 16px; border-radius: 10px; border: 1px solid #e2e8f0; font-size: 14px; font-family: inherit; resize: vertical; background: white;"></textarea>
+          <button style="background: #0f172a; color: white; border: none; padding: 13px; border-radius: 10px; font-weight: 700; font-size: 14px; cursor: pointer; margin-top: 4px;">Send Message</button>
+        </div>
+      </div>
+    </section>`,
+            },
+            {
+                id: 'form-lead-magnet', label: 'Free Lesson Download', category: '📝 Forms',
+                icon: '🎁',
+                content: `<section style="padding: 56px 40px; display: flex; justify-content: center;">
+      <div style="background: white; border: 1px solid #e2e8f0; border-radius: 20px; padding: 36px; display: flex; align-items: center; gap: 28px; max-width: 620px; flex-wrap: wrap; box-shadow: 0 1px 3px rgba(0,0,0,0.06);">
+        <div style="font-size: 44px; flex-shrink: 0;">🎁</div>
+        <div style="flex: 1; min-width: 200px;">
+          <h3 style="font-size: 18px; font-weight: 700; color: #0f172a; margin: 0 0 6px;">Try Lesson 1 — Free</h3>
+          <p style="font-size: 14px; color: #64748b; margin: 0 0 16px; line-height: 1.5;">See exactly what's inside before you commit. No card required.</p>
+          <div style="display: flex; gap: 8px;">
+            <input type="email" placeholder="Your email" style="flex: 1; min-width: 140px; padding: 11px 14px; border-radius: 9px; border: 1px solid #e2e8f0; font-size: 13px; font-family: inherit;">
+            <button style="background: #3b82f6; color: white; border: none; padding: 11px 20px; border-radius: 9px; font-weight: 700; font-size: 13px; cursor: pointer; white-space: nowrap;">Send It</button>
+          </div>
+        </div>
+      </div>
+    </section>`,
+            },
+        ];
+
+        // Build categorized HTML in custom container
+        const container = document.getElementById('custom-blocks-container');
+        if (!container) return;
+
+        const categories = {};
+        blocks.forEach(b => {
+            if (!categories[b.category]) categories[b.category] = [];
+            categories[b.category].push(b);
+        });
+
+        container.innerHTML = '';
+        Object.entries(categories).forEach(([cat, catBlocks]) => {
+            const catDiv = document.createElement('div');
+            catDiv.innerHTML = `<div class="blocks-cat-label">${cat}</div>`;
+            const grid = document.createElement('div');
+            grid.className = 'blocks-grid';
+
+            catBlocks.forEach(b => {
+                bm.add(b.id, {
+                    label: b.label,
+                    category: b.category,
+                    content: b.content,
+                    render: () => ''
+                });
+
+                const item = document.createElement('div');
+                item.className = 'block-item';
+                item.draggable = true;
+                item.dataset.blockId = b.id;
+                item.innerHTML = `<div class="block-icon">${b.icon}</div><div class="block-label">${b.label}</div>`;
+
+                item.addEventListener('dragstart', (e) => {
+                    const block = bm.get(b.id);
+                    bm.startDrag(block);
+                });
+                item.addEventListener('mousedown', (e) => { e.stopPropagation(); });
+                item.addEventListener('click', () => {
+                    const block = bm.get(b.id);
+                    if (block) {
+                        editor.addComponents(
+                            typeof b.content === 'string' ? b.content : '<img src="" style="max-width:100%"/>'
+                        );
+                    }
+                });
+
+                grid.appendChild(item);
+            });
+
+            catDiv.appendChild(grid);
+            container.appendChild(catDiv);
+        });
+    }
+
+    // ─── Left panel tabs ───────────────────────────────────────
+    function switchLeftTab(tab, el) {
+        document.querySelectorAll('.panel-tab').forEach(t => t.classList.remove('active'));
+        el.classList.add('active');
+        document.querySelectorAll('.panel-section').forEach(s => s.classList.remove('active'));
+        document.getElementById('panel-' + tab).classList.add('active');
+    }
+
+    // ─── Right panel tabs ──────────────────────────────────────
+    function switchRightTab(tab, el) {
+        document.querySelectorAll('.right-tab').forEach(t => t.classList.remove('active'));
+        el.classList.add('active');
+        document.querySelectorAll('.right-panel-section').forEach(s => s.classList.remove('active'));
+        document.getElementById('rpanel-' + tab).classList.add('active');
+    }
+
+    // ─── Viewport ─────────────────────────────────────────────
+    function setViewport(name, btn) {
+        document.querySelectorAll('.vp-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const devMap = { desktop: 'Desktop', tablet: 'Tablet', mobile: 'Mobile' };
+        if (editor) editor.setDevice(devMap[name]);
+    }
+
+    // ─── Undo/Redo ────────────────────────────────────────────
+    function editorUndo() { if (editor) editor.UndoManager.undo(); }
+    function editorRedo() { if (editor) editor.UndoManager.redo(); }
+
+    // ─── Clear canvas ─────────────────────────────────────────
+    function clearCanvas() {
+        if (confirm('Clear all content from canvas? This cannot be undone.')) {
+            editor.setComponents('');
+            editor.setStyle('');
+        }
+    }
+
+    // ─── Code editor modal ────────────────────────────────────
+    function openCodeModal() {
+        document.getElementById('codeEditorHtml').value = editor.getHtml();
+        document.getElementById('codeEditorCss').value  = editor.getCss();
+        currentCodeTab = 'html';
+        document.querySelectorAll('.code-tab-btn').forEach((b,i) => b.classList.toggle('active', i === 0));
+        document.getElementById('codeEditorHtml').style.display = 'block';
+        document.getElementById('codeEditorCss').style.display  = 'none';
+        document.getElementById('codeModal').classList.add('open');
+    }
+    function closeCodeModal() {
+        document.getElementById('codeModal').classList.remove('open');
+    }
+    function switchCodeTab(tab, el) {
+        currentCodeTab = tab;
+        document.querySelectorAll('.code-tab-btn').forEach(b => b.classList.remove('active'));
+        el.classList.add('active');
+        document.getElementById('codeEditorHtml').style.display = tab === 'html' ? 'block' : 'none';
+        document.getElementById('codeEditorCss').style.display  = tab === 'css'  ? 'block' : 'none';
+    }
+    function applyCode() {
+        editor.setComponents(document.getElementById('codeEditorHtml').value);
+        editor.setStyle(document.getElementById('codeEditorCss').value);
+        closeCodeModal();
+    }
+
+    document.getElementById('codeModal').addEventListener('click', function(e) {
+        if (e.target === this) closeCodeModal();
+    });
+
+    // ─── Sidebar navigation ───────────────────────────────────
+    function updateTopBarForEntity() {
+        const isCourses = currentEntity === 'courses';
+        document.getElementById('newEntryBtn').style.display      = isCourses ? 'none' : 'inline-flex';
+        document.getElementById('openBuilderBtn').style.display   = isCourses ? 'inline-flex' : 'none';
+        document.getElementById('builderMenuLabel').style.display = isCourses ? 'block' : 'none';
+        document.getElementById('builderNavLink').style.display   = isCourses ? 'flex' : 'none';
+    }
     function switchEntity(entity, element) {
         document.querySelectorAll('.menu-link').forEach(l => l.classList.remove('active'));
         element.classList.add('active');
         currentEntity = entity;
         currentPage = 0;
         document.getElementById('pageTitle').innerText = entity;
+        updateTopBarForEntity();
+        closePageBuilder();
         loadData();
     }
 
+    // ─── Main list view ──────────────────────────────────────
     async function loadData() {
-        document.querySelectorAll('.course-only').forEach(el => el.style.display = (currentEntity === 'courses' ? 'block' : 'none'));
-        document.querySelectorAll('.item-only').forEach(el => el.style.display = (currentEntity === 'items' ? 'block' : 'none'));
-
+        document.querySelectorAll('.course-only').forEach(el =>
+            el.style.display = (currentEntity === 'courses' ? 'block' : 'none'));
+        document.querySelectorAll('.item-only').forEach(el =>
+            el.style.display = (currentEntity === 'items' ? 'block' : 'none'));
         try {
             const response = await fetch(`/api/admin/${currentEntity}?page=${currentPage}&size=${pageSize}`);
             const pageData = await response.json();
             const items = pageData.content || pageData;
             document.getElementById('pageInfo').innerText = `PAGE ${currentPage}`;
             renderCards(items);
+            if (currentEntity === 'courses') {
+                allCourses = items;
+                populateBuilderSelect(items);
+            }
         } catch (e) { console.error("Load error", e); }
     }
 
@@ -483,15 +1983,20 @@
         const container = document.getElementById('cardContainer');
         container.innerHTML = '';
         items.forEach(item => {
-            const imgId = `img-ctx-${item.id}`;
+            const imgId  = `img-ctx-${item.id}`;
             const isLive = item.published;
-            const price = item.price ? `<div class="price-tag">$${item.price}</div>` : '';
-
-            // Format category for display: "ELECTRONICS" → "Electronics"
+            const price  = item.price ? `<div class="price-tag">$${item.price}</div>` : '';
             const categoryLabel = item.category
-                ? item.category.charAt(0) + item.category.slice(1).toLowerCase()
-                : null;
-
+                ? item.category.charAt(0) + item.category.slice(1).toLowerCase() : null;
+            const actionsHtml = (currentEntity === 'courses')
+                ? `<button class="btn btn-outline-primary btn-sm flex-grow-1 fw-600" style="border-radius: 8px;"
+                           onclick="openBuilderForCourse(${item.id}, '${(item.name||item.title||'').replace(/'/g,"\\'")}')">🎨 Edit</button>
+                   <button class="btn btn-outline-danger btn-sm px-3" style="border-radius: 8px"
+                           onclick="deleteItem(${item.id})">🗑</button>`
+                : `<button class="btn btn-light btn-sm flex-grow-1 fw-600 border" style="border-radius: 8px"
+                           onclick='editItem(${JSON.stringify(item).replace(/'/g, "&apos;")})'>Edit</button>
+                   <button class="btn btn-outline-danger btn-sm px-3" style="border-radius: 8px"
+                           onclick="deleteItem(${item.id})">🗑</button>`;
             const div = document.createElement('div');
             div.innerHTML = `
                 <div class="card-item">
@@ -510,11 +2015,9 @@
                     </div>
                     <p class="text-muted small text-truncate mb-4 flex-grow-1" style="line-height: 1.5">${item.description || 'No description provided.'}</p>
                     <div class="d-flex gap-2 mt-auto">
-                        <button class="btn btn-light btn-sm flex-grow-1 fw-600 border" style="border-radius: 8px" onclick='editItem(${JSON.stringify(item).replace(/'/g, "&apos;")})'>Edit</button>
-                        <button class="btn btn-outline-danger btn-sm px-3" style="border-radius: 8px" onclick="deleteItem(${item.id})">🗑</button>
+                        ${actionsHtml}
                     </div>
-                </div>
-            `;
+                </div>`;
             container.appendChild(div);
             fetchPreview(item.id, imgId);
         });
@@ -523,7 +2026,7 @@
     async function fetchPreview(entityId, containerId) {
         try {
             const type = currentEntity.toUpperCase().replace(/S$/, '');
-            const res = await fetch(`/api/pictures/entity/${entityId}?type=${type}`);
+            const res  = await fetch(`/api/pictures/entity/${entityId}?type=${type}`);
             const pics = await res.json();
             const container = document.getElementById(containerId);
             if (pics && pics.length > 0) {
@@ -531,13 +2034,363 @@
                 container.innerHTML = '';
                 badges.forEach(b => container.appendChild(b));
                 const img = document.createElement('img');
-                img.src = pics[0].url;
-                img.className = 'card-img-top';
+                img.src = pics[0].url; img.className = 'card-img-top';
                 container.appendChild(img);
             }
         } catch (e) {}
     }
 
+    // ─── Page Builder open/close ──────────────────────────────
+    function openPageBuilderFromBtn() {
+        openPageBuilder(document.getElementById('builderNavLink'));
+    }
+    function openPageBuilder(navEl) {
+        document.querySelectorAll('.menu-link').forEach(l => l.classList.remove('active'));
+        if (navEl) navEl.classList.add('active');
+        document.getElementById('mainListView').classList.add('hidden');
+        document.querySelector('.content').style.padding = '0';
+        document.getElementById('pageBuilderView').classList.add('active');
+        currentEntity = 'courses';
+        updateTopBarForEntity();
+        if (allCourses.length === 0) fetchAllCourses();
+    }
+    function closePageBuilder() {
+        document.getElementById('mainListView').classList.remove('hidden');
+        document.getElementById('pageBuilderView').classList.remove('active');
+        document.querySelector('.content').style.padding = '';
+        updateTopBarForEntity();
+        const links = document.querySelectorAll('.menu-link:not(.builder-nav)');
+        links.forEach(l => {
+            const txt = l.textContent.trim();
+            if (
+                (currentEntity === 'courses' && txt.includes('Courses')) ||
+                (currentEntity === 'articles' && txt.includes('Articles')) ||
+                (currentEntity === 'items' && txt.includes('Items'))
+            ) l.classList.add('active');
+            else l.classList.remove('active');
+        });
+        setBuilderStatus('');
+    }
+    function openBuilderForCourse(courseId, courseName) {
+        openPageBuilder(document.getElementById('builderNavLink'));
+        setTimeout(() => {
+            const sel = document.getElementById('builderCourseSelect');
+            if (sel.querySelector(`option[value="${courseId}"]`)) {
+                sel.value = courseId;
+                onBuilderCourseChange();
+                loadPageIntoBuilder();
+            }
+        }, 100);
+    }
+
+    // ─── Builder: course select ────────────────────────────────
+    async function fetchAllCourses() {
+        try {
+            const res  = await fetch(`/api/admin/courses?page=0&size=999`);
+            const data = await res.json();
+            allCourses = data.content || data;
+            populateBuilderSelect(allCourses);
+        } catch (e) { console.error('Cannot fetch courses', e); }
+    }
+    function populateBuilderSelect(courses) {
+        const sel = document.getElementById('builderCourseSelect');
+        const prev = sel.value;
+        sel.innerHTML = '<option value="">— Select a course —</option>';
+        courses.forEach(c => {
+            const opt = document.createElement('option');
+            opt.value = c.id; opt.textContent = c.name || c.title || `Course #${c.id}`;
+            sel.appendChild(opt);
+        });
+        if (prev) sel.value = prev;
+    }
+
+    // ─── Builder: create a brand new course ─────────────────────
+    function createNewCourse() {
+        document.getElementById('newCourseForm').reset();
+        document.getElementById('ncFormat').value   = 'ONLINE';
+        document.getElementById('ncType').value     = 'INDIVIDUAL';
+        document.getElementById('ncLevel').value    = 'Beginner';
+        document.getElementById('ncLanguage').value = '';
+        document.getElementById('ncDuration').value = '';
+        document.getElementById('ncPublished').checked = false;
+        // Reset image upload
+        document.getElementById('ncPictureInput').value = '';
+        document.getElementById('ncImagePreviews').innerHTML = '';
+        document.getElementById('ncPictureLabel').textContent = 'Click to select images';
+        ncSlugEdited = false;
+        hideNcError();
+        newCourseModal.show();
+    }
+    function showNcError(msg) {
+        const el = document.getElementById('ncError');
+        el.textContent = msg;
+        el.style.display = 'block';
+    }
+    function hideNcError() {
+        document.getElementById('ncError').style.display = 'none';
+    }
+
+    // ─── Image preview for new course modal ───────────────────
+    function previewNcImages(input) {
+        const container = document.getElementById('ncImagePreviews');
+        const label     = document.getElementById('ncPictureLabel');
+        container.innerHTML = '';
+        const files = Array.from(input.files);
+        if (!files.length) { label.textContent = 'Click to select images'; return; }
+        label.textContent = files.length === 1 ? '1 image selected' : files.length + ' images selected';
+        files.forEach((file, idx) => {
+            const reader = new FileReader();
+            reader.onload = (ev) => {
+                const wrap = document.createElement('div');
+                wrap.className = 'nc-pic-wrap';
+                wrap.style.position = 'relative';
+                const img = document.createElement('img');
+                img.src = ev.target.result;
+                img.style.cssText = 'width:56px;height:56px;object-fit:cover;border-radius:8px;border:1px solid #e2e8f0;';
+                const del = document.createElement('div');
+                del.className = 'nc-del';
+                del.textContent = '×';
+                del.onclick = () => removeNcImage(idx);
+                wrap.appendChild(img);
+                wrap.appendChild(del);
+                container.appendChild(wrap);
+            };
+            reader.readAsDataURL(file);
+        });
+    }
+    function removeNcImage(idx) {
+        const input = document.getElementById('ncPictureInput');
+        const dt    = new DataTransfer();
+        Array.from(input.files).forEach((f, i) => { if (i !== idx) dt.items.add(f); });
+        input.files = dt.files;
+        previewNcImages(input);
+    }
+
+    async function submitNewCourse(e) {
+        e.preventDefault();
+        hideNcError();
+        const name      = document.getElementById('ncName').value.trim();
+        const slug      = document.getElementById('ncSlug').value.trim();
+        const price     = document.getElementById('ncPrice').value;
+        const format    = document.getElementById('ncFormat').value;
+        const type      = document.getElementById('ncType').value;
+        const level     = document.getElementById('ncLevel').value;
+        const language  = document.getElementById('ncLanguage').value;
+        const duration  = document.getElementById('ncDuration').value.trim();
+        const published = document.getElementById('ncPublished').checked;
+        if (!name || !slug || price === '' || !format || !type) {
+            showNcError('Please fill in name, slug, price, format and type.');
+            return;
+        }
+
+        const submitBtn = document.getElementById('ncSubmitBtn');
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Creating...';
+        try {
+            const fd = new FormData();
+            fd.append('name', name);
+            fd.append('title', name);
+            fd.append('slug', slug);
+            fd.append('price', price);
+            fd.append('format', format);
+            fd.append('type', type);
+            fd.append('level', level);
+            if (language) fd.append('language', language);
+            if (duration) fd.append('duration', duration);
+            fd.append('published', String(published));
+            // Attach selected images
+            const ncFiles = document.getElementById('ncPictureInput');
+            if (ncFiles && ncFiles.files && ncFiles.files.length) {
+                Array.from(ncFiles.files).forEach(f => fd.append('pictures', f));
+            }
+
+            const res = await fetch('/api/admin/courses', { method: 'POST', body: fd });
+            if (!res.ok) throw new Error(`HTTP ${res.status}`);
+            const created = await res.json().catch(() => null);
+
+            newCourseModal.hide();
+            await fetchAllCourses();
+            const newId = created && created.id ? created.id
+                : (allCourses.find(c => c.slug === slug) || {}).id;
+            if (newId) {
+                document.getElementById('builderCourseSelect').value = newId;
+                onBuilderCourseChange();
+            }
+            editor.setComponents('');
+            editor.setStyle('');
+            setBuilderStatus('success', '✓ Course created — fill in the rest & design the page');
+            setTimeout(() => setBuilderStatus(''), 4000);
+        } catch (err) {
+            console.error(err);
+            showNcError('Could not create the course — make sure the slug is unique and try again.');
+        } finally {
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'Create & Continue';
+        }
+    }
+
+    // ─── Builder: Course Info tab ────────────────────────────────
+    let builderPicturesToDelete = [];
+    function populateCourseInfoPanel(course) {
+        document.getElementById('ciName').value        = course.name || course.title || '';
+        document.getElementById('ciSlug').value        = course.slug || '';
+        document.getElementById('ciPrice').value       = course.price || '';
+        document.getElementById('ciDuration').value    = course.duration || '';
+        document.getElementById('ciLevel').value       = course.level || 'Beginner';
+        document.getElementById('ciFormat').value      = course.format || 'ONLINE';
+        document.getElementById('ciType').value        = course.type || 'INDIVIDUAL';
+        document.getElementById('ciLanguage').value    = course.language || '';
+        document.getElementById('ciDescription').value = course.description || '';
+        document.getElementById('ciPublished').checked = course.published || false;
+    }
+    function clearCourseInfoPanel() {
+        ['ciName','ciSlug','ciPrice','ciDuration','ciLanguage','ciDescription'].forEach(id => document.getElementById(id).value = '');
+        document.getElementById('ciLevel').value = 'Beginner';
+        document.getElementById('ciFormat').value = 'ONLINE';
+        document.getElementById('ciType').value = 'INDIVIDUAL';
+        document.getElementById('ciPublished').checked = false;
+        document.getElementById('ciExistingPictures').innerHTML = '';
+        builderPicturesToDelete = [];
+    }
+    async function loadBuilderPictures(courseId) {
+        const wrap = document.getElementById('ciExistingPictures');
+        wrap.innerHTML = '';
+        builderPicturesToDelete = [];
+        try {
+            const res  = await fetch(`/api/pictures/entity/${courseId}?type=COURSE`);
+            const pics = await res.json();
+            pics.forEach(pic => {
+                const div = document.createElement('div');
+                div.className = 'preview-container'; div.id = `ci-pic-wrap-${pic.id}`;
+                div.innerHTML = `<img src="${pic.url}" class="rounded border" style="width: 54px; height: 54px; object-fit: cover;">
+                    <div class="delete-badge" onclick="toggleBuilderPictureDeletion(${pic.id})">&times;</div>`;
+                wrap.appendChild(div);
+            });
+        } catch (e) {}
+    }
+    function toggleBuilderPictureDeletion(id) {
+        const wrap = document.getElementById(`ci-pic-wrap-${id}`);
+        builderPicturesToDelete.includes(id)
+            ? builderPicturesToDelete = builderPicturesToDelete.filter(i => i !== id)
+            : builderPicturesToDelete.push(id);
+        if (wrap) wrap.classList.toggle('marked-for-delete');
+    }
+
+    function onBuilderCourseChange() {
+        const id = document.getElementById('builderCourseSelect').value;
+        builderCourseId = id ? Number(id) : null;
+        document.getElementById('btnLoad').disabled = !builderCourseId;
+        document.getElementById('btnSave').disabled = !builderCourseId;
+        const course = allCourses.find(c => c.id == id);
+        const previewBtn = document.getElementById('btnPreview');
+        if (course && builderCourseId) {
+            const url = course.slug ? `/language-courses/${course.slug}` : `/language-courses/${course.id}`;
+            previewBtn.href = url;
+            previewBtn.style.pointerEvents = 'auto';
+            previewBtn.style.opacity = '1';
+            document.getElementById('seoTitle').value = course.name || course.title || '';
+            document.getElementById('seoDescription').value = course.description || '';
+            document.getElementById('seoDescCount').textContent = (course.description || '').length + ' / 160';
+            populateCourseInfoPanel(course);
+            loadBuilderPictures(builderCourseId);
+        } else {
+            previewBtn.href = '#'; previewBtn.style.pointerEvents = 'none'; previewBtn.style.opacity = '0.4';
+            clearCourseInfoPanel();
+        }
+        setBuilderStatus('');
+    }
+
+    // ─── Builder: load/save ────────────────────────────────────
+    async function loadPageIntoBuilder() {
+        if (!builderCourseId) return;
+        setBuilderStatus('loading', '⏳ Loading...');
+        try {
+            const res  = await fetch(`/api/admin/course-page/${builderCourseId}`);
+            if (!res.ok) throw new Error(`HTTP ${res.status}`);
+            const data = await res.json();
+            editor.setComponents(data.html || '');
+            if (data.css) editor.setStyle(data.css);
+            if (data.seoTitle) document.getElementById('seoTitle').value = data.seoTitle;
+            if (data.seoDescription) {
+                document.getElementById('seoDescription').value = data.seoDescription;
+                document.getElementById('seoDescCount').textContent = data.seoDescription.length + ' / 160';
+            }
+            if (data.seoOgImage) document.getElementById('seoOgImage').value = data.seoOgImage;
+            if (data.seoKeywords) document.getElementById('seoKeywords').value = data.seoKeywords;
+            setBuilderStatus('success', '✓ Loaded');
+            setTimeout(() => setBuilderStatus(''), 2500);
+        } catch (e) {
+            console.error(e);
+            setBuilderStatus('error', '✗ Failed to load');
+        }
+    }
+
+    async function saveCourseInfo() {
+        const fd = new FormData();
+        fd.append('name',        document.getElementById('ciName').value);
+        fd.append('title',       document.getElementById('ciName').value);
+        fd.append('slug',        document.getElementById('ciSlug').value);
+        fd.append('price',       document.getElementById('ciPrice').value);
+        fd.append('duration',    document.getElementById('ciDuration').value);
+        fd.append('level',       document.getElementById('ciLevel').value);
+        fd.append('format',      document.getElementById('ciFormat').value);
+        fd.append('type',        document.getElementById('ciType').value);
+        fd.append('language',    document.getElementById('ciLanguage').value);
+        fd.append('description', document.getElementById('ciDescription').value);
+        fd.append('published',   String(document.getElementById('ciPublished').checked));
+        builderPicturesToDelete.forEach(id => fd.append('picturesToDelete', id));
+        const fileInput = document.getElementById('ciPictureInput');
+        if (fileInput && fileInput.files && fileInput.files.length) {
+            Array.from(fileInput.files).forEach(f => fd.append('pictures', f));
+        }
+        const res = await fetch(`/api/admin/courses/${builderCourseId}`, { method: 'PUT', body: fd });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    }
+
+    async function savePageFromBuilder() {
+        if (!builderCourseId) return;
+        const btnSave = document.getElementById('btnSave');
+        btnSave.disabled = true;
+        setBuilderStatus('loading', '⏳ Saving...');
+        try {
+            await saveCourseInfo();
+            const html = editor.getHtml();
+            const css  = editor.getCss();
+            const full = `<style>${css}</style>\n${html}`;
+            const payload = {
+                html: full,
+                css,
+                seoTitle:       document.getElementById('seoTitle').value,
+                seoDescription: document.getElementById('seoDescription').value,
+                seoOgImage:     document.getElementById('seoOgImage').value,
+                seoKeywords:    document.getElementById('seoKeywords').value,
+            };
+            const res = await fetch(`/api/admin/course-page/${builderCourseId}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+            if (!res.ok) throw new Error(`HTTP ${res.status}`);
+            const fileInput = document.getElementById('ciPictureInput');
+            if (fileInput) fileInput.value = '';
+            await fetchAllCourses();
+            onBuilderCourseChange();
+            setBuilderStatus('success', '✓ Saved!');
+            setTimeout(() => setBuilderStatus(''), 3000);
+        } catch (e) {
+            console.error(e); setBuilderStatus('error', '✗ Save failed');
+        } finally {
+            btnSave.disabled = !builderCourseId;
+        }
+    }
+
+    function setBuilderStatus(type, text) {
+        const el = document.getElementById('builderStatus');
+        el.className = 'builder-status' + (type ? ' ' + type : '');
+        el.textContent = text || '';
+    }
+
+    // ─── Entity Modal ─────────────────────────────────────────
     function openModal() {
         document.getElementById('entityForm').reset();
         document.getElementById('entityId').value = '';
@@ -547,109 +2400,89 @@
         document.getElementById('modalTitle').innerText = `Create ${currentEntity.slice(0, -1)}`;
         modalInstance.show();
     }
-
     function editItem(item) {
         openModal();
-        document.getElementById('entityId').value = item.id;
-        document.getElementById('entityTitle').value = item.name || item.title || '';
+        document.getElementById('entityId').value          = item.id;
+        document.getElementById('entityTitle').value       = item.name || item.title || '';
         document.getElementById('entityDescription').value = item.description || '';
         quill.root.innerHTML = item.text || '';
         document.getElementById('entityPublished').checked = item.published || false;
-        document.getElementById('entitySlug').value = item.slug || '';
-
+        document.getElementById('entitySlug').value        = item.slug || '';
         if (currentEntity === 'courses') {
-            document.getElementById('coursePrice').value = item.price || '';
+            document.getElementById('coursePrice').value    = item.price || '';
             document.getElementById('courseDuration').value = item.duration || '';
-            document.getElementById('courseLevel').value = item.level || 'Beginner';
-            document.getElementById('courseFormat').value = item.format || 'ONLINE';
-            document.getElementById('courseType').value = item.type || 'INDIVIDUAL';
+            document.getElementById('courseLevel').value    = item.level || 'Beginner';
+            document.getElementById('courseFormat').value   = item.format || 'ONLINE';
+            document.getElementById('courseType').value     = item.type || 'INDIVIDUAL';
             document.getElementById('courseLanguage').value = item.language || '';
         } else if (currentEntity === 'items') {
-            document.getElementById('itemPrice').value = item.price || '';
-            document.getElementById('itemAmount').value = item.amount || 0;
+            document.getElementById('itemPrice').value     = item.price || '';
+            document.getElementById('itemAmount').value    = item.amount || 0;
             document.getElementById('itemAvailable').value = String(item.available !== false);
-            // Set category — falls back to empty string if null/undefined
-            document.getElementById('itemCategory').value = item.category || '';
+            document.getElementById('itemCategory').value  = item.category || '';
         }
         loadExistingPictures(item.id);
     }
-
     async function loadExistingPictures(id) {
         const picContainer = document.getElementById('existingPictures');
         const type = currentEntity.toUpperCase().replace(/S$/, '');
-        const res = await fetch(`/api/pictures/entity/${id}?type=${type}`);
+        const res  = await fetch(`/api/pictures/entity/${id}?type=${type}`);
         const pics = await res.json();
         pics.forEach(pic => {
             const wrap = document.createElement('div');
-            wrap.className = 'preview-container';
-            wrap.id = `pic-wrap-${pic.id}`;
-            wrap.innerHTML = `
-                <img src="${pic.url}" class="rounded border" style="width: 70px; height: 70px; object-fit: cover;">
-                <div class="delete-badge" onclick="toggleDeletion(${pic.id})">&times;</div>
-            `;
+            wrap.className = 'preview-container'; wrap.id = `pic-wrap-${pic.id}`;
+            wrap.innerHTML = `<img src="${pic.url}" class="rounded border" style="width: 70px; height: 70px; object-fit: cover;">
+                <div class="delete-badge" onclick="toggleDeletion(${pic.id})">&times;</div>`;
             picContainer.appendChild(wrap);
         });
     }
-
     function toggleDeletion(id) {
         const wrap = document.getElementById(`pic-wrap-${id}`);
-        picturesToDelete.includes(id) ?
-            picturesToDelete = picturesToDelete.filter(i => i !== id) :
-            picturesToDelete.push(id);
+        picturesToDelete.includes(id)
+            ? picturesToDelete = picturesToDelete.filter(i => i !== id)
+            : picturesToDelete.push(id);
         wrap.classList.toggle('marked-for-delete');
     }
-
     async function saveData(e) {
         e.preventDefault();
         const formData = new FormData(e.target);
         formData.set('text', quill.root.innerHTML);
         picturesToDelete.forEach(id => formData.append('picturesToDelete', id));
-
         if (currentEntity === 'courses' || currentEntity === 'items') {
             formData.set('name', document.getElementById('entityTitle').value);
         }
         if (currentEntity === 'courses') {
-            formData.set('price', document.getElementById('coursePrice').value);
-            formData.set('level', document.getElementById('courseLevel').value);
-            formData.set('format', document.getElementById('courseFormat').value);
-            formData.set('type', document.getElementById('courseType').value);
-            formData.set('duration', document.getElementById('courseDuration').value);
-            formData.set('language', document.getElementById('courseLanguage').value);
+            formData.set('price',     document.getElementById('coursePrice').value);
+            formData.set('level',     document.getElementById('courseLevel').value);
+            formData.set('format',    document.getElementById('courseFormat').value);
+            formData.set('type',      document.getElementById('courseType').value);
+            formData.set('duration',  document.getElementById('courseDuration').value);
+            formData.set('language',  document.getElementById('courseLanguage').value);
             formData.set('published', String(document.getElementById('entityPublished').checked));
         } else if (currentEntity === 'items') {
-            formData.set('price', document.getElementById('itemPrice').value);
-            formData.set('amount', document.getElementById('itemAmount').value);
+            formData.set('price',     document.getElementById('itemPrice').value);
+            formData.set('amount',    document.getElementById('itemAmount').value);
             formData.set('available', String(document.getElementById('itemAvailable').value === 'true'));
             formData.set('published', String(document.getElementById('entityPublished').checked));
-            // Send category — backend expects the enum name (e.g. "ELECTRONICS")
-            const categoryVal = document.getElementById('itemCategory').value;
-            if (categoryVal) {
-                formData.set('category', categoryVal);
-            } else {
-                formData.delete('category'); // don't send empty string
-            }
+            const cat = document.getElementById('itemCategory').value;
+            if (cat) formData.set('category', cat); else formData.delete('category');
         }
-
-        const id = document.getElementById('entityId').value;
+        const id  = document.getElementById('entityId').value;
         const url = `/api/admin/${currentEntity}${id ? '/' + id : ''}`;
-
         try {
             const res = await fetch(url, { method: id ? 'PUT' : 'POST', body: formData });
             if (res.ok) { modalInstance.hide(); loadData(); }
         } catch (e) { console.error(e); }
     }
-
     async function deleteItem(id) {
         if (confirm('Delete this entry permanently?')) {
             await fetch(`/api/admin/${currentEntity}/${id}`, { method: 'DELETE' });
             loadData();
         }
     }
-
     function changePage(delta) {
         if (currentPage + delta >= 0) { currentPage += delta; loadData(); }
     }
 </script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

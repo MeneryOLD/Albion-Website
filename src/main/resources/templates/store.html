@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -20,11 +20,18 @@
         .logo-group{display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--text);font-weight:800;font-size:1.4rem}
         .logo-circle{width:55px;height:55px;background:url('/img/logo.webp') center/cover no-repeat;border-radius:12px;transition:transform .3s ease}
         .logo-circle:hover{transform:rotate(360deg)}
-        .nav-links{display:flex;align-items:center;gap:28px}
-        .nav-links a{text-decoration:none;color:#1f1f1f;padding:8px 20px;font-weight:600;transition:color .3s,background-color .3s;border-radius:20px}
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 28px;
+        }
+        .nav-links a{text-decoration:none;color:#1f1f1f;padding:8px 20px;font-weight:600;transition:color .3s,background-color .3s;}
         .nav-links a:hover{color:#d4af37;background:rgba(212,175,55,.1)}
         .nav-links a.active{color: #917003;}
         .menu-toggle{display:none;border:none;background:none;font-size:1.8rem;cursor:pointer;color:var(--text)}
+        .login-button { display: inline-flex; align-items:center; justify-content:center; width:50px; height:50px; flex-shrink:0; margin-left:10px; padding:0; background:url('/img/default-user.png') center/cover no-repeat; border-radius:50%; border:2px solid rgba(180, 145, 40, 0.5); box-shadow:0 6px 16px rgba(212,175,55,.18); transition:var(--transition); }
+        .login-button:hover{ transform:translateY(-3px) scale(1.06); border-color:rgba(212,175,55,.85); box-shadow:0 12px 26px rgba(212,175,55,.32); color:inherit; }
+        .login-button.authenticated { background-image: url('/img/auth-user.png'); }
 
         .store-hero{
             position:relative;min-height:560px;display:flex;align-items:center;justify-content:center;
@@ -154,6 +161,8 @@
             .nav-links{position:absolute;top:100%;left:0;width:100%;background:rgba(255,255,255,.96);backdrop-filter:blur(14px);flex-direction:column;align-items:center;gap:10px;padding:20px 0;border-radius:0 0 20px 20px;opacity:0;visibility:hidden;transform:translateY(-10px);transition:.35s ease}
             .nav-links.active{opacity:1;visibility:visible;transform:translateY(0)}
             .nav-links a{width:90%;text-align:center;padding:14px;border-radius:14px}
+            .nav-links a.login-button{ width:52px; height:52px; padding:0; margin:10px auto 0; border-radius:50%; }
+            .nav-links a.login-button:hover{ background-color:transparent; transform:translateY(-2px) scale(1.05); }
             .store-hero{padding:120px 20px 60px;min-height:auto}
             .store-hero h1{font-size:2.4rem}
             .hero-stats{flex-wrap:wrap}
@@ -171,23 +180,31 @@
     </style>
 </head>
 <body>
-
 <header>
     <div class="header-container">
         <a th:href="@{/}" class="logo-group">
             <div class="logo-circle"></div>
             <span>Albion</span>
         </a>
-        <button class="menu-toggle" id="menuToggle">☰</button>
+        <button class="menu-toggle" id="menuToggle"> ☰</button>
         <nav class="nav-links" id="navMenu">
             <a th:href="@{/language-courses}">Courses</a>
             <a th:href="@{/blog}">Blog</a>
             <a th:href="@{/store}" class="active">Store</a>
             <a th:href="@{/about-us}">About us</a>
+
+            <a sec:authorize="isAuthenticated()"
+               th:href="@{/login}"
+               class="login-button authenticated"
+               aria-label="My Profile"></a>
+
+            <a sec:authorize="!isAuthenticated()"
+               th:href="@{/login}"
+               class="login-button"
+               aria-label="Login"></a>
         </nav>
     </div>
 </header>
-
 <!-- ─── HERO ─── -->
 <section class="store-hero">
     <div class="store-hero-inner">

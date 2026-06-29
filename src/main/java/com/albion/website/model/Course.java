@@ -19,8 +19,8 @@ public class Course {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private String name;
+    @Column(nullable = false, name = "name")
+    private String title;
 
     @Column(unique = true, nullable = false)
     private String slug;
@@ -47,6 +47,10 @@ public class Course {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private CourseType type;
+
+    @Lob
+    @Column(name = "page_html", columnDefinition = "LONGTEXT")
+    private String pageHtml;
 
     @PrePersist
     public void prePersist() {

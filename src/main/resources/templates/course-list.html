@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:tf="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -80,8 +80,11 @@ header {
   border-radius: 12px; transition: transform 0.3s ease;
 }
 .logo-circle:hover { transform: rotate(360deg); }
-
-.nav-links { display: flex; align-items: center; gap: 28px; }
+.nav-links {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+}
 .nav-links a {
   text-decoration: none; color: var(--dark-text);
   padding: 8px 20px; font-weight: 600;
@@ -89,7 +92,6 @@ header {
 }
 .nav-links a.active{color: #917003;}
 .nav-links a:hover { color: #d4af37 !important; }
-
 .menu-toggle { display: none; border: none; background: none; font-size: 1.8rem; cursor: pointer; color: var(--text); }
 
 /* HERO */
@@ -212,17 +214,10 @@ header {
 /* FILTER */
 .courses-filter-section { padding-top: 60px; padding-bottom: 20px; background: lightgray; }
 
-.filter-top { display: flex; align-items: center; gap: 16px; margin-bottom: 35px; }
-.filter-top h2 { margin-bottom: 0; text-align: left; }
+.filter-top { align-items: center; gap: 16px; margin-bottom: 35px; }
+.filter-top h2 { margin-bottom: 0; text-align: center; }
 
-.filter-icon {
-  width: 56px; height: 56px; border-radius: 18px; display: flex;
-  align-items: center; justify-content: center; font-size: 1.5rem;
-  background: linear-gradient(135deg, var(--gold-light), var(--gold));
-  color: #fff; box-shadow: 0 10px 22px rgba(200, 169, 91, 0.2);
-}
-
-.filter-pills { display: flex; gap: 16px; flex-wrap: wrap; }
+.filter-pills { display: flex; gap: 16px; flex-wrap: nowrap; justify-content: center; }
 
 .filter-pill {
   border: none; padding: 14px 24px; border-radius: 999px;
@@ -442,6 +437,10 @@ header {
 }
 .footer-btn:hover { transform: translateY(-4px); box-shadow: 0 18px 40px rgba(212, 175, 55, 0.32); }
 
+.login-button { display: inline-flex; align-items:center; justify-content:center; width:50px; height:50px; flex-shrink:0; margin-left:10px; padding:0; background:url('/img/default-user.png') center/cover no-repeat; border-radius:50%; border:2px solid rgba(180, 145, 40, 0.5); box-shadow:0 6px 16px rgba(212,175,55,.18); transition:var(--transition); }
+        .login-button:hover{ transform:translateY(-3px) scale(1.06); border-color:rgba(212,175,55,.85); box-shadow:0 12px 26px rgba(212,175,55,.32); color:inherit; }
+        .login-button.authenticated { background-image: url('/img/auth-user.png'); }
+
 /* MEDIA QUERIES */
 @media (max-width: 1200px) { .courses-grid, .why-grid { grid-template-columns: repeat(2, 1fr); } }
 
@@ -472,6 +471,8 @@ header {
   }
   .nav-links a { width: 90%; text-align: center; padding: 14px; border-radius: 14px; }
   .nav-links.active { opacity: 1; visibility: visible; transform: translateY(0); }
+  .nav-links a.login-button{ width:52px; height:52px; padding:0; margin:10px auto 0; border-radius:50%; }
+  .nav-links a.login-button:hover{ background-color:transparent; transform:translateY(-2px) scale(1.05); }
   section { padding: 70px 20px; }
   h1 { font-size: 2.7rem; }
   h2 { font-size: 2rem; }
@@ -501,12 +502,22 @@ header {
             <div class="logo-circle"></div>
             <span>Albion</span>
         </a>
-        <button class="menu-toggle" id="menuToggle">☰</button>
+        <button class="menu-toggle" id="menuToggle"> ☰</button>
         <nav class="nav-links" id="navMenu">
             <a th:href="@{/language-courses}" class="active">Courses</a>
             <a th:href="@{/blog}">Blog</a>
             <a th:href="@{/store}">Store</a>
             <a th:href="@{/about-us}">About us</a>
+
+            <a sec:authorize="isAuthenticated()"
+               th:href="@{/login}"
+               class="login-button authenticated"
+               aria-label="My Profile"></a>
+
+            <a sec:authorize="!isAuthenticated()"
+               th:href="@{/login}"
+               class="login-button"
+               aria-label="Login"></a>
         </nav>
     </div>
 </header>
@@ -539,7 +550,6 @@ header {
     <!-- FILTER -->
     <section class="courses-filter-section">
         <div class="filter-top reveal">
-            <div class="filter-icon">⚙</div>
             <h2>Find Your Perfect Course</h2>
         </div>
         <div class="filter-pills reveal">
