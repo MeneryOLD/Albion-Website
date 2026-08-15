@@ -13,6 +13,7 @@ public class RegistrationService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final EmailService emailService;
 
     public void register(String name, String email, String password) {
         if (userRepository.findByName(name).isPresent()) {
@@ -28,5 +29,12 @@ public class RegistrationService {
         user.setPassword(passwordEncoder.encode(password));
         user.setRole(Role.USER);
         userRepository.save(user);
+
+        emailService.sendEmail(
+                email,
+                "Welcome!",
+                "Thank you for joining us,",
+                "localhost:8080/"
+        );
     }
 }

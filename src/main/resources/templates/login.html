@@ -60,15 +60,6 @@
         .panel-right{position:relative;display:flex;align-items:center;justify-content:center;padding:40px;
             background:radial-gradient(circle at 70% 30%,rgba(200,169,91,.06),transparent 50%),var(--bg);overflow-y:auto}
 
-        /* LOGOUT */
-        .logout-btn{position:absolute;top:22px;right:24px;display:inline-flex;align-items:center;gap:6px;
-            padding:8px 14px;border-radius:999px;background:rgba(255,255,255,.7);border:1px solid var(--border-gold);
-            color:var(--text-soft);font-size:.78rem;font-weight:700;letter-spacing:.3px;text-decoration:none;
-            cursor:pointer;font-family:inherit;backdrop-filter:blur(8px);transition:all .25s ease}
-        .logout-btn:hover{color:var(--gold-dark);border-color:var(--gold);background:#fff;
-            transform:translateY(-1px);box-shadow:0 6px 14px rgba(200,169,91,.15)}
-        .logout-btn svg{width:13px;height:13px}
-
         .auth-box{width:100%;max-width:420px}
 
         /* TABS */
@@ -177,25 +168,8 @@
 </aside>
 
 <main class="panel-right">
-
-    <form th:action="@{/logout}" action="/logout" method="post" style="margin:0;">
-        <button type="submit" class="logout-btn" title="Sign out">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
-                 stroke-linecap="round" stroke-linejoin="round">
-                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
-                <polyline points="16 17 21 12 16 7"/>
-                <line x1="21" y1="12" x2="9" y2="12"/>
-            </svg>
-            Sign out
-        </button>
-    </form>
-
     <div class="auth-box">
         <div class="auth-tabs" role="tablist">
-            <!--
-                Sign in таб: активен по умолчанию, НЕ активен при ошибке регистрации
-                Register таб: НЕ активен по умолчанию, активен при ошибке регистрации
-            -->
             <button type="button"
                     class="tab-btn"
                     th:classappend="${registerError != null} ? '' : 'active'"
@@ -206,7 +180,6 @@
                     data-target="register-form">Register</button>
         </div>
 
-        <!-- Sign in секция: активна по умолчанию, скрыта при ошибке регистрации -->
         <section id="login-form"
                  class="auth-form"
                  th:classappend="${registerError != null} ? '' : 'active'">
@@ -400,6 +373,11 @@
     }
 
     [pw, pw2, user, emailEl].forEach(el => el.addEventListener('input', evaluate));
+    const registerForm = document.getElementById('registerForm');
+    registerForm.addEventListener('submit', () => {
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'CREATING...';
+    });
 </script>
 </body>
 </html>

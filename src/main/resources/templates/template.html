@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title th:text="#{legal.refund.pageTitle}">Refund Policy — Albion EDU</title>
+    <title>Albion EDU</title>
     <style>
         *{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',Roboto,sans-serif}
         :root{
@@ -59,111 +59,6 @@
         }
 
         main{min-height:60vh;padding:40px 5%}
-
-        /* ─── LEGAL PAGE ─── */
-        .legal-page{max-width:880px;margin:0 auto}
-
-        .legal-hero{
-            position:relative;
-            text-align:center;
-            padding:72px 30px 48px;
-            margin-bottom:44px;
-            background:
-                radial-gradient(circle at 15% 20%, rgba(212,175,55,.16), transparent 55%),
-                radial-gradient(circle at 85% 15%, rgba(212,175,55,.12), transparent 50%),
-                rgba(255,255,255,.6);
-            border:1px solid rgba(212,175,55,.25);
-            border-radius:32px;
-            box-shadow:var(--shadow-soft), inset 0 1px 0 rgba(255,255,255,.7);
-            overflow:hidden;
-        }
-        .legal-hero::before{
-            content:"";
-            position:absolute;
-            top:-40%;left:50%;
-            width:520px;height:260px;
-            transform:translateX(-50%);
-            background:radial-gradient(ellipse at center, rgba(212,175,55,.28), transparent 70%);
-            pointer-events:none;
-        }
-        .legal-hero::after{
-            content:"";
-            position:absolute;
-            left:50%;bottom:0;
-            transform:translateX(-50%);
-            width:120px;height:3px;
-            border-radius:3px;
-            background:linear-gradient(90deg,transparent,var(--gold),transparent);
-            opacity:.6;
-        }
-        .legal-hero-icon{
-            position:relative;
-            width:80px;height:80px;
-            margin:0 auto 24px;
-            border-radius:22px;
-            display:flex;align-items:center;justify-content:center;
-            background:linear-gradient(145deg,#f7e7b0,#d4af37 55%,#c8a049);
-            box-shadow:0 14px 32px rgba(212,175,55,.38), inset 0 1px 1px rgba(255,255,255,.6);
-        }
-        .legal-hero-icon svg{width:34px;height:34px;color:#3a2c0b;stroke-width:2.1}
-        .legal-hero h1{
-            position:relative;
-            font-size:2.6rem;
-            font-weight:800;
-            color:var(--text);
-            margin-bottom:16px;
-            letter-spacing:-.8px;
-        }
-        .legal-updated{
-            position:relative;
-            display:inline-flex;
-            align-items:center;
-            gap:9px;
-            font-size:.88rem;
-            font-weight:700;
-            color:#7a5e1f;
-            background:rgba(255,255,255,.65);
-            border:1px solid rgba(212,175,55,.4);
-            padding:10px 22px;
-            border-radius:999px;
-            box-shadow:0 6px 18px rgba(212,175,55,.15);
-        }
-        .legal-updated::before{
-            content:"";
-            width:7px;height:7px;
-            border-radius:50%;
-            background:linear-gradient(135deg,#d4af37,#9f7d2f);
-            box-shadow:0 0 0 3px rgba(212,175,55,.18);
-        }
-
-        .legal-body{
-            position:relative;
-            background:rgba(255,255,255,.78);
-            border:1px solid rgba(212,175,55,.18);
-            border-radius:32px;
-            padding:60px 68px;
-            box-shadow:var(--shadow-soft), inset 0 1px 0 rgba(255,255,255,.8);
-            line-height:1.9;
-            color:var(--text);
-            font-size:1.03rem;
-        }
-        .legal-body h2{
-            font-size:1.4rem;
-            font-weight:800;
-            color:var(--text);
-            margin:40px 0 16px;
-            padding-bottom:12px;
-            border-bottom:1px solid rgba(212,175,55,.22);
-        }
-        .legal-body h2:first-child{margin-top:0}
-        .legal-body h3{font-size:1.12rem;font-weight:700;color:var(--gold-dark);margin:26px 0 10px}
-        .legal-body p{margin-bottom:17px;color:var(--text-soft)}
-        .legal-body ul,.legal-body ol{margin:0 0 17px 22px;color:var(--text-soft)}
-        .legal-body li{margin-bottom:9px;padding-left:4px}
-        .legal-body li::marker{color:var(--gold-dark)}
-        .legal-body a{color:#b8922e;text-decoration:underline;text-underline-offset:3px;transition:.25s}
-        .legal-body a:hover{color:#9f7d2f}
-        .legal-body strong{color:var(--text);font-weight:700}
 
         /* ─── FOOTER ─── */
         .premium-footer{width:100%;background:lightgray}
@@ -293,48 +188,46 @@
             transform:translateY(-2px);
             box-shadow:0 12px 28px rgba(212,175,55,.35);
         }
-        .lang-switcher{
-            display:flex;
-            align-items:center;
-            gap:8px;
-            margin-right:auto;
-        }
-        .lang-switcher a{
-            display:flex;
-            align-items:center;
-            justify-content:center;
-            width:38px;
-            height:38px;
-            border-radius:10px;
-            border:1.5px solid rgba(212,175,55,.4);
-            background:rgba(255,255,255,.6);
-            font-size:.78rem;
-            font-weight:800;
-            letter-spacing:.5px;
-            color:var(--gray-text);
-            text-decoration:none;
-            transition:var(--transition);
-        }
-        .lang-switcher a:hover{
-            border-color:rgba(212,175,55,.7);
-            background:rgba(212,175,55,.1);
-            color:var(--dark-text);
-            transform:translateY(-2px);
-        }
-        .lang-switcher a.active{
-            background:linear-gradient(135deg,#f7e7b0,#d4af37,#f3e2a0);
-            border-color:transparent;
-            color:#222;
-            box-shadow:0 6px 16px rgba(212,175,55,.3);
-        }
+            .lang-switcher{
+        display:flex;
+        align-items:center;
+        gap:8px;
+        margin-right:auto;
+    }
+.lang-switcher a{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    width:38px;
+    height:38px;
+    border-radius:10px;
+    border:1.5px solid rgba(212,175,55,.4);
+    background:rgba(255,255,255,.6);
+    font-size:.78rem;
+    font-weight:800;
+    letter-spacing:.5px;
+    color:var(--gray-text);
+    text-decoration:none;
+    transition:var(--transition);
+}
+.lang-switcher a:hover{
+    border-color:rgba(212,175,55,.7);
+    background:rgba(212,175,55,.1);
+    color:var(--dark-text);
+    transform:translateY(-2px);
+}
+.lang-switcher a.active{
+    background:linear-gradient(135deg,#f7e7b0,#d4af37,#f3e2a0);
+    border-color:transparent;
+    color:#222;
+    box-shadow:0 6px 16px rgba(212,175,55,.3);
+}
 
         /* ─── RESPONSIVE ─── */
         @media(max-width:900px){
             .footer-container{grid-template-columns:1fr;gap:60px;padding:50px 24px}
             .footer-map{width:100%;height:280px}
             .footer-btn{width:100%}
-            .legal-body{padding:40px 28px}
-            .legal-hero h1{font-size:1.9rem}
         }
         @media(max-width:768px){
             .header-container{ position:relative; padding:0 20px; flex-wrap:wrap; gap:15px; }
@@ -402,26 +295,7 @@
 </header>
 
 <main>
-    <div class="legal-page">
-        <div class="legal-hero">
-            <div class="legal-hero-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M3 10h18"/>
-                    <path d="M3 6h18v13a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1z"/>
-                    <path d="M8 14l2 2 4-4"/>
-                </svg>
-            </div>
-            <h1 th:text="#{legal.refund.title}">Refund Policy</h1>
-            <span class="legal-updated">
-                <span th:text="#{legal.updatedLabel}">Last updated:</span>
-                <span th:text="#{legal.refund.updatedDate}">August 13, 2026</span>
-            </span>
-        </div>
-
-        <div class="legal-body" th:utext="#{legal.refund.content}">
-            <p>Your refund policy text will appear here.</p>
-        </div>
-    </div>
+    <!-- page content -->
 </main>
 
 <!-- ─── FOOTER ─── -->
@@ -680,6 +554,7 @@
         e.preventDefault();
         e.stopPropagation();
 
+        // если открыто бургер-меню — сначала закрываем его
         if (navMenu.classList.contains('active')) {
             closeMenu();
         }

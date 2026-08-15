@@ -1,5 +1,6 @@
 package com.albion.website.controller;
 
+import com.albion.website.model.Item;
 import com.albion.website.service.ItemService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 @RequiredArgsConstructor
 public class StoreController {
     private final ItemService itemService;
+
     @GetMapping("/store")
     public String store(Model model) {
         model.addAttribute("products", itemService.getAllPublished());
@@ -19,6 +21,8 @@ public class StoreController {
 
     @GetMapping("/store/{slug}")
     public String storePage(@PathVariable String slug, Model model) {
+        Item item = itemService.getBySlug(slug);
+        model.addAttribute("item", item);
         return "item";
     }
 }

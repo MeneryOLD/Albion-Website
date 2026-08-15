@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Albion EDU | Blog</title>
+    <title>LC Albion | Blog</title>
+    <link rel="icon" href="/img/logo.webp" type="image/png">
     <style>
         *{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',Roboto,sans-serif}
         :root{
@@ -12,13 +13,30 @@
             --shadow-soft:0 10px 30px rgba(0,0,0,.06);
             --shadow-hover:0 18px 45px rgba(0,0,0,.1);
             --transition:all .45s cubic-bezier(.2,1,.3,1);
+            --ink:#241f12;--line:rgba(159,125,47,.22);--eyebrow:#9f7d2f;
         }
-        body{background:lightgray}
+        body {
+            scroll-behavior: smooth;
+            background: radial-gradient(circle at top left, rgba(255, 255, 51, .08), transparent 30%), radial-gradient(circle at bottom right, rgba(169, 169, 169, .12), transparent 35%), #fff;
+            color: var(--dark-text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
 
         /* HEADER */
-        header{width:100%;background:rgba(180,180,180,.35);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,255,51,.25);position:fixed;top:0;z-index:1000;padding:15px 0}
-        .header-container{padding:0 40px;flex-wrap:wrap;gap:15px;width:100%;display:flex;justify-content:space-between;align-items:center}
-        .logo-group{display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--text);font-weight:800;font-size:1.4rem}
+        header{
+            width:100%;
+            background:rgba(180,180,180,.35);
+            backdrop-filter:blur(16px);
+            -webkit-backdrop-filter:blur(16px);
+            border-bottom:1px solid rgba(255,255,51,.25);
+            position:sticky;
+            top:0;
+            z-index:1000;
+            padding:15px 0
+        }
+        .header-container{padding:0 40px;width:100%;display:flex;justify-content:space-between;align-items:center}
+        .logo-group{ display:flex; align-items:center; gap:12px; text-decoration:none; color:var(--dark-text); font-weight:800; font-size:1.4rem; margin-right: 12px}
         .logo-circle{width:55px;height:55px;background:url('/img/logo.webp') center/cover no-repeat;border-radius:12px;transition:transform .3s ease}
         .logo-circle:hover{transform:rotate(360deg)}
         .nav-links {
@@ -26,66 +44,288 @@
             align-items: center;
             gap: 28px;
         }
-        .nav-links a{text-decoration:none;color:#1f1f1f;padding:8px 20px;font-weight:600;transition:color .3s,background-color .3s;}
-        .nav-links a:hover{color:#d4af37;background:rgba(212,175,55,.1)}
+        .nav-links a{text-decoration:none;color:#1f1f1f;padding:8px 20px;font-weight:600;transition:.3s;}
         .nav-links a.active{color: #917003;}
-        .menu-toggle{display:none;border:none;background:none;font-size:1.8rem;cursor:pointer;color:var(--text)}
+        .nav-links a:hover { color: #d4d400; }
+        .menu-toggle{display:none;border:none;background:none;font-size:2rem;cursor:pointer;color:var(--text)}
         .login-button { display: inline-flex; align-items:center; justify-content:center; width:50px; height:50px; flex-shrink:0; margin-left:10px; padding:0; background:url('/img/default-user.png') center/cover no-repeat; border-radius:50%; border:2px solid rgba(180, 145, 40, 0.5); box-shadow:0 6px 16px rgba(212,175,55,.18); transition:var(--transition); }
         .login-button:hover{ transform:translateY(-3px) scale(1.06); border-color:rgba(212,175,55,.85); box-shadow:0 12px 26px rgba(212,175,55,.32); color:inherit; }
         .login-button.authenticated { background-image: url('/img/auth-user.png'); }
 
+        .menu-overlay {
+          position: fixed;
+          inset: 0;
+          background: rgba(0, 0, 0, 0);
+          backdrop-filter: blur(0px);
+          -webkit-backdrop-filter: blur(0px);
+          z-index: 999;
+          pointer-events: none;
+          transition: background 0.35s ease, backdrop-filter 0.35s ease;
+        }
+
+        .menu-overlay.active {
+          background: rgba(0, 0, 0, 0.45);
+          backdrop-filter: blur(3px);
+          -webkit-backdrop-filter: blur(3px);
+          pointer-events: all;
+        }
+
         /* HERO */
         .blog-hero{
-            text-align: center;
-            padding: 150px 40px 80px;
-            position: relative;
-            min-height: 520px;
-            display: flex;
-            align-items: center;
-            background: linear-gradient(rgba(215, 215, 215, .72), rgba(235, 235, 235, .78)), url(/img/main-background.webp) center / cover no-repeat;
-            overflow: hidden;
-            flex-direction: column;
+            background: linear-gradient(rgba(215,215,215,.72),rgba(235,235,235,.78)), url('/img/main-background.webp') center/cover no-repeat;
+            text-align:center;
+            padding:190px 40px;
+            display:flex;
+            flex-direction:column;
+            align-items:center;
         }
-        .hero-text-container h1{font-size:3rem;font-weight:800;letter-spacing:-1px;margin-bottom:14px;color:#1f1f1f}
-        .hero-text-container p{font-size:1.1rem;font-weight:400;max-width:680px;margin:0 auto;line-height:1.7;color:#4a4a4a}
+        .hero-text-container h1{font-size:3rem;font-weight:800;letter-spacing:-1px;margin-bottom:50px;color:#1f1f1f}
+        .hero-text-container p{font-size:1.3rem;font-weight:400;max-width:680px;margin:0 auto;line-height:1.7;color:#4a4a4a}
 
-        /* BLOG LAYOUT */
-        .blog-main-layout{width:100%;padding:50px 5% 70px;display:grid;grid-template-columns:1fr 300px;gap:45px;align-items:start;background:lightgray}
+        /* ===== MAIN LAYOUT ===== */
+        .blog-main-layout{
+            width:100%;
+            padding:60px 5% 90px;
+            display:grid;
+            grid-template-columns:1fr 320px;
+            gap:56px;
+            align-items:start;
+            background:lightgray;
+        }
 
-        /* ARTICLES */
-        .articles-column{display:flex;flex-direction:column;gap:32px}
+        /* ===== ARTICLES COLUMN ===== */
+        .articles-column{display:flex;flex-direction:column;gap:30px}
 
-        .no-articles{text-align:center;padding:60px 40px;color:var(--text-soft);background:linear-gradient(145deg,rgba(255,250,235,.98),rgba(250,240,210,.9));border:2px solid rgba(212,175,55,.45);border-radius:22px;box-shadow:var(--shadow-soft)}
-        .no-articles p{font-size:1.1rem;font-weight:600}
+        .articles-column-header{
+            display:flex;align-items:baseline;justify-content:space-between;
+            margin-bottom:6px;
+            border-bottom:1px solid var(--line);
+            padding-bottom:18px;
+        }
+        .articles-column-header .eyebrow{
+            font-size:.74rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;
+            color:var(--eyebrow);
+        }
+        .articles-column-header .count-tag{
+            font-size:.78rem;font-weight:700;color:var(--text-soft);
+            background:rgba(200,169,91,.13);border:1px solid var(--line);
+            padding:5px 12px;border-radius:999px;
+        }
 
-        .article-card{background:linear-gradient(145deg,rgba(255,250,235,.98),rgba(250,240,210,.9));border:2px solid rgba(212,175,55,.45);border-radius:22px;overflow:hidden;box-shadow:var(--shadow-soft);transition:var(--transition);display:grid;grid-template-columns:240px 1fr}
-        .article-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-hover);border-color:var(--gold-light)}
+        /* ---- empty state ---- */
+        .no-articles{
+            text-align:center;padding:90px 40px;color:var(--text-soft);
+            background:
+                radial-gradient(circle at 50% 0%, rgba(212,175,55,.10), transparent 60%),
+                linear-gradient(145deg,rgba(255,250,235,.98),rgba(250,240,210,.9));
+            border:2px dashed rgba(159,125,47,.4);border-radius:26px;
+            display:flex;flex-direction:column;align-items:center;gap:14px;
+        }
+        .no-articles .no-articles-icon{
+            width:58px;height:58px;border-radius:16px;
+            background:linear-gradient(135deg,#f7e7b0,#d4af37);
+            display:flex;align-items:center;justify-content:center;font-size:1.5rem;
+            box-shadow:0 14px 30px rgba(212,175,55,.28);
+        }
+        .no-articles p{font-size:1.12rem;font-weight:700;color:var(--text)}
+        .no-articles span{font-size:.92rem;color:var(--text-soft)}
+        .no-articles strong {
+            color: var(--gold-dark);
+        }
 
-        .article-picture-box{min-height:200px;background-size:cover;background-position:center;background-repeat:no-repeat;background-color:#e2d9c2;display:flex;align-items:center;justify-content:center}
-        .article-picture-box .placeholder-icon{font-size:3rem;opacity:.5}
+        .footer-newsletter-actions{
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            gap:18px;
+            flex-wrap:wrap;
+        }
+        .footer-unsubscribe-btn{
+            padding:14px 28px;
+            border-radius:18px;
+            background:rgba(255,255,255,.6);
+            border:1px solid rgba(169,169,169,.5);
+            font-size:.9rem;
+            font-weight:700;
+            color:var(--gray-text);
+            cursor:pointer;
+            transition:var(--transition);
+        }
+        .footer-unsubscribe-btn:hover{
+            background:rgba(169,169,169,.15);
+            border-color:rgba(169,169,169,.8);
+            color:var(--dark-text);
+            transform:translateY(-2px);
+        }
 
-        .article-details-box{padding:28px 30px;display:flex;flex-direction:column;gap:12px;justify-content:center}
-        .article-date{font-size:.8rem;font-weight:700;color:var(--gold-dark);text-transform:uppercase;letter-spacing:.4px}
-        .article-headline{font-size:1.25rem;font-weight:700;color:var(--text);line-height:1.35;text-decoration:none;transition:color .3s}
+        /* ---- article cards ---- */
+        .article-card{
+            position:relative;
+            background:linear-gradient(145deg,rgba(255,250,235,.98),rgba(250,240,210,.9));
+            border:2px solid rgba(212,175,55,.45);
+            border-radius:24px;
+            overflow:hidden;
+            box-shadow:var(--shadow-soft);
+            transition:var(--transition);
+            display:grid;
+            grid-template-columns:240px 1fr;
+        }
+        .article-card:hover{
+            transform:translateY(-5px);
+            box-shadow:var(--shadow-hover);
+            border-color:var(--gold-light);
+        }
+
+        .article-card.featured{
+            grid-template-columns:1fr;
+            border-color:var(--gold);
+            box-shadow:0 18px 46px rgba(159,125,47,.16);
+        }
+        .article-card.featured .article-picture-box{
+            min-height:320px;
+            position:relative;
+        }
+        .article-card.featured .article-picture-box::after{
+            content:'';
+            position:absolute;inset:0;
+            background:linear-gradient(0deg,rgba(20,16,4,.62) 0%,rgba(20,16,4,0) 55%);
+        }
+        .article-card.featured .article-details-box{padding:30px 36px 34px}
+
+        .featured-tag{
+            display:none;
+            position:absolute;top:18px;left:18px;z-index:2;
+            font-size:.72rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;
+            color:#241f12;
+            background:linear-gradient(135deg,#f7e7b0,#d4af37);
+            padding:7px 14px;border-radius:999px;
+            box-shadow:0 8px 20px rgba(0,0,0,.18);
+        }
+        .article-card.featured .featured-tag{display:inline-block}
+
+        .article-picture-box{
+            min-height:200px;
+            background-size:cover;background-position:center;background-repeat:no-repeat;
+            background-color:#e2d9c2;
+            display:flex;align-items:center;justify-content:center;
+        }
+        .article-picture-box .placeholder-icon{font-size:2.6rem;opacity:.45}
+
+        .article-details-box{
+            padding:26px 28px;
+            display:flex;flex-direction:column;gap:11px;justify-content:center;
+            min-width:0;
+        }
+
+        .article-meta-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+        .article-date{
+            font-size:.76rem;font-weight:800;color:var(--gold-dark);
+            text-transform:uppercase;letter-spacing:.06em;
+            display:inline-flex;align-items:center;gap:6px;
+        }
+        .article-date::before{
+            content:'';width:6px;height:6px;border-radius:50%;
+            background:var(--gold-dark);display:inline-block;
+        }
+        .article-card.featured .article-date{color:#f3e2a0}
+        .article-card.featured .article-date::before{background:#f3e2a0}
+
+        .article-headline{
+            font-size:1.22rem;font-weight:800;color:var(--text);line-height:1.32;
+            text-decoration:none;transition:color .3s;
+            display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
+        }
+        .article-card.featured .article-headline{
+            font-size:1.7rem;color: black;
+        }
         .article-headline:hover{color:var(--gold-dark)}
-        .article-description{font-size:.92rem;color:var(--text-soft);line-height:1.65}
-        .article-footer-row{display:flex;align-items:center;justify-content:flex-end;margin-top:6px}
-        .read-link{font-size:.82rem;font-weight:700;color:var(--gold-dark);text-decoration:none;display:inline-flex;align-items:center;gap:4px;transition:gap .25s}
-        .read-link:hover{gap:8px}
+        .article-card.featured .article-headline:hover{color:var(--gold-dark)}
 
-        /* SIDEBAR */
-        .sidebar-column{display:flex;flex-direction:column;gap:28px;position:sticky;top:100px}
-        .sidebar-block{background:linear-gradient(145deg,rgba(255,250,235,.98),rgba(250,240,210,.9));border:2px solid rgba(212,175,55,.45);border-radius:22px;padding:26px;box-shadow:var(--shadow-soft)}
-        .sidebar-block h3{font-size:1.1rem;font-weight:800;color:var(--text);margin-bottom:18px;padding-bottom:12px;border-bottom:1px solid rgba(200,169,91,.25);display:flex;align-items:center;gap:8px}
-        .sidebar-block h3::before{content:'';display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--gold);flex-shrink:0}
+        .article-description{
+            font-size:.92rem;color:var(--text-soft);line-height:1.65;
+            display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
+        }
 
-        .popular-items-stack{display:flex;flex-direction:column;gap:16px}
-        .popular-item-row{display:flex;align-items:center;gap:12px;text-decoration:none}
-        .pop-num{width:24px;height:24px;border-radius:7px;background:rgba(200,169,91,.15);color:var(--gold-dark);font-size:.75rem;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-        .popular-mini-thumb{width:62px;height:62px;border-radius:11px;background-size:cover;background-position:center;flex-shrink:0;border:1px solid var(--border);background-color:#e2d9c2;display:flex;align-items:center;justify-content:center;font-size:1.3rem;color:#b0a080}
-        .popular-item-title{font-size:.85rem;font-weight:700;color:var(--text);line-height:1.35;transition:color .3s}
+        .article-footer-row{display:flex;align-items:center;justify-content:flex-end;margin-top:4px}
+        .read-link{
+            font-size:.82rem;font-weight:800;color:var(--gold-dark);text-decoration:none;
+            display:inline-flex;align-items:center;gap:5px;transition:gap .25s;
+        }
+        .read-link:hover{gap:9px}
+
+        /* ===== SIDEBAR ===== */
+        .sidebar-column{display:flex;flex-direction:column;gap:26px;position:sticky;top:100px}
+
+        .sidebar-block{
+            background:linear-gradient(145deg,rgba(255,250,235,.98),rgba(250,240,210,.9));
+            border:2px solid rgba(212,175,55,.45);border-radius:22px;
+            padding:26px;box-shadow:var(--shadow-soft);
+        }
+        .sidebar-block h3{
+            font-size:1.05rem;font-weight:800;color:var(--text);margin-bottom:18px;
+            padding-bottom:12px;border-bottom:1px solid rgba(200,169,91,.25);
+            display:flex;align-items:center;gap:8px;
+        }
+        .sidebar-block h3::before{
+            content:'';display:inline-block;width:8px;height:8px;border-radius:50%;
+            background:var(--gold);flex-shrink:0;
+        }
+
+        .popular-items-stack{display:flex;flex-direction:column;gap:8px}
+        .popular-item-row{
+            display:flex;align-items:center;gap:13px;text-decoration:none;
+            padding:8px;margin:0 -8px;border-radius:14px;
+            transition:background .25s ease;
+        }
+        .popular-item-row:hover{background:rgba(212,175,55,.12)}
+
+        .pop-num{
+            width:26px;height:26px;border-radius:8px;flex-shrink:0;
+            background:rgba(200,169,91,.15);color:var(--gold-dark);
+            font-size:.76rem;font-weight:800;
+            display:flex;align-items:center;justify-content:center;
+        }
+        .popular-item-row:first-child .pop-num{
+            background:linear-gradient(135deg,#f7e7b0,#d4af37);color:#241f12;
+        }
+
+        .popular-mini-thumb{
+            width:60px;height:60px;border-radius:12px;flex-shrink:0;
+            background-size:cover;background-position:center;
+            border:1px solid var(--border);background-color:#e2d9c2;
+            display:flex;align-items:center;justify-content:center;font-size:1.2rem;color:#b0a080;
+        }
+
+        .popular-item-title{
+            font-size:.85rem;font-weight:700;color:var(--text);line-height:1.35;
+            transition:color .3s;
+            display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
+        }
         .popular-item-row:hover .popular-item-title{color:var(--gold-dark)}
-        .popular-item-date{font-size:.75rem;color:var(--text-soft);margin-top:3px}
+        .popular-item-date{font-size:.74rem;color:var(--text-soft);margin-top:4px}
+
+        .sidebar-empty{
+            font-size:.86rem;color:var(--text-soft);text-align:center;padding:18px 6px;
+        }
+
+        .sidebar-cta{
+            background:linear-gradient(150deg,#241f12 0%,#3a3014 100%);
+            border:2px solid rgba(212,175,55,.5);
+            border-radius:22px;padding:26px;color:#fffdf2;box-shadow:var(--shadow-soft);
+        }
+        .sidebar-cta h3{
+            border-bottom:1px solid rgba(247,231,176,.18);
+            color:#fffdf2;
+        }
+        .sidebar-cta h3::before{background:#f3e2a0}
+        .sidebar-cta p{font-size:.88rem;line-height:1.6;color:rgba(255,253,242,.78);margin-bottom:16px}
+        .sidebar-cta-btn{
+            display:inline-flex;align-items:center;gap:6px;
+            font-size:.84rem;font-weight:800;color:#241f12;text-decoration:none;
+            background:linear-gradient(135deg,#f7e7b0,#d4af37);
+            padding:12px 20px;border-radius:14px;transition:.3s;
+        }
+        .sidebar-cta-btn:hover{transform:translateY(-3px);box-shadow:0 14px 28px rgba(212,175,55,.3)}
 
         /* FOOTER */
         .premium-footer{width:100%;background:lightgray;}
@@ -103,7 +343,7 @@
         .footer-contact-row{align-items:center;gap:16px}
         .footer-contact-pill{padding:15px 24px;border-radius:18px;text-decoration:none;color:#222;font-weight:600;background:rgba(255,255,255,.72);border:1px solid rgba(212,175,55,.18);transition:.35s}
         .footer-contact-pill:hover{transform:translateY(-4px);background:rgba(212,175,55,.14);border-color:rgba(212,175,55,.4);box-shadow:0 10px 25px rgba(212,175,55,.15)}
-        .footer-links{gap:24px}
+        .footer-links{gap:20px}
         .footer-links a{text-decoration:none;color:#2b2b2b;font-weight:500;transition:.3s}
         .footer-links a:hover{color:#b8922e}
         .footer-newsletter h3{font-size:1.95rem;font-weight:800;color:rgba(212,175,55,.65)}
@@ -121,48 +361,179 @@
         .footer-btn{width:fit-content;padding:18px 42px;border-radius:18px;cursor:pointer;font-size:1rem;font-weight:800;color:#222;border: 2px solid rgba(212, 175, 55, .5);background: linear-gradient(135deg, #f7e7b0, #d4af37, #f3e2a0);transition:.35s}
         .footer-btn:hover{transform:translateY(-4px);box-shadow:0 18px 40px rgba(212,175,55,.32)}
 
+        /* PROFILE POPOVER */
+        .profile-popover{
+            position:absolute;
+            top:calc(100% + 10px);
+            right:30px;
+            width:290px;
+            background:rgba(255,255,255,.85);
+            backdrop-filter:blur(24px) saturate(180%);
+            -webkit-backdrop-filter:blur(24px) saturate(180%);
+            border:1px solid rgba(255,255,255,.7);
+            border-radius:24px;
+            padding:20px;
+            box-shadow:0 25px 70px rgba(0,0,0,.16), 0 4px 12px rgba(0,0,0,.06), inset 0 1px 0 rgba(255,255,255,.8);
+            z-index:1001;
+            opacity:0;
+            visibility:hidden;
+            transform:translateY(-12px) scale(.96);
+            transform-origin:top right;
+            transition:opacity .3s cubic-bezier(.2,1,.3,1),
+                       transform .3s cubic-bezier(.2,1,.3,1),
+                       visibility .3s;
+        }
+        .profile-popover::before{
+            content:"";
+            position:absolute;
+            top:-7px;
+            right:26px;
+            width:14px;
+            height:14px;
+            background:rgba(255,255,255,.85);
+            backdrop-filter:blur(24px);
+            -webkit-backdrop-filter:blur(24px);
+            border-left:1px solid rgba(255,255,255,.7);
+            border-top:1px solid rgba(255,255,255,.7);
+            transform:rotate(45deg);
+            border-radius:4px 0 0 0;
+        }
+        .profile-popover.active{
+            opacity:1;
+            visibility:visible;
+            transform:translateY(0) scale(1);
+        }
+        .profile-popover-header{
+            display:flex;
+            align-items:center;
+            margin-bottom:20px;
+            padding-bottom:20px;
+            border-bottom:1px solid rgba(200,169,91,.25);
+        }
+        .profile-popover-info{min-width:0}
+        .profile-popover-name{
+            font-weight:800;
+            font-size:1.08rem;
+            color:var(--dark-text);
+            white-space:nowrap;
+            overflow:hidden;
+            text-overflow:ellipsis;
+        }
+        .profile-popover-email{
+            font-size:.85rem;
+            color:var(--gray-text);
+            white-space:nowrap;
+            overflow:hidden;
+            text-overflow:ellipsis;
+            margin-top:4px;
+        }
+        .profile-popover-date{
+            font-size:.78rem;
+            color:#9f7d2f;
+            margin-top:8px;
+            font-weight:600;
+            opacity:.9;
+        }
+        .profile-popover-logout{
+            display:block;
+            width:100%;
+            margin:0 auto;
+            padding:12px 26px;
+            font-size:.88rem;
+            border-radius:16px;
+        }
+
+.lang-switcher{
+        display:flex;
+        align-items:center;
+        gap:8px;
+        margin-right:auto;
+    }
+.lang-switcher a{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    width:38px;
+    height:38px;
+    border-radius:10px;
+    border:1.5px solid rgba(212,175,55,.4);
+    background:rgba(255,255,255,.6);
+    font-size:.78rem;
+    font-weight:800;
+    letter-spacing:.5px;
+    color:var(--gray-text);
+    text-decoration:none;
+    transition:var(--transition);
+}
+.lang-switcher a:hover{
+    border-color:rgba(212,175,55,.7);
+    background:rgba(212,175,55,.1);
+    color:var(--dark-text);
+    transform:translateY(-2px);
+}
+.lang-switcher a.active{
+    background:linear-gradient(135deg,#f7e7b0,#d4af37,#f3e2a0);
+    border-color:transparent;
+    color:#222;
+    box-shadow:0 6px 16px rgba(212,175,55,.3);
+}
+
         @media(max-width:900px){
             .blog-main-layout{grid-template-columns:1fr}
             .sidebar-column{position:static}
             .article-card{grid-template-columns:1fr}
+            .article-card.featured .article-picture-box{min-height:220px}
             .article-picture-box{min-height:180px}
             .footer-container{grid-template-columns:1fr;gap:60px;padding:50px 24px}
             .footer-map{width:100%;height:280px}
             .footer-btn{width:100%}
         }
-        @media(max-width:600px){
+        @media(max-width:768px){
             .nav-links a.login-button{ width:52px; height:52px; padding:0; margin:10px auto 0; border-radius:50%; }
             .nav-links a.login-button:hover{ background-color:transparent; transform:translateY(-2px) scale(1.05); }
             .header-container{padding:0 20px}
-            .menu-toggle{display:block}
-            .nav-links{position:absolute;top:100%;left:0;width:100%;background:rgba(255,255,255,.96);backdrop-filter:blur(14px);flex-direction:column;align-items:center;gap:10px;padding:20px 0;border-radius:0 0 20px 20px;opacity:0;visibility:hidden;transform:translateY(-10px);transition:.35s ease}
+            .menu-toggle{ display:block; z-index:1001; order:3; }
+            .lang-switcher{ order:2; margin-left:auto; gap:6px; }
+            .logo-group { margin-right: 0; }
+            .nav-links{position:absolute;top:130%;left:0;width:100%;background:rgba(255,255,255,.96);backdrop-filter:blur(14px);flex-direction:column;align-items:center;gap:10px;padding:20px 0;border-radius:0 0 20px 20px;opacity:0;visibility:hidden;transform:translateY(-10px);transition:.35s ease}
             .nav-links.active{opacity:1;visibility:visible;transform:translateY(0)}
             .nav-links a{width:90%;text-align:center;padding:14px;border-radius:14px}
-            .blog-hero{padding:120px 20px 60px}
+            .blog-hero{ padding:140px 20px; }
             .hero-text-container h1{font-size:2.2rem}
-            .blog-main-layout{padding:24px 16px 50px}
+            .blog-main-layout{padding:30px 16px 60px;gap:40px}
+            .articles-column-header{flex-direction:column;align-items:flex-start;gap:8px}
+            .article-card.featured .article-headline{font-size:1.35rem}
             .footer-container{padding:40px 16px}
             .footer-contact-pill{width:100%;text-align:center}
+            .profile-popover{top:80px;left:5px;right:5px;width:auto}
+            .profile-popover::before{right:20px}
+            .header-container{position:relative; padding:0 20px; flex-wrap:wrap; gap:15px}
         }
     </style>
 </head>
 <body>
-
+<div id="menuOverlay" class="menu-overlay"></div>
 <header>
     <div class="header-container">
         <a th:href="@{/}" class="logo-group">
             <div class="logo-circle"></div>
             <span>Albion</span>
         </a>
+        <div class="lang-switcher">
+            <a th:href="@{''(lang=en)}" th:classappend="${#locale.language == 'en'} ? 'active'">EN</a>
+            <a th:href="@{''(lang=pl)}" th:classappend="${#locale.language == 'pl'} ? 'active'">PL</a>
+            <a th:href="@{''(lang=uk)}" th:classappend="${#locale.language == 'uk'} ? 'active'">UK</a>
+        </div>
         <button class="menu-toggle" id="menuToggle"> ☰</button>
         <nav class="nav-links" id="navMenu">
-            <a th:href="@{/language-courses}">Courses</a>
-            <a th:href="@{/blog}" class="active">Blog</a>
-            <a th:href="@{/store}">Store</a>
-            <a th:href="@{/about-us}">About us</a>
+            <a th:href="@{/language-courses}" th:text="#{menu-courses}">Courses</a>
+            <a th:href="@{/blog}" th:text="#{menu-blog}" class="active">Blog</a>
+            <a th:href="@{/store}" th:text="#{menu-store}">Store</a>
+            <a th:href="@{/about-us}" th:text="#{menu-about-us}">About us</a>
 
             <a sec:authorize="isAuthenticated()"
-               th:href="@{/login}"
+               href="javascript:void(0)"
+               onclick="openProfileModal(event)"
                class="login-button authenticated"
                aria-label="My Profile"></a>
 
@@ -171,171 +542,402 @@
                class="login-button"
                aria-label="Login"></a>
         </nav>
+
+        <div id="profilePopover" class="profile-popover" sec:authorize="isAuthenticated()">
+            <div class="profile-popover-header">
+                <div class="profile-popover-info">
+                    <div class="profile-popover-name" id="profileName" th:text="#{profile.loading}">Loading...</div>
+                    <div class="profile-popover-email" id="profileEmail"></div>
+                    <div class="profile-popover-date" id="profileDate"></div>
+                </div>
+            </div>
+            <form th:action="@{/logout}" method="post">
+                <button type="submit" class="footer-btn profile-popover-logout" th:text="#{menu-logout}">Log out</button>
+            </form>
+        </div>
     </div>
 </header>
-
-<section class="blog-hero">
-    <div class="hero-text-container">
-        <h1>Albion Blog</h1>
-        <p>Learn English and understand life in an English-speaking environment. Expert articles on learning English, passing proficiency exams, meeting citizenship requirements, and adapting to everyday life.</p>
-    </div>
-</section>
-
-<div class="blog-main-layout">
-
-    <!-- ===== ARTICLES ===== -->
-    <div class="articles-column">
-
-        <!-- Пусто -->
-        <div th:if="${#lists.isEmpty(articles)}" class="no-articles">
-            <p>No articles published yet. Check back soon!</p>
+<main>
+    <section class="blog-hero">
+        <div class="hero-text-container">
+            <h1 th:text="#{blog.hero.title}">Albion Blog</h1>
+            <p th:text="#{blog.hero.subtitle}">Learn English and understand life in an English-speaking environment. Expert articles on learning English, passing proficiency exams, meeting citizenship requirements, and adapting to everyday life.</p>
         </div>
+    </section>
 
-        <!-- Карточка статьи -->
-        <article class="article-card" th:each="article : ${articles}">
+    <div class="blog-main-layout">
 
-            <!-- Картинка: если есть pictures[0].url — показываем, иначе плейсхолдер -->
-            <div class="article-picture-box"
-                 th:style="${not #lists.isEmpty(article.pictures)}
-                            ? 'background-image: url(' + ${article.pictures[0].url} + ');'
-                            : 'background-image: url(/img/article-placeholder.webp);'">
-                <span class="placeholder-icon" th:if="${#lists.isEmpty(article.pictures)}">📄</span>
+        <div class="articles-column">
+
+            <div class="articles-column-header" th:if="${not #lists.isEmpty(articles)}">
+                <span class="eyebrow" th:text="#{blog.articles.eyebrow}">Latest articles</span>
+                <span class="count-tag" th:text="#{blog.articles.countTag(${#lists.size(articles)})}">12 published</span>
             </div>
 
-            <div class="article-details-box">
+            <div th:if="${#lists.isEmpty(articles)}" class="no-articles">
+                <div class="no-articles-icon">📝</div>
+                <p th:text="#{blog.noArticles.title}">No articles published yet</p>
+                <span th:utext="#{blog.noArticles.text}">New lessons and guides are on the way — <strong>coming soon!</strong></span>
+            </div>
 
-                <span class="article-date"
-                      th:text="${#temporals.format(article.createdAt, 'MMMM dd, yyyy')}">
-                    June 01, 2026
-                </span>
+            <article class="article-card"
+                     th:each="article, artIter : ${articles}"
+                     th:classappend="${artIter.first} ? 'featured' : ''">
 
-                <a class="article-headline"
-                   th:href="@{/blog/{slug}(slug=${article.slug})}"
-                   th:text="${article.title}">
-                    Article Title
-                </a>
+                <div class="article-picture-box"
+                     th:style="${not #lists.isEmpty(article.pictures)}
+                            ? 'background-image: url(' + ${article.pictures[0].url} + ');'
+                            : 'background-image: url(/img/article-placeholder.webp);'">
+                    <span class="placeholder-icon" th:if="${#lists.isEmpty(article.pictures)}">📄</span>
+                    <span class="featured-tag" th:text="#{blog.featured.tag}">Featured</span>
+                </div>
 
-                <p class="article-description"
-                   th:if="${article.description != null and !article.description.isEmpty()}"
-                   th:text="${article.description}">
-                    Article description goes here...
-                </p>
+                <div class="article-details-box">
 
-                <div class="article-footer-row">
-                    <a class="read-link"
-                       th:href="@{/blog/{slug}(slug=${article.slug})}">
-                        Read article →
+                    <div class="article-meta-row">
+                    <span class="article-date"
+                          th:text="${#temporals.format(article.createdAt, 'MMMM dd, yyyy')}">
+                        June 01, 2026
+                    </span>
+                    </div>
+
+                    <a class="article-headline"
+                       th:href="@{/blog/{slug}(slug=${article.slug})}"
+                       th:text="${article.title}">
+                        Article Title
+                    </a>
+
+                    <p class="article-description"
+                       th:if="${article.description != null and !article.description.isEmpty()}"
+                       th:text="${article.description}">
+                        Article description goes here...
+                    </p>
+
+                    <div class="article-footer-row">
+                        <a class="read-link"
+                           th:href="@{/blog/{slug}(slug=${article.slug})}"
+                           th:text="#{blog.readMore}">
+                            Read article →
+                        </a>
+                    </div>
+
+                </div>
+            </article>
+
+        </div>
+
+        <!-- ===== SIDEBAR ===== -->
+        <aside class="sidebar-column">
+
+            <div class="sidebar-block">
+                <h3 th:text="#{blog.sidebar.popular.title}">Most Popular</h3>
+
+                <div class="popular-items-stack" th:if="${not #lists.isEmpty(popularArticles)}">
+                    <a class="popular-item-row"
+                       th:each="popular, iterStat : ${popularArticles}"
+                       th:href="@{/blog/{slug}(slug=${popular.slug})}">
+
+                        <div class="pop-num" th:text="${iterStat.count}">1</div>
+
+                        <div class="popular-mini-thumb"
+                             th:style="${not #lists.isEmpty(popular.pictures)}
+                                    ? 'background-image: url(' + ${popular.pictures[0].url} + ');'
+                                    : 'background-image: url(/img/article-placeholder.webp);'">
+                            <span th:if="${#lists.isEmpty(popular.pictures)}">📄</span>
+                        </div>
+
+                        <div>
+                            <div class="popular-item-title" th:text="${popular.title}">Title</div>
+                            <div class="popular-item-date"
+                                 th:text="${#temporals.format(popular.createdAt, 'MMMM dd, yyyy')}">
+                                June 01, 2026
+                            </div>
+                        </div>
+
                     </a>
                 </div>
 
+                <div class="sidebar-empty" th:if="${#lists.isEmpty(popularArticles)}" th:text="#{blog.sidebar.empty}">
+                    Popular articles will appear here once readers start visiting.
+                </div>
             </div>
-        </article>
 
+            <div class="sidebar-cta">
+                <h3 th:text="#{blog.sidebar.cta.title}">Join the journey</h3>
+                <p th:text="#{blog.sidebar.cta.text}">Speaking tips, exam strategies, and real-life English &mdash; straight to your inbox.</p>
+                <a href="#subscribe" class="sidebar-cta-btn" th:text="#{blog.sidebar.cta.btn}">Subscribe below ↓</a>
+            </div>
+
+        </aside>
     </div>
 
-    <!-- ===== SIDEBAR ===== -->
-    <aside class="sidebar-column">
-
-        <div class="sidebar-block">
-            <h3>Most Popular</h3>
-            <div class="popular-items-stack">
-
-                <a class="popular-item-row"
-                   th:each="popular, iterStat : ${popularArticles}"
-                   th:href="@{/blog/{slug}(slug=${popular.slug})}">
-
-                    <div class="pop-num" th:text="${iterStat.count}">1</div>
-
-                    <div class="popular-mini-thumb"
-                         th:style="${not #lists.isEmpty(popular.pictures)}
-                                    ? 'background-image: url(' + ${popular.pictures[0].url} + ');'
-                                    : 'background-image: url(/img/article-placeholder.webp);'">
-                        <span th:if="${#lists.isEmpty(popular.pictures)}">📄</span>
-                    </div>
-
-                    <div>
-                        <div class="popular-item-title" th:text="${popular.title}">Title</div>
-                        <div class="popular-item-date"
-                             th:text="${#temporals.format(popular.createdAt, 'MMMM dd, yyyy')}">
-                            June 01, 2026
+    <footer class="premium-footer">
+        <div class="footer-container">
+            <div class="footer-left">
+                <div class="footer-map">
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2443.9544086494325!2d21.01888171035901!3d52.22604610686692!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x690f8796d09929bb%3A0x4f9fc36d8097aa63!2sLC%20Albion%20Olena%20Kiriushkina!5e0!3m2!1sru!2sno!4v1779386940088!5m2!1sru!2sno"
+                            loading="lazy" allowfullscreen></iframe>
+                </div>
+                <div class="footer-bottom-left">
+                    <div class="footer-inline-row">
+                        <div class="footer-socials">
+                            <a href="https://www.instagram.com/albion_lc" class="footer-social-circle">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="2" y="2" width="20" height="20" rx="5"></rect>
+                                    <circle cx="12" cy="12" r="4"></circle>
+                                    <circle cx="18" cy="6" r="1"></circle>
+                                </svg>
+                            </a>
+                            <a href="https://www.facebook.com/albionhub" class="footer-social-circle">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
+                                </svg>
+                            </a>
+                        </div>
+                        <div class="footer-contact-row">
+                            <a href="mailto:lc.albion@gmail.com" class="footer-contact-pill">lc.albion@gmail.com</a>
+                            <a href="tel:+48574065884" class="footer-contact-pill">+48 574 065 884</a>
                         </div>
                     </div>
-
-                </a>
-
-            </div>
-        </div>
-
-    </aside>
-</div>
-
-<footer class="premium-footer">
-    <div class="footer-container">
-        <div class="footer-left">
-            <div class="footer-map">
-                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2443.9544086494325!2d21.01888171035901!3d52.22604610686692!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x690f8796d09929bb%3A0x4f9fc36d8097aa63!2sLC%20Albion%20Olena%20Kiriushkina!5e0!3m2!1sru!2sno!4v1779386940088!5m2!1sru!2sno"
-                        loading="lazy" allowfullscreen></iframe>
-            </div>
-            <div class="footer-bottom-left">
-                <div class="footer-inline-row">
-                    <div class="footer-socials">
-                        <a href="https://www.instagram.com/albion_lc" class="footer-social-circle">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <rect x="2" y="2" width="20" height="20" rx="5"></rect>
-                                <circle cx="12" cy="12" r="4"></circle>
-                                <circle cx="18" cy="6" r="1"></circle>
-                            </svg>
-                        </a>
-                        <a href="https://www.facebook.com/albionhub" class="footer-social-circle">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
-                            </svg>
-                        </a>
-                    </div>
-                    <div class="footer-contact-row">
-                        <a href="mailto:lc.albion@gmail.com" class="footer-contact-pill">lc.albion@gmail.com</a>
-                        <a href="tel:+48574065884" class="footer-contact-pill">+48 574 065 884</a>
+                    <div class="footer-links">
+                        <a href="/privacy-policy" th:text="#{footer.links.privacy}">Privacy Policy</a>
+                        <a href="/terms-of-service" th:text="#{footer.links.terms}">Terms of Service</a>
+                        <a href="/refund-policy" th:text="#{footer.links.refund}">Refund Policy</a>
                     </div>
                 </div>
-                <div class="footer-links">
-                    <a href="#">Privacy Policy</a>
-                    <a href="#">Terms of Use</a>
-                    <a href="#">Refund Policy</a>
+            </div>
+
+            <div class="footer-right">
+                <div class="footer-newsletter" id="subscribe"><h3 th:text="#{footer.newsletter.title}">Your Language Journey Starts Here ✨</h3></div>
+                <div class="footer-form">
+                    <div class="footer-newsletter-text">
+                        <p th:text="#{footer.newsletter.text1}"> Join our community of language learners and get real, practical content:
+                            speaking tips, useful phrases, cultural insights, and simple ways to grow your
+                            English, Polish, or Ukrainian — every single week. </p>
+                        <p th:text="#{footer.newsletter.text2}"> No boring grammar walls. Just things you'll actually use ✨📩 </p>
+                    </div>
+                    <input type="email" id="newsletterEmail" th:placeholder="#{footer.newsletter.emailPlaceholder}" placeholder="Enter your email" class="footer-input">
+                    <div class="footer-checkboxes">
+                        <label class="footer-checkbox">
+                            <input type="checkbox" id="newsletterConsent1">
+                            <span class="checkmark"></span>
+                            <span th:text="#{footer.newsletter.consent1}"> Yes, send me learning tips, updates, and special offers. </span>
+                        </label>
+                        <label class="footer-checkbox">
+                            <input type="checkbox" id="newsletterConsent2">
+                            <span class="checkmark"></span>
+                            <span>
+                            <span th:text="#{footer.newsletter.consent2}">I've read and accept the</span>
+                            <a href="/privacy-policy" style="color:#b8922e; text-decoration:underline;" th:text="#{footer.newsletter.consent2.link}">Privacy Policy</a>.
+                        </span>
+                        </label>
+                    </div>
+                    <p id="newsletterMessage" style="font-size: .9rem; font-weight: 600; display: none;"></p>
+                    <div class="footer-newsletter-actions">
+                        <button class="footer-btn" id="newsletterSubmitBtn" type="button" th:text="#{footer.newsletter.join}">JOIN THE NEWSLETTER</button>
+                        <button class="footer-unsubscribe-btn" id="newsletterUnsubscribeBtn" type="button" th:text="#{footer.newsletter.unsubscribe}">Unsubscribe</button>
+                    </div>
                 </div>
             </div>
         </div>
+    </footer>
+</main>
+<script th:inline="javascript">
+    /* i18n messages injected by Thymeleaf */
+    const i18n = {
+        invalidEmail: /*[[#{footer.newsletter.msg.invalidEmail}]]*/ 'Please enter a valid email address.',
+        needConsent: /*[[#{footer.newsletter.msg.needConsent}]]*/ 'Please check both boxes to subscribe.',
+        joining: /*[[#{footer.newsletter.msg.joining}]]*/ 'Joining...',
+        subscribed: /*[[#{footer.newsletter.msg.subscribed}]]*/ 'Thank you for subscribing!',
+        genericError: /*[[#{footer.newsletter.msg.genericError}]]*/ 'Something went wrong. Please try again.',
+        networkError: /*[[#{footer.newsletter.msg.networkError}]]*/ 'Network error. Please try again later.',
+        enterEmailToUnsub: /*[[#{footer.newsletter.msg.enterEmailToUnsub}]]*/ 'Enter your email above to unsubscribe.',
+        unsubscribed: /*[[#{footer.newsletter.msg.unsubscribed}]]*/ 'You have been unsubscribed.',
+        profileLoadFailed: /*[[#{profile.loadFailed}]]*/ 'Failed to load',
+        profileLoadError: /*[[#{profile.loadError}]]*/ 'Error loading profile',
+        profileMemberSince: /*[[#{profile.memberSince}]]*/ 'Member since'
+    };
 
-        <div class="footer-right">
-            <div class="footer-newsletter">
-                <h3>Your Language Journey Starts Here ✨</h3>
-            </div>
-            <div class="footer-form">
-                <div class="footer-newsletter-text">
-                    <p>Join our language learning community and receive practical tips, speaking hacks, useful phrases, cultural insights, and creative ways to improve your English, Polish, and Ukrainian naturally.</p>
-                    <p>No boring grammar overload — just useful content, motivation, and real language for everyday life ✨📩</p>
-                </div>
-                <input type="email" placeholder="Enter your email" class="footer-input">
-                <div class="footer-checkboxes">
-                    <label class="footer-checkbox">
-                        <input type="checkbox"> <span class="checkmark"></span>
-                        <span>I agree to receive language learning tips, updates, and special offers by email.</span>
-                    </label>
-                    <label class="footer-checkbox">
-                        <input type="checkbox"> <span class="checkmark"></span>
-                        <span>I accept the Privacy Policy and consent to email communication.</span>
-                    </label>
-                </div>
-                <button class="footer-btn">JOIN THE NEWSLETTER</button>
-            </div>
-        </div>
-    </div>
-</footer>
-
-<script>
     const menuToggle = document.getElementById('menuToggle');
-    const navMenu = document.getElementById('navMenu');
-    menuToggle.addEventListener('click', () => navMenu.classList.toggle('active'));
-</script>
+    const navMenu    = document.getElementById('navMenu');
+    const overlay    = document.getElementById('menuOverlay');
 
+    function openMenu() {
+      navMenu.classList.add('active');
+      overlay.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeMenu() {
+      navMenu.classList.remove('active');
+      overlay.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    menuToggle.addEventListener('click', () => {
+      navMenu.classList.contains('active') ? closeMenu() : openMenu();
+    });
+
+    overlay.addEventListener('click', closeMenu);
+
+    const newsletterBtn = document.getElementById('newsletterSubmitBtn');
+    const newsletterEmailInput = document.getElementById('newsletterEmail');
+    const newsletterConsent1 = document.getElementById('newsletterConsent1');
+    const newsletterConsent2 = document.getElementById('newsletterConsent2');
+    const newsletterMessage = document.getElementById('newsletterMessage');
+    const newsletterBtnOriginalText = newsletterBtn.textContent;
+
+    function showNewsletterMessage(text, isError) {
+        newsletterMessage.textContent = text;
+        newsletterMessage.style.color = isError ? '#c0392b' : '#2d8d31';
+        newsletterMessage.style.display = 'block';
+    }
+
+    function isValidEmail(email) {
+        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    }
+
+    newsletterBtn.addEventListener('click', async () => {
+        const email = newsletterEmailInput.value.trim();
+
+        if (!isValidEmail(email)) {
+            showNewsletterMessage(i18n.invalidEmail, true);
+            return;
+        }
+
+        if (!newsletterConsent1.checked || !newsletterConsent2.checked) {
+            showNewsletterMessage(i18n.needConsent, true);
+            return;
+        }
+
+        newsletterBtn.disabled = true;
+        newsletterBtn.textContent = i18n.joining;
+
+        try {
+            const response = await fetch(`/api/newsletter/subscribe?email=${encodeURIComponent(email)}`, {
+                method: 'POST'
+            });
+
+            if (response.ok) {
+                showNewsletterMessage(i18n.subscribed, false);
+                newsletterEmailInput.value = '';
+                newsletterConsent1.checked = false;
+                newsletterConsent2.checked = false;
+            } else {
+                const errorText = await response.text();
+                showNewsletterMessage(errorText || i18n.genericError, true);
+            }
+        } catch (err) {
+            showNewsletterMessage(i18n.networkError, true);
+        } finally {
+            newsletterBtn.disabled = false;
+            newsletterBtn.textContent = newsletterBtnOriginalText;
+        }
+    });
+
+    const newsletterUnsubBtn = document.getElementById('newsletterUnsubscribeBtn');
+
+    newsletterUnsubBtn.addEventListener('click', async () => {
+        const email = newsletterEmailInput.value.trim();
+
+        if (!isValidEmail(email)) {
+            showNewsletterMessage(i18n.enterEmailToUnsub, true);
+            return;
+        }
+
+        newsletterUnsubBtn.disabled = true;
+
+        try {
+            const response = await fetch(`/api/newsletter/unsubscribe?email=${encodeURIComponent(email)}`, {
+                method: 'POST'
+            });
+
+            if (response.ok) {
+                showNewsletterMessage(i18n.unsubscribed, false);
+                newsletterEmailInput.value = '';
+            } else {
+                const errorText = await response.text();
+                showNewsletterMessage(errorText || i18n.genericError, true);
+            }
+        } catch (err) {
+            showNewsletterMessage(i18n.networkError, true);
+        } finally {
+            newsletterUnsubBtn.disabled = false;
+        }
+    });
+
+    /* ─── PROFILE POPOVER ─── */
+    const profilePopover = document.getElementById('profilePopover');
+    let profileLoaded = false;
+
+    async function loadProfile() {
+        if (profileLoaded) return;
+        try {
+            const res = await fetch('/api/profile', {
+                method: 'GET',
+                credentials: 'include'
+            });
+
+            if (!res.ok) {
+                document.getElementById('profileName').textContent = i18n.profileLoadFailed;
+                return;
+            }
+
+            const user = await res.json(); // { name, email, createDate }
+
+            document.getElementById('profileName').textContent = user.name || '—';
+            document.getElementById('profileEmail').textContent = user.email || '';
+
+            if (user.createDate) {
+                const date = new Date(user.createDate);
+                document.getElementById('profileDate').textContent =
+                    i18n.profileMemberSince + ' ' + date.toLocaleDateString('en-US', {
+                        day: '2-digit', month: 'long', year: 'numeric'
+                    });
+            }
+
+            profileLoaded = true;
+        } catch (e) {
+            console.error('Failed to load profile', e);
+            document.getElementById('profileName').textContent = i18n.profileLoadError;
+        }
+    }
+
+    function openProfileModal(e) {
+        e.preventDefault();
+        e.stopPropagation();
+
+        if (navMenu.classList.contains('active')) {
+            closeMenu();
+        }
+
+        if (profilePopover.classList.contains('active')) {
+            closeProfileModal();
+            return;
+        }
+
+        profilePopover.classList.add('active');
+        loadProfile();
+    }
+
+    function closeProfileModal() {
+        profilePopover.classList.remove('active');
+    }
+
+    document.addEventListener('click', (e) => {
+        if (profilePopover.classList.contains('active') &&
+            !profilePopover.contains(e.target) &&
+            !e.target.closest('.login-button.authenticated')) {
+            closeProfileModal();
+        }
+    });
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            closeProfileModal();
+            closeMenu();
+        }
+    });
+</script>
 </body>
 </html>

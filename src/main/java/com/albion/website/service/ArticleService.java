@@ -3,7 +3,6 @@ package com.albion.website.service;
 import com.albion.website.Exception.NotFoundException;
 import com.albion.website.dto.*;
 import com.albion.website.model.Article;
-import com.albion.website.model.Picture;
 import com.albion.website.model.PictureType;
 import com.albion.website.repository.ArticleRepository;
 
@@ -130,6 +129,19 @@ public class ArticleService {
         return articleRepository.findById(id);
     }
 
+    public void savePage(Long id, String html) {
+        Article article = articleRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Course not found: " + id));
+        article.setPageHtml(html);
+        articleRepository.save(article);
+    }
+
+    public String getPageHtml(Long id) {
+        Article article = articleRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Course not found: " + id));
+        return article.getPageHtml();
+    }
+
     @Transactional(readOnly = true)
     public List<ArticleCardDto> getPublishedArticles() {
 
@@ -148,6 +160,7 @@ public class ArticleService {
                 article.getSlug(),
                 article.getDescription(),
                 article.getText(),
+                article.getPageHtml(),
                 article.getCreatedAt(),
                 mapPictures(article.getId())
         );

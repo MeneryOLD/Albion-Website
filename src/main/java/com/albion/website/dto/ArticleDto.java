@@ -15,6 +15,7 @@ public class ArticleDto {
     private String slug;
     private String description;
     private String text;
+    private String pageHtml;
     private LocalDateTime createdAt;
     private List<PictureResponse> pictures;
 }

@@ -41,4 +41,8 @@ public class Item {
 
     @Column(nullable = false)
     private boolean published = false;
+
+    @Lob
+    @Column(name = "page_html", columnDefinition = "LONGTEXT")
+    private String pageHtml;
 }

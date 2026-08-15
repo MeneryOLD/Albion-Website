@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Albion EDU | Store</title>
+    <title>LC Albion | Store</title>
+    <link rel="icon" href="/img/logo.webp" type="image/png">
     <style>
         *{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',Roboto,sans-serif}
         :root{
@@ -15,9 +16,19 @@
         }
         body{background:lightgray;color:var(--text)}
 
-        header{width:100%;background:rgba(180,180,180,.35);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,255,51,.25);position:fixed;top:0;z-index:1000;padding:15px 0}
-        .header-container{padding:0 40px;flex-wrap:wrap;gap:15px;width:100%;display:flex;justify-content:space-between;align-items:center}
-        .logo-group{display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--text);font-weight:800;font-size:1.4rem}
+        header {
+            width:100%;
+            background:rgba(180,180,180,.35);
+            backdrop-filter:blur(16px);
+            -webkit-backdrop-filter:blur(16px);
+            border-bottom:1px solid rgba(255,255,51,.25);
+            position:sticky;
+            top:0;
+            z-index:1000;
+            padding:15px 0
+        }
+        .header-container{padding:0 40px;width:100%;display:flex;justify-content:space-between;align-items:center}
+        .logo-group{ display:flex; align-items:center; gap:12px; text-decoration:none; color:var(--dark-text); font-weight:800; font-size:1.4rem; margin-right: 12px}
         .logo-circle{width:55px;height:55px;background:url('/img/logo.webp') center/cover no-repeat;border-radius:12px;transition:transform .3s ease}
         .logo-circle:hover{transform:rotate(360deg)}
         .nav-links {
@@ -25,10 +36,10 @@
             align-items: center;
             gap: 28px;
         }
-        .nav-links a{text-decoration:none;color:#1f1f1f;padding:8px 20px;font-weight:600;transition:color .3s,background-color .3s;}
-        .nav-links a:hover{color:#d4af37;background:rgba(212,175,55,.1)}
+        .nav-links a{text-decoration:none;color:#1f1f1f;padding:8px 20px;font-weight:600;transition:.3s;}
         .nav-links a.active{color: #917003;}
-        .menu-toggle{display:none;border:none;background:none;font-size:1.8rem;cursor:pointer;color:var(--text)}
+        .nav-links a:hover { color: #d4d400; }
+        .menu-toggle{display:none;border:none;background:none;font-size:2rem;cursor:pointer;color:var(--text)}
         .login-button { display: inline-flex; align-items:center; justify-content:center; width:50px; height:50px; flex-shrink:0; margin-left:10px; padding:0; background:url('/img/default-user.png') center/cover no-repeat; border-radius:50%; border:2px solid rgba(180, 145, 40, 0.5); box-shadow:0 6px 16px rgba(212,175,55,.18); transition:var(--transition); }
         .login-button:hover{ transform:translateY(-3px) scale(1.06); border-color:rgba(212,175,55,.85); box-shadow:0 12px 26px rgba(212,175,55,.32); color:inherit; }
         .login-button.authenticated { background-image: url('/img/auth-user.png'); }
@@ -52,6 +63,24 @@
         .hero-stat + .hero-stat{border-left:1px solid rgba(200,169,91,.2)}
         .hero-stat-num{font-size:1.35rem;font-weight:800;color:var(--gold-dark)}
         .hero-stat-label{font-size:.72rem;font-weight:600;color:var(--text-soft);text-transform:uppercase;letter-spacing:.6px}
+
+        .menu-overlay {
+          position: fixed;
+          inset: 0;
+          background: rgba(0, 0, 0, 0);
+          backdrop-filter: blur(0px);
+          -webkit-backdrop-filter: blur(0px);
+          z-index: 999;
+          pointer-events: none;
+          transition: background 0.35s ease, backdrop-filter 0.35s ease;
+        }
+
+        .menu-overlay.active {
+          background: rgba(0, 0, 0, 0.45);
+          backdrop-filter: blur(3px);
+          -webkit-backdrop-filter: blur(3px);
+          pointer-events: all;
+        }
 
         /* ─── FILTER BAR ─── */
         .filter-bar{
@@ -86,14 +115,32 @@
         .store-main{padding:40px 5% 70px;background:lightgray}
         .store-empty{display:none;text-align:center;padding:80px 40px;background:linear-gradient(145deg,rgba(255,250,235,.98),rgba(250,240,210,.9));border:2px solid rgba(212,175,55,.45);border-radius:22px;box-shadow:var(--shadow-soft)}
         .store-empty p{font-size:1.1rem;font-weight:600;color:var(--text-soft)}
-        .products-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px}
+        .products-grid {
+            display: flex;
+            gap: 34px;
+            overflow-x: auto;
+            scroll-behavior: smooth;
+            scrollbar-width: none;
+            width: 100%;
+            padding: 10px;
+            justify-content: center;
+        }
 
-        /* карточки — анимация скрытия */
         .product-card{
-            background:linear-gradient(145deg,rgba(255,250,235,.98),rgba(250,240,210,.9));
-            border:2px solid rgba(212,175,55,.4);border-radius:22px;overflow:hidden;
-            box-shadow:var(--shadow-soft);transition:var(--transition);
-            display:flex;flex-direction:column;text-decoration:none;color:inherit;
+                min-width: calc(33.333% - 23px);
+                max-width: calc(33.333% - 23px);
+                flex-shrink: 0;
+                display: flex;
+                flex-direction: column;
+                text-decoration: none;
+                border-radius: 30px;
+                overflow: hidden;
+                position: relative;
+                background: linear-gradient(145deg, rgba(255, 250, 235, .98), rgba(250, 240, 210, .9));
+                border: 1px solid rgba(212, 175, 55, .22);
+                box-shadow: 0 10px 30px rgba(0, 0, 0, .07);
+                backdrop-filter: blur(10px);
+                transition: var(--transition);
         }
         .product-card.hidden{
             display:none;
@@ -117,6 +164,158 @@
         .btn-add:hover{box-shadow:0 8px 22px rgba(212,175,55,.4);transform:translateY(-2px)}
         .btn-add:disabled{background:rgba(200,200,200,.6);color:#888;box-shadow:none;cursor:not-allowed;transform:none}
 
+        /* PROFILE POPOVER */
+        .profile-popover{
+            position:absolute;
+            top:calc(100% + 10px);
+            right:30px;
+            width:290px;
+            background:rgba(255,255,255,.85);
+            backdrop-filter:blur(24px) saturate(180%);
+            -webkit-backdrop-filter:blur(24px) saturate(180%);
+            border:1px solid rgba(255,255,255,.7);
+            border-radius:24px;
+            padding:20px;
+            box-shadow:0 25px 70px rgba(0,0,0,.16), 0 4px 12px rgba(0,0,0,.06), inset 0 1px 0 rgba(255,255,255,.8);
+            z-index:1001;
+            opacity:0;
+            visibility:hidden;
+            transform:translateY(-12px) scale(.96);
+            transform-origin:top right;
+            transition:opacity .3s cubic-bezier(.2,1,.3,1),
+                       transform .3s cubic-bezier(.2,1,.3,1),
+                       visibility .3s;
+        }
+        .profile-popover::before{
+            content:"";
+            position:absolute;
+            top:-7px;
+            right:26px;
+            width:14px;
+            height:14px;
+            background:rgba(255,255,255,.85);
+            backdrop-filter:blur(24px);
+            -webkit-backdrop-filter:blur(24px);
+            border-left:1px solid rgba(255,255,255,.7);
+            border-top:1px solid rgba(255,255,255,.7);
+            transform:rotate(45deg);
+            border-radius:4px 0 0 0;
+        }
+        .profile-popover.active{
+            opacity:1;
+            visibility:visible;
+            transform:translateY(0) scale(1);
+        }
+        .profile-popover-header{
+            display:flex;
+            align-items:center;
+            margin-bottom:20px;
+            padding-bottom:20px;
+            border-bottom:1px solid rgba(200,169,91,.25);
+        }
+        .profile-popover-info{min-width:0}
+        .profile-popover-name{
+            font-weight:800;
+            font-size:1.08rem;
+            color:var(--text);
+            white-space:nowrap;
+            overflow:hidden;
+            text-overflow:ellipsis;
+        }
+        .profile-popover-email{
+            font-size:.85rem;
+            color:var(--text-soft);
+            white-space:nowrap;
+            overflow:hidden;
+            text-overflow:ellipsis;
+            margin-top:4px;
+        }
+        .profile-popover-date{
+            font-size:.78rem;
+            color:var(--gold-dark);
+            margin-top:8px;
+            font-weight:600;
+            opacity:.9;
+        }
+        .profile-popover-logout{
+            display:block;
+            width:100%;
+            margin:0 auto;
+            padding:12px 26px;
+            font-size:.88rem;
+            border-radius:16px;
+            font-weight: 800;
+            color: #222;
+            border: 2px solid rgba(212, 175, 55, .5);
+            background: linear-gradient(135deg, #f7e7b0, #d4af37, #f3e2a0);
+            transition: .35s;
+        }
+
+    .store-empty{
+        display:none;
+        text-align:center;
+        padding:80px 40px;
+        background:linear-gradient(145deg,rgba(255,250,235,.98),rgba(250,240,210,.9));
+        border:2px dashed rgba(212,175,55,.45);
+        border-radius:22px;
+        box-shadow:var(--shadow-soft);
+        grid-column:1 / -1;
+    }
+    .store-empty-icon{
+        font-size:3rem;
+        margin-bottom:18px;
+        opacity:.8;
+    }
+    .store-empty h3{
+        font-size:1.4rem;
+        font-weight:800;
+        color:var(--text);
+        margin-bottom:10px;
+    }
+    .store-empty p{
+        font-size:1rem;
+        font-weight:600;
+        color:var(--text-soft);
+        max-width:420px;
+        margin:0 auto;
+    }
+    .store-empty strong{color:var(--gold-dark)}
+
+    .lang-switcher{
+        display:flex;
+        align-items:center;
+        gap:8px;
+        margin-right:auto;
+    }
+.lang-switcher a{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    width:38px;
+    height:38px;
+    border-radius:10px;
+    border:1.5px solid rgba(212,175,55,.4);
+    background:rgba(255,255,255,.6);
+    font-size:.78rem;
+    font-weight:800;
+    letter-spacing:.5px;
+    color:var(--gray-text);
+    text-decoration:none;
+    transition:var(--transition);
+}
+.lang-switcher a:hover{
+    border-color:rgba(212,175,55,.7);
+    background:rgba(212,175,55,.1);
+    color:var(--dark-text);
+    transform:translateY(-2px);
+}
+.lang-switcher a.active{
+    background:linear-gradient(135deg,#f7e7b0,#d4af37,#f3e2a0);
+    border-color:transparent;
+    color:#222;
+    box-shadow:0 6px 16px rgba(212,175,55,.3);
+}
+
         /* ─── FOOTER ─── */
         .premium-footer{width:100%;background:lightgray}
         .footer-container{width:100%;display:grid;grid-template-columns:1.2fr .8fr;gap:80px;padding:70px;align-items:start}
@@ -133,7 +332,7 @@
         .footer-contact-row{align-items:center;gap:16px}
         .footer-contact-pill{padding:15px 24px;border-radius:18px;text-decoration:none;color:#222;font-weight:600;background:rgba(255,255,255,.72);border:1px solid rgba(212,175,55,.18);transition:.35s}
         .footer-contact-pill:hover{transform:translateY(-4px);background:rgba(212,175,55,.14);border-color:rgba(212,175,55,.4);box-shadow:0 10px 25px rgba(212,175,55,.15)}
-        .footer-links{gap:24px}
+        .footer-links{gap:20px}
         .footer-links a{text-decoration:none;color:#2b2b2b;font-weight:500;transition:.3s}
         .footer-links a:hover{color:#b8922e}
         .footer-newsletter h3{font-size:1.95rem;font-weight:800;color:rgba(212,175,55,.65)}
@@ -148,17 +347,56 @@
         .checkmark{min-width:20px;height:20px;border-radius:6px;margin-top:3px;border:1px solid rgba(212,175,55,.4);background:rgba(255,255,255,.5);position:relative;transition:.3s}
         .footer-checkbox input:checked+.checkmark{background:linear-gradient(135deg,#f7e7b0,#d4af37);border-color:transparent}
         .footer-checkbox input:checked+.checkmark::after{content:"✓";position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);color:#222;font-size:.8rem;font-weight:800}
-        .footer-btn{width:fit-content;padding:18px 42px;border-radius:18px;cursor:pointer;font-size:1rem;font-weight:800;color:#222;border: 2px solid rgba(212, 175, 55, .5);background: linear-gradient(135deg, #f7e7b0, #d4af37, #f3e2a0);transition:.35s}
+        .footer-btn{
+            border: 2px solid rgba(212, 175, 55, .5);
+            background: linear-gradient(135deg, #f7e7b0, #d4af37, #f3e2a0);
+            width: fit-content;
+            padding: 18px 42px;
+            border-radius: 18px;
+            font-size: 1rem;
+            color: #222;
+            cursor: pointer;
+            font-weight: 800;
+            transition: .35s;
+            text-decoration: none;
+        }
         .footer-btn:hover{transform:translateY(-4px);box-shadow:0 18px 40px rgba(212,175,55,.32)}
+
+        .footer-newsletter-actions{
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            gap:18px;
+            flex-wrap:wrap;
+        }
+        .footer-unsubscribe-btn{
+            padding:14px 28px;
+            border-radius:18px;
+            background:rgba(255,255,255,.6);
+            border:1px solid rgba(169,169,169,.5);
+            font-size:.9rem;
+            font-weight:700;
+            color:var(--gray-text);
+            cursor:pointer;
+            transition:var(--transition);
+        }
+        .footer-unsubscribe-btn:hover{
+            background:rgba(169,169,169,.15);
+            border-color:rgba(169,169,169,.8);
+            color:var(--dark-text);
+            transform:translateY(-2px);
+        }
 
         /* ─── RESPONSIVE ─── */
         @media(max-width:1100px){.products-grid{grid-template-columns:repeat(3,1fr)}}
         @media(max-width:800px){.products-grid{grid-template-columns:repeat(2,1fr)}}
         @media(max-width:900px){.footer-container{grid-template-columns:1fr;gap:60px;padding:50px 24px}.footer-map{width:100%;height:280px}.footer-btn{width:100%}}
-        @media(max-width:600px){
-            .header-container{padding:0 20px}
-            .menu-toggle{display:block}
-            .nav-links{position:absolute;top:100%;left:0;width:100%;background:rgba(255,255,255,.96);backdrop-filter:blur(14px);flex-direction:column;align-items:center;gap:10px;padding:20px 0;border-radius:0 0 20px 20px;opacity:0;visibility:hidden;transform:translateY(-10px);transition:.35s ease}
+        @media(max-width:768px){
+            .header-container{position:relative; padding:0 20px; flex-wrap:wrap; gap:15px}
+            .menu-toggle{ display:block; z-index:1001; order:3; }
+            .lang-switcher{ order:2; margin-left:auto; gap:6px; }
+            .logo-group { margin-right: 0; }
+            .nav-links{position:absolute;top:130%;left:0;width:100%;background:rgba(255,255,255,.96);backdrop-filter:blur(14px);flex-direction:column;align-items:center;gap:10px;padding:20px 0;border-radius:0 0 20px 20px;opacity:0;visibility:hidden;transform:translateY(-10px);transition:.35s ease}
             .nav-links.active{opacity:1;visibility:visible;transform:translateY(0)}
             .nav-links a{width:90%;text-align:center;padding:14px;border-radius:14px}
             .nav-links a.login-button{ width:52px; height:52px; padding:0; margin:10px auto 0; border-radius:50%; }
@@ -172,29 +410,38 @@
             .filter-divider{display:none}
             .filter-count{display:none}
             .store-main{padding:24px 4% 50px}
-            .products-grid{grid-template-columns:repeat(2,1fr);gap:14px}
+            .products-grid{justify-content: flex-start;}
             .footer-container{padding:40px 16px}
             .footer-contact-pill{width:100%;text-align:center}
+            .profile-popover{top:80px;left:5px;right:5px;width:auto}
+            .profile-popover::before{right:20px}
+            .product-card {min-width: 100%; max-width: 100%;}
         }
-        @media(max-width:400px){.products-grid{grid-template-columns:1fr}}
     </style>
 </head>
 <body>
+<div id="menuOverlay" class="menu-overlay"></div>
 <header>
     <div class="header-container">
         <a th:href="@{/}" class="logo-group">
             <div class="logo-circle"></div>
             <span>Albion</span>
         </a>
+        <div class="lang-switcher">
+            <a th:href="@{''(lang=en)}" th:classappend="${#locale.language == 'en'} ? 'active'">EN</a>
+            <a th:href="@{''(lang=pl)}" th:classappend="${#locale.language == 'pl'} ? 'active'">PL</a>
+            <a th:href="@{''(lang=uk)}" th:classappend="${#locale.language == 'uk'} ? 'active'">UK</a>
+        </div>
         <button class="menu-toggle" id="menuToggle"> ☰</button>
         <nav class="nav-links" id="navMenu">
-            <a th:href="@{/language-courses}">Courses</a>
-            <a th:href="@{/blog}">Blog</a>
-            <a th:href="@{/store}" class="active">Store</a>
-            <a th:href="@{/about-us}">About us</a>
+            <a th:href="@{/language-courses}" th:text="#{menu-courses}">Courses</a>
+            <a th:href="@{/blog}" th:text="#{menu-blog}">Blog</a>
+            <a th:href="@{/store}" th:text="#{menu-store}" class="active">Store</a>
+            <a th:href="@{/about-us}" th:text="#{menu-about-us}">About us</a>
 
             <a sec:authorize="isAuthenticated()"
-               th:href="@{/login}"
+               href="javascript:void(0)"
+               onclick="openProfileModal(event)"
                class="login-button authenticated"
                aria-label="My Profile"></a>
 
@@ -203,6 +450,19 @@
                class="login-button"
                aria-label="Login"></a>
         </nav>
+
+        <div id="profilePopover" class="profile-popover" sec:authorize="isAuthenticated()">
+            <div class="profile-popover-header">
+                <div class="profile-popover-info">
+                    <div class="profile-popover-name" id="profileName" th:text="#{profile.loading}">Loading...</div>
+                    <div class="profile-popover-email" id="profileEmail"></div>
+                    <div class="profile-popover-date" id="profileDate"></div>
+                </div>
+            </div>
+            <form th:action="@{/logout}" method="post">
+                <button type="submit" class="profile-popover-logout" th:text="#{menu-logout}">Log out</button>
+            </form>
+        </div>
     </div>
 </header>
 <!-- ─── HERO ─── -->
@@ -215,21 +475,21 @@
                 <path d="M16 10a4 4 0 01-8 0"/>
             </svg>
         </div>
-        <h1>Albion <span class="hero-accent">Store</span></h1>
-        <p>Books, materials, and resources to support your language learning journey — carefully selected by our teachers.</p>
+        <h1><span th:text="#{store.hero.title}">Albion</span> <span class="hero-accent" th:text="#{store.hero.titleAccent}">Store</span></h1>
+        <p th:text="#{store.hero.subtitle}">Books, materials, and resources to support your language learning journey — carefully selected by our teachers.</p>
         <div class="hero-stats">
             <div class="hero-stat">
                 <!-- Общее кол-во — считается из всех продуктов, не меняется при фильтре -->
                 <span class="hero-stat-num" id="heroTotalCount" th:text="${#lists.size(products)}">0</span>
-                <span class="hero-stat-label">Products</span>
+                <span class="hero-stat-label" th:text="#{store.stats.products}">Products</span>
             </div>
             <div class="hero-stat">
                 <span class="hero-stat-num">4</span>
-                <span class="hero-stat-label">Categories</span>
+                <span class="hero-stat-label" th:text="#{store.stats.categories}">Categories</span>
             </div>
             <div class="hero-stat">
                 <span class="hero-stat-num">🇬🇧 🇵🇱 🇺🇦</span>
-                <span class="hero-stat-label">Languages</span>
+                <span class="hero-stat-label" th:text="#{store.stats.languages}">Languages</span>
             </div>
         </div>
     </div>
@@ -240,7 +500,7 @@
 
     <span class="filter-label">
         <svg viewBox="0 0 24 24"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
-        Explore
+        <span th:text="#{store.filter.explore}">Explore</span>
     </span>
 
     <div class="filter-divider"></div>
@@ -254,27 +514,27 @@
 
         <button class="filter-tab active" data-category="">
             <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
-            All
+            <span th:text="#{store.filter.all}">All</span>
         </button>
 
         <button class="filter-tab" data-category="BOOKS">
             <svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>
-            Books
+            <span th:text="#{store.filter.books}">Books</span>
         </button>
 
         <button class="filter-tab" data-category="COURSES">
             <svg viewBox="0 0 24 24"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
-            Courses
+            <span th:text="#{store.filter.courses}">Courses</span>
         </button>
 
         <button class="filter-tab" data-category="MATERIALS">
             <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
-            Materials
+            <span th:text="#{store.filter.materials}">Materials</span>
         </button>
 
         <button class="filter-tab" data-category="LECTURES">
             <svg viewBox="0 0 24 24"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>
-            Lectures
+            <span th:text="#{store.filter.lectures}">Lectures</span>
         </button>
 
     </div>
@@ -283,23 +543,13 @@
 
     <!-- Счётчик — обновляется JS-ом -->
     <div class="filter-count">
-        <strong id="visibleCount" th:text="${#lists.size(products)}">0</strong> items
+        <strong id="visibleCount" th:text="${#lists.size(products)}">0</strong> <span th:text="#{store.filter.items}">items</span>
     </div>
 
 </div>
 
 <!-- ─── MAIN ─── -->
 <main class="store-main">
-
-    <!-- Показывается JS-ом если после фильтра ничего нет -->
-    <div class="store-empty" id="emptyState">
-        <p>No products in this category yet. Check back soon!</p>
-    </div>
-
-    <!--
-        Все карточки рендерятся Thymeleaf-ом сразу.
-        data-category хранит enum-значение из бэкенда — JS читает его для фильтрации.
-    -->
     <div class="products-grid" id="productsGrid">
 
         <a class="product-card"
@@ -317,10 +567,11 @@
                     </svg>
                 </div>
                 <span class="product-badge-out"
-                      th:if="${product.amount != null and product.amount == 0}">Out of stock</span>
+                      th:if="${product.amount != null and product.amount == 0}"
+                      th:text="#{store.badge.outOfStock}">Out of stock</span>
                 <span class="product-badge-low"
                       th:if="${product.amount != null and product.amount > 0 and product.amount <= 5}"
-                      th:text="'Only ' + ${product.amount} + ' left'">Only 3 left</span>
+                      th:text="#{store.badge.lowStock(${product.amount})}">Only 3 left</span>
             </div>
 
             <div class="product-body">
@@ -331,10 +582,11 @@
                 <div class="product-footer">
                     <div class="product-price">
                         <th:block th:text="${#numbers.formatDecimal(product.price, 1, 2)}">0.00</th:block>
-                        <span>PLN</span>
+                        <span th:text="#{store.currency.pln}">PLN</span>
                     </div>
                     <button class="btn-add"
                             th:if="${product.published == true and product.amount > 0}"
+                            th:text="#{store.product.addToCart}"
                             onclick="event.preventDefault(); event.stopPropagation();">
                         Add to cart
                     </button>
@@ -342,6 +594,11 @@
             </div>
 
         </a>
+        <div class="store-empty" id="emptyState">
+            <div class="store-empty-icon">🛍️</div>
+            <h3 th:text="#{store.empty.title}">No products here yet</h3>
+            <p th:utext="#{store.empty.text}">We're adding new items — <strong>coming soon!</strong></p>
+        </div>
     </div>
 </main>
 
@@ -373,42 +630,88 @@
                     </div>
                 </div>
                 <div class="footer-links">
-                    <a href="#">Privacy Policy</a>
-                    <a href="#">Terms of Use</a>
-                    <a href="#">Refund Policy</a>
+                    <a href="/privacy-policy" th:text="#{footer.links.privacy}">Privacy Policy</a>
+                    <a href="/terms-of-service" th:text="#{footer.links.terms}">Terms of Service</a>
+                    <a href="/refund-policy" th:text="#{footer.links.refund}">Refund Policy</a>
                 </div>
             </div>
         </div>
         <div class="footer-right">
-            <div class="footer-newsletter">
-                <h3>Your Language Journey Starts Here ✨</h3>
-            </div>
+            <div class="footer-newsletter"><h3 th:text="#{footer.newsletter.title}">Your Language Journey Starts Here ✨</h3></div>
             <div class="footer-form">
                 <div class="footer-newsletter-text">
-                    <p>Join our language learning community and receive practical tips, speaking hacks, useful phrases, cultural insights, and creative ways to improve your English, Polish, and Ukrainian naturally.</p>
-                    <p>No boring grammar overload — just useful content, motivation, and real language for everyday life ✨📩</p>
+                    <p th:text="#{footer.newsletter.text1}"> Join our community of language learners and get real, practical content:
+                        speaking tips, useful phrases, cultural insights, and simple ways to grow your
+                        English, Polish, or Ukrainian — every single week. </p>
+                    <p th:text="#{footer.newsletter.text2}"> No boring grammar walls. Just things you'll actually use ✨📩 </p>
                 </div>
-                <input type="email" placeholder="Enter your email" class="footer-input">
+                <input type="email" id="newsletterEmail" th:placeholder="#{footer.newsletter.emailPlaceholder}" placeholder="Enter your email" class="footer-input">
                 <div class="footer-checkboxes">
                     <label class="footer-checkbox">
-                        <input type="checkbox"><span class="checkmark"></span>
-                        <span>I agree to receive language learning tips, updates, and special offers by email.</span>
+                        <input type="checkbox" id="newsletterConsent1">
+                        <span class="checkmark"></span>
+                        <span th:text="#{footer.newsletter.consent1}"> Yes, send me learning tips, updates, and special offers. </span>
                     </label>
                     <label class="footer-checkbox">
-                        <input type="checkbox"><span class="checkmark"></span>
-                        <span>I accept the Privacy Policy and consent to email communication.</span>
+                        <input type="checkbox" id="newsletterConsent2">
+                        <span class="checkmark"></span>
+                        <span>
+                            <th:block th:text="#{footer.newsletter.consent2}">I've read and accept the</th:block>
+                            <a href="/privacy-policy" style="color:#b8922e; text-decoration:underline;" th:text="#{footer.newsletter.consent2.link}">Privacy Policy</a>.
+                        </span>
                     </label>
                 </div>
-                <button class="footer-btn">JOIN THE NEWSLETTER</button>
+                <p id="newsletterMessage" style="font-size: .9rem; font-weight: 600; display: none;"></p>
+                <div class="footer-newsletter-actions">
+                    <button class="footer-btn" id="newsletterSubmitBtn" type="button" th:text="#{footer.newsletter.join}">JOIN THE NEWSLETTER</button>
+                    <button class="footer-unsubscribe-btn" id="newsletterUnsubscribeBtn" type="button" th:text="#{footer.newsletter.unsubscribe}">Unsubscribe</button>
+                </div>
             </div>
         </div>
     </div>
 </footer>
 
-<script>
-    // ─── Мобильное меню ───
-    document.getElementById('menuToggle')
-        .addEventListener('click', () => document.getElementById('navMenu').classList.toggle('active'));
+<script th:inline="javascript">
+    /* ─── i18n strings passed from server ─── */
+    const i18n = {
+        localeCode: /*[[${#locale.language}]]*/ 'en',
+        profileLoadFailed: /*[[#{profile.loadFailed}]]*/ 'Failed to load',
+        profileLoadError: /*[[#{profile.loadError}]]*/ 'Error loading profile',
+        profileMemberSince: /*[[#{profile.memberSince}]]*/ 'Member since',
+        newsletter: {
+            invalidEmail: /*[[#{footer.newsletter.msg.invalidEmail}]]*/ 'Please enter a valid email address.',
+            needConsent: /*[[#{footer.newsletter.msg.needConsent}]]*/ 'Please check both boxes to subscribe.',
+            joining: /*[[#{footer.newsletter.msg.joining}]]*/ 'Joining...',
+            subscribed: /*[[#{footer.newsletter.msg.subscribed}]]*/ 'Thank you for subscribing!',
+            genericError: /*[[#{footer.newsletter.msg.genericError}]]*/ 'Something went wrong. Please try again.',
+            networkError: /*[[#{footer.newsletter.msg.networkError}]]*/ 'Network error. Please try again later.',
+            enterEmailToUnsub: /*[[#{footer.newsletter.msg.enterEmailToUnsub}]]*/ 'Enter your email above to unsubscribe.',
+            unsubscribed: /*[[#{footer.newsletter.msg.unsubscribed}]]*/ 'You have been unsubscribed.',
+            join: /*[[#{footer.newsletter.join}]]*/ 'JOIN THE NEWSLETTER'
+        }
+    };
+
+    const menuToggle = document.getElementById('menuToggle');
+    const navMenu    = document.getElementById('navMenu');
+    const overlay    = document.getElementById('menuOverlay');
+
+    function openMenu() {
+      navMenu.classList.add('active');
+      overlay.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeMenu() {
+      navMenu.classList.remove('active');
+      overlay.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    menuToggle.addEventListener('click', () => {
+      navMenu.classList.contains('active') ? closeMenu() : openMenu();
+    });
+
+    overlay.addEventListener('click', closeMenu);
 
     // ─── Загрузка картинок ───
     async function loadProductImage(itemId) {
@@ -445,28 +748,186 @@
         let visible = 0;
 
         cards.forEach(card => {
-            // data-category может быть null/undefined если у товара нет категории
             const cardCat = (card.dataset.category || '').toUpperCase();
             const show = !category || cardCat === category;
             card.classList.toggle('hidden', !show);
             if (show) visible++;
         });
 
-        // Показываем/скрываем «пусто»
-        emptyState.style.display = visible === 0 ? 'block' : 'none';
+        emptyState.style.display = visible === 0 ? 'flex' : 'none';
+        emptyState.style.flexDirection = 'column';
+        emptyState.style.alignItems = 'center';
+        emptyState.style.justifyContent = 'center';
 
-        // Обновляем счётчик
         countEl.textContent = visible;
     }
 
     tabs.forEach(tab => {
         tab.addEventListener('click', () => {
-            // Переключаем active
             tabs.forEach(t => t.classList.remove('active'));
             tab.classList.add('active');
-
             applyFilter(tab.dataset.category);
         });
+    });
+
+    applyFilter('');
+
+    const newsletterBtn = document.getElementById('newsletterSubmitBtn');
+    const newsletterEmailInput = document.getElementById('newsletterEmail');
+    const newsletterConsent1 = document.getElementById('newsletterConsent1');
+    const newsletterConsent2 = document.getElementById('newsletterConsent2');
+    const newsletterMessage = document.getElementById('newsletterMessage');
+
+    function showNewsletterMessage(text, isError) {
+        newsletterMessage.textContent = text;
+        newsletterMessage.style.color = isError ? '#c0392b' : '#2d8d31';
+        newsletterMessage.style.display = 'block';
+    }
+
+    function isValidEmail(email) {
+        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    }
+
+    newsletterBtn.addEventListener('click', async () => {
+        const email = newsletterEmailInput.value.trim();
+
+        if (!isValidEmail(email)) {
+            showNewsletterMessage(i18n.newsletter.invalidEmail, true);
+            return;
+        }
+
+        if (!newsletterConsent1.checked || !newsletterConsent2.checked) {
+            showNewsletterMessage(i18n.newsletter.needConsent, true);
+            return;
+        }
+
+        newsletterBtn.disabled = true;
+        newsletterBtn.textContent = i18n.newsletter.joining;
+
+        try {
+            const response = await fetch(`/api/newsletter/subscribe?email=${encodeURIComponent(email)}`, {
+                method: 'POST'
+            });
+
+            if (response.ok) {
+                showNewsletterMessage(i18n.newsletter.subscribed, false);
+                newsletterEmailInput.value = '';
+                newsletterConsent1.checked = false;
+                newsletterConsent2.checked = false;
+            } else {
+                const errorText = await response.text();
+                showNewsletterMessage(errorText || i18n.newsletter.genericError, true);
+            }
+        } catch (err) {
+            showNewsletterMessage(i18n.newsletter.networkError, true);
+        } finally {
+            newsletterBtn.disabled = false;
+            newsletterBtn.textContent = i18n.newsletter.join;
+        }
+    });
+
+    const newsletterUnsubBtn = document.getElementById('newsletterUnsubscribeBtn');
+
+    newsletterUnsubBtn.addEventListener('click', async () => {
+        const email = newsletterEmailInput.value.trim();
+
+        if (!isValidEmail(email)) {
+            showNewsletterMessage(i18n.newsletter.enterEmailToUnsub, true);
+            return;
+        }
+
+        newsletterUnsubBtn.disabled = true;
+
+        try {
+            const response = await fetch(`/api/newsletter/unsubscribe?email=${encodeURIComponent(email)}`, {
+                method: 'POST'
+            });
+
+            if (response.ok) {
+                showNewsletterMessage(i18n.newsletter.unsubscribed, false);
+                newsletterEmailInput.value = '';
+            } else {
+                const errorText = await response.text();
+                showNewsletterMessage(errorText || i18n.newsletter.genericError, true);
+            }
+        } catch (err) {
+            showNewsletterMessage(i18n.newsletter.networkError, true);
+        } finally {
+            newsletterUnsubBtn.disabled = false;
+        }
+    });
+
+    /* ─── PROFILE POPOVER ─── */
+    const profilePopover = document.getElementById('profilePopover');
+    let profileLoaded = false;
+
+    async function loadProfile() {
+        if (profileLoaded) return;
+        try {
+            const res = await fetch('/api/profile', {
+                method: 'GET',
+                credentials: 'include'
+            });
+
+            if (!res.ok) {
+                document.getElementById('profileName').textContent = i18n.profileLoadFailed;
+                return;
+            }
+
+            const user = await res.json(); // { name, email, createDate }
+
+            document.getElementById('profileName').textContent = user.name || '—';
+            document.getElementById('profileEmail').textContent = user.email || '';
+
+            if (user.createDate) {
+                const date = new Date(user.createDate);
+                document.getElementById('profileDate').textContent =
+                    i18n.profileMemberSince + ' ' + date.toLocaleDateString(i18n.localeCode, {
+                        day: '2-digit', month: 'long', year: 'numeric'
+                    });
+            }
+
+            profileLoaded = true;
+        } catch (e) {
+            console.error('Failed to load profile', e);
+            document.getElementById('profileName').textContent = i18n.profileLoadError;
+        }
+    }
+
+    function openProfileModal(e) {
+        e.preventDefault();
+        e.stopPropagation();
+
+        if (navMenu.classList.contains('active')) {
+            closeMenu();
+        }
+
+        if (profilePopover.classList.contains('active')) {
+            closeProfileModal();
+            return;
+        }
+
+        profilePopover.classList.add('active');
+        loadProfile();
+    }
+
+    function closeProfileModal() {
+        profilePopover.classList.remove('active');
+    }
+
+    document.addEventListener('click', (e) => {
+        if (profilePopover.classList.contains('active') &&
+            !profilePopover.contains(e.target) &&
+            !e.target.closest('.login-button.authenticated')) {
+            closeProfileModal();
+        }
+    });
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            closeProfileModal();
+            closeMenu();
+        }
     });
 </script>
 

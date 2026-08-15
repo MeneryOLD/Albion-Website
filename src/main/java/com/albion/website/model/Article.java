@@ -34,6 +34,10 @@ public class Article {
 
     private boolean published = false;
 
+    @Lob
+    @Column(name = "page_html", columnDefinition = "LONGTEXT")
+    private String pageHtml;
+
     @PrePersist
     public void prePersist() {
         this.createdAt = LocalDateTime.now();

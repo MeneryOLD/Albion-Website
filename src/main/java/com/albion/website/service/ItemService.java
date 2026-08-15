@@ -1,5 +1,6 @@
 package com.albion.website.service;
 
+import com.albion.website.Exception.NotFoundException;
 import com.albion.website.dto.ItemRequestDto;
 import com.albion.website.model.Item;
 import com.albion.website.model.PictureType;
@@ -23,7 +24,6 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class ItemService {
-
     private final ItemRepository itemRepository;
     private final SlugService slugService;
     private final PictureService pictureService;
@@ -124,6 +124,19 @@ public class ItemService {
         }
 
         return itemRepository.save(item);
+    }
+
+    public void savePage(Long id, String html) {
+        Item item = itemRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Course not found: " + id));
+        item.setPageHtml(html);
+        itemRepository.save(item);
+    }
+
+    public String getPageHtml(Long id) {
+        Item item = itemRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Course not found: " + id));
+        return item.getPageHtml();
     }
 
     @Transactional

@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Albion | Language Courses</title>
+    <title>LC Albion | Language Courses</title>
+    <link rel="icon" href="/img/logo.webp" type="image/png">
     <style>
         :root {
   --bg-main: #f5f5f3;
@@ -23,7 +24,8 @@
 
 * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Roboto, sans-serif; }
 
-html, body { scroll-behavior: smooth; overflow-x: hidden; width: 100%; }
+html { scroll-behavior: smooth; width: 100%; }
+body { overflow-x: hidden; width: 100%; }
 
 body {
   background: radial-gradient(circle at top left, rgba(200, 169, 91, 0.12), transparent 30%),
@@ -53,26 +55,14 @@ header {
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border-bottom: 1px solid rgba(255, 255, 51, 0.25);
-  position: fixed;
+  position: sticky;
   top: 0;
   z-index: 1000;
   padding: 15px 0;
 }
 
-.header-container {
-  padding: 0 40px;
-  flex-wrap: wrap;
-  gap: 15px;
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.logo-group {
-  display: flex; align-items: center; gap: 12px;
-  text-decoration: none; color: var(--text); font-weight: 800; font-size: 1.4rem;
-}
+.header-container{ width:100%; display:flex; justify-content:space-between; align-items:center; padding:0 40px; }
+.logo-group{ display:flex; align-items:center; gap:12px; text-decoration:none; color:var(--dark-text); font-weight:800; font-size:1.4rem; margin-right: 12px}
 
 .logo-circle {
   width: 55px; height: 55px;
@@ -88,18 +78,18 @@ header {
 .nav-links a {
   text-decoration: none; color: var(--dark-text);
   padding: 8px 20px; font-weight: 600;
-  transition: color 0.3s ease, background-color 0.3s ease;
+  transition:.3s;
 }
 .nav-links a.active{color: #917003;}
-.nav-links a:hover { color: #d4af37 !important; }
-.menu-toggle { display: none; border: none; background: none; font-size: 1.8rem; cursor: pointer; color: var(--text); }
+.nav-links a:hover { color: #d4d400;}
+.menu-toggle { display: none; border: none; background: none; font-size: 2rem; cursor: pointer; color: var(--text); }
 
 /* HERO */
 .courses-hero {
   position: relative;
   display: flex;
   align-items: center;
-  padding: 150px 40px 100px;
+  padding: 100px 40px 100px;
   background: linear-gradient(rgba(245, 245, 243, 0.92), rgba(236, 235, 231, 0.92)),
               url('/img/main-background.webp') center/cover no-repeat;
 }
@@ -214,37 +204,116 @@ header {
 /* FILTER */
 .courses-filter-section { padding-top: 60px; padding-bottom: 20px; background: lightgray; }
 
-.filter-top { align-items: center; gap: 16px; margin-bottom: 35px; }
+.filter-top { align-items: center; gap: 16px; margin-bottom: 45px; }
 .filter-top h2 { margin-bottom: 0; text-align: center; }
 
-.filter-pills { display: flex; gap: 16px; flex-wrap: nowrap; justify-content: center; }
-
-.filter-pill {
-  border: none; padding: 14px 24px; border-radius: 999px;
-  background: rgba(255, 255, 255, 0.7); border: 1px solid rgba(200, 169, 91, 0.18);
-  backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
-  font-weight: 700; cursor: pointer; transition: 0.3s ease;
+.filter-tabs {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0;
+  max-width: 720px;
+  margin: 0 auto;
+  border-bottom: 1px solid rgba(200, 169, 91, 0.28);
 }
-.filter-pill:hover, .filter-pill.active {
-  transform: translateY(-3px);
-  background: linear-gradient(135deg, var(--gold-light), var(--gold)); color: #fff;
+
+.filter-tab {
+  position: relative;
+  flex: 1;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  padding: 0 18px 22px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  font-family: inherit;
+}
+
+.filter-tab-icon {
+  font-size: 1.3rem;
+  line-height: 1;
+  filter: grayscale(1) opacity(0.55);
+  transition: filter 0.4s ease, transform 0.4s ease;
+}
+
+.filter-tab-label {
+  font-size: 0.86rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--text-soft);
+  transition: color 0.4s ease, letter-spacing 0.4s ease;
+}
+
+.filter-tab:hover .filter-tab-icon { filter: grayscale(0.3) opacity(0.85); transform: translateY(-2px); }
+.filter-tab:hover .filter-tab-label { color: var(--gold-dark); }
+
+.filter-tab.active .filter-tab-icon { filter: grayscale(0) opacity(1); transform: translateY(-2px); }
+.filter-tab.active .filter-tab-label { color: var(--text); letter-spacing: 2.5px; }
+
+.filter-tab-indicator {
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  height: 2px;
+  width: 0;
+  background: linear-gradient(90deg, var(--gold-light), var(--gold), var(--gold-dark));
+  box-shadow: 0 0 12px rgba(212, 175, 55, 0.55);
+  transition: transform 0.5s cubic-bezier(0.2, 1, 0.3, 1), width 0.5s cubic-bezier(0.2, 1, 0.3, 1);
+}
+
+.filter-tab-indicator::after {
+  content: "";
+  position: absolute;
+  top: -4px;
+  left: 50%;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  transform: translateX(-50%) rotate(45deg);
+  background: var(--gold);
+  box-shadow: 0 0 10px rgba(212, 175, 55, 0.7);
+}
+
+@media (max-width: 600px) {
+  .filter-tabs { max-width: 100%; }
+  .filter-tab { padding: 0 8px 18px; }
+  .filter-tab-label { font-size: 0.72rem; letter-spacing: 1px; }
+  .filter-tab.active .filter-tab-label { letter-spacing: 1.3px; }
 }
 
 /* COURSES */
 #courses-list { padding-top: 40px; }
 
 .courses-grid {
-  display: grid; grid-template-columns: repeat(3, 1fr);
-  gap: 34px; background: lightgray;
+    display: flex;
+    gap: 34px;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+    width: 100%;
+    padding: 10px;
+    justify-content: center;
 }
 
 .premium-course-card {
-  display: flex; flex-direction: column; text-decoration: none;
-  border-radius: 30px; overflow: hidden; position: relative;
-  background: linear-gradient(145deg, rgba(255, 250, 235, .98), rgba(250, 240, 210, .9));
-  border: 2px solid rgba(212, 175, 55, .55); backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px); box-shadow: var(--shadow-soft);
-  transition: var(--transition); cursor: pointer;
+    min-width: calc(33.333% - 23px);
+    max-width: calc(33.333% - 23px);
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    border-radius: 30px;
+    overflow: hidden;
+    position: relative;
+    background: linear-gradient(145deg, rgba(255, 250, 235, .98), rgba(250, 240, 210, .9));
+    border: 1px solid rgba(212, 175, 55, .22);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, .07);
+    backdrop-filter: blur(10px);
+    transition: var(--transition);
 }
 .premium-course-card:hover {
   transform: translateY(-10px); border-color: rgba(200, 169, 91, 0.4);
@@ -356,7 +425,30 @@ header {
   background: rgba(255, 255, 255, 0.55); border: 1px solid rgba(200, 169, 91, 0.12);
   font-weight: 600; color: #444;
 }
-
+        .footer-newsletter-actions{
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            gap:18px;
+            flex-wrap:wrap;
+        }
+        .footer-unsubscribe-btn{
+            padding:14px 28px;
+            border-radius:18px;
+            background:rgba(255,255,255,.6);
+            border:1px solid rgba(169,169,169,.5);
+            font-size:.9rem;
+            font-weight:700;
+            color:var(--gray-text);
+            cursor:pointer;
+            transition:var(--transition);
+        }
+        .footer-unsubscribe-btn:hover{
+            background:rgba(169,169,169,.15);
+            border-color:rgba(169,169,169,.8);
+            color:var(--dark-text);
+            transform:translateY(-2px);
+        }
 /* FOOTER */
 .premium-footer { width: 100%; position: relative; overflow: hidden; background: lightgray; }
 
@@ -395,7 +487,7 @@ header {
 }
 .footer-contact-pill:hover { transform: translateY(-4px); background: rgba(212, 175, 55, 0.14); border-color: rgba(212, 175, 55, 0.4); box-shadow: 0 10px 25px rgba(212, 175, 55, 0.15); }
 
-.footer-links { gap: 24px; }
+.footer-links{gap:20px}
 .footer-links a { text-decoration: none; color: #2b2b2b; font-weight: 500; transition: 0.3s; }
 .footer-links a:hover { color: #b8922e; }
 
@@ -438,8 +530,171 @@ header {
 .footer-btn:hover { transform: translateY(-4px); box-shadow: 0 18px 40px rgba(212, 175, 55, 0.32); }
 
 .login-button { display: inline-flex; align-items:center; justify-content:center; width:50px; height:50px; flex-shrink:0; margin-left:10px; padding:0; background:url('/img/default-user.png') center/cover no-repeat; border-radius:50%; border:2px solid rgba(180, 145, 40, 0.5); box-shadow:0 6px 16px rgba(212,175,55,.18); transition:var(--transition); }
-        .login-button:hover{ transform:translateY(-3px) scale(1.06); border-color:rgba(212,175,55,.85); box-shadow:0 12px 26px rgba(212,175,55,.32); color:inherit; }
-        .login-button.authenticated { background-image: url('/img/auth-user.png'); }
+.login-button:hover{ transform:translateY(-3px) scale(1.06); border-color:rgba(212,175,55,.85); box-shadow:0 12px 26px rgba(212,175,55,.32); color:inherit; }
+.login-button.authenticated { background-image: url('/img/auth-user.png'); }
+
+.menu-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0);
+  backdrop-filter: blur(0px);
+  -webkit-backdrop-filter: blur(0px);
+  z-index: 999;
+  pointer-events: none;
+  transition: background 0.35s ease, backdrop-filter 0.35s ease;
+}
+
+.menu-overlay.active {
+  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+  pointer-events: all;
+}
+/* PROFILE POPOVER */
+.profile-popover{
+    position:absolute;
+    top:calc(100% + 10px);
+    right:30px;
+    width:290px;
+    background:rgba(255,255,255,.85);
+    backdrop-filter:blur(24px) saturate(180%);
+    -webkit-backdrop-filter:blur(24px) saturate(180%);
+    border:1px solid rgba(255,255,255,.7);
+    border-radius:24px;
+    padding:20px;
+    box-shadow:0 25px 70px rgba(0,0,0,.16), 0 4px 12px rgba(0,0,0,.06), inset 0 1px 0 rgba(255,255,255,.8);
+    z-index:1001;
+    opacity:0;
+    visibility:hidden;
+    transform:translateY(-12px) scale(.96);
+    transform-origin:top right;
+    transition:opacity .3s cubic-bezier(.2,1,.3,1),
+               transform .3s cubic-bezier(.2,1,.3,1),
+               visibility .3s;
+}
+.profile-popover::before{
+    content:"";
+    position:absolute;
+    top:-7px;
+    right:26px;
+    width:14px;
+    height:14px;
+    background:rgba(255,255,255,.85);
+    backdrop-filter:blur(24px);
+    -webkit-backdrop-filter:blur(24px);
+    border-left:1px solid rgba(255,255,255,.7);
+    border-top:1px solid rgba(255,255,255,.7);
+    transform:rotate(45deg);
+    border-radius:4px 0 0 0;
+}
+.profile-popover.active{
+    opacity:1;
+    visibility:visible;
+    transform:translateY(0) scale(1);
+}
+.profile-popover-header{
+    display:flex;
+    align-items:center;
+    margin-bottom:20px;
+    padding-bottom:20px;
+    border-bottom:1px solid rgba(200,169,91,.25);
+}
+.profile-popover-info{min-width:0}
+.profile-popover-name{
+    font-weight:800;
+    font-size:1.08rem;
+    color:var(--text);
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+}
+.profile-popover-email{
+    font-size:.85rem;
+    color:var(--text-soft);
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    margin-top:4px;
+}
+.profile-popover-date{
+    font-size:.78rem;
+    color:var(--gold-dark);
+    margin-top:8px;
+    font-weight:600;
+    opacity:.9;
+}
+.profile-popover-logout{
+    display:block;
+    width:100%;
+    margin:0 auto;
+    padding:12px 26px;
+    font-size:.88rem;
+    border-radius:16px;
+}
+
+.no-courses-placeholder {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 70px 30px;
+  border-radius: 28px;
+  background: linear-gradient(145deg, rgba(255, 250, 235, .98), rgba(250, 240, 210, .9));
+  border: 2px dashed rgba(212, 175, 55, .45);
+}
+.no-courses-icon {
+    background: url(/img/no-course.png) center / cover no-repeat;
+    font-size: 3rem;
+    margin-bottom: 18px;
+    opacity: .8;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 50px;
+    height: 50px;
+    flex-shrink: 0;
+    padding: 0;
+}
+.no-courses-placeholder h3 { font-size: 1.5rem; margin-bottom: 10px; color: var(--text); }
+.no-courses-placeholder p { max-width: 420px; }
+.no-courses-placeholder strong { color: var(--gold-dark); }
+
+.lang-switcher{
+        display:flex;
+        align-items:center;
+        gap:8px;
+        margin-right:auto;
+    }
+.lang-switcher a{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    width:38px;
+    height:38px;
+    border-radius:10px;
+    border:1.5px solid rgba(212,175,55,.4);
+    background:rgba(255,255,255,.6);
+    font-size:.78rem;
+    font-weight:800;
+    letter-spacing:.5px;
+    color:var(--gray-text);
+    text-decoration:none;
+    transition:var(--transition);
+}
+.lang-switcher a:hover{
+    border-color:rgba(212,175,55,.7);
+    background:rgba(212,175,55,.1);
+    color:var(--dark-text);
+    transform:translateY(-2px);
+}
+.lang-switcher a.active{
+    background:linear-gradient(135deg,#f7e7b0,#d4af37,#f3e2a0);
+    border-color:transparent;
+    color:#222;
+    box-shadow:0 6px 16px rgba(212,175,55,.3);
+}
 
 /* MEDIA QUERIES */
 @media (max-width: 1200px) { .courses-grid, .why-grid { grid-template-columns: repeat(2, 1fr); } }
@@ -461,13 +716,21 @@ header {
 }
 
 @media (max-width: 768px) {
-  .menu-toggle { display: block; }
+  .menu-toggle{ display:block; z-index:1001; order:3; }
+  .lang-switcher{ order:2; margin-left:auto; gap:6px; }
+  .logo-group { margin-right: 0; }
   .nav-links {
-    position: absolute; top: 100%; left: 0; width: 100%;
+    position: absolute; top: 130%; left: 0; width: 100%;
     background: rgba(255, 255, 255, .96); backdrop-filter: blur(14px);
     display: flex; flex-direction: column; align-items: center;
     gap: 10px; padding: 20px 0; border-radius: 0 0 20px 20px;
     opacity: 0; visibility: hidden; transform: translateY(-10px); transition: .35s ease;
+  }
+  .header-container {
+       position: relative;
+       padding: 0 20px;
+       flex-wrap: wrap;
+       gap: 15px;
   }
   .nav-links a { width: 90%; text-align: center; padding: 14px; border-radius: 14px; }
   .nav-links.active { opacity: 1; visibility: visible; transform: translateY(0); }
@@ -482,6 +745,10 @@ header {
   .footer-newsletter h3 { font-size: 2rem; }
   .final .roadmap-circle { width: 180px; height: 180px; font-size: 1.5rem; }
   .medium .roadmap-circle { width: 130px; height: 130px; }
+  .profile-popover{top:80px;left:5px;right:5px;width:auto}
+  .profile-popover::before{right:20px}
+  .premium-course-card{ min-width:100%; max-width:100%; }
+  .courses-grid {justify-content: flex-start;}
 }
 
 @media (max-width: 480px) {
@@ -495,22 +762,28 @@ header {
     </style>
 </head>
 <body>
-
+<div id="menuOverlay" class="menu-overlay"></div>
 <header>
     <div class="header-container">
         <a th:href="@{/}" class="logo-group">
             <div class="logo-circle"></div>
             <span>Albion</span>
         </a>
+        <div class="lang-switcher">
+            <a th:href="@{''(lang=en)}" th:classappend="${#locale.language == 'en'} ? 'active'">EN</a>
+            <a th:href="@{''(lang=pl)}" th:classappend="${#locale.language == 'pl'} ? 'active'">PL</a>
+            <a th:href="@{''(lang=uk)}" th:classappend="${#locale.language == 'uk'} ? 'active'">UK</a>
+        </div>
         <button class="menu-toggle" id="menuToggle"> ☰</button>
         <nav class="nav-links" id="navMenu">
-            <a th:href="@{/language-courses}" class="active">Courses</a>
-            <a th:href="@{/blog}">Blog</a>
-            <a th:href="@{/store}">Store</a>
-            <a th:href="@{/about-us}">About us</a>
+            <a th:href="@{/language-courses}" th:text="#{menu-courses}" class="active">Courses</a>
+            <a th:href="@{/blog}" th:text="#{menu-blog}">Blog</a>
+            <a th:href="@{/store}" th:text="#{menu-store}">Store</a>
+            <a th:href="@{/about-us}" th:text="#{menu-about-us}">About us</a>
 
             <a sec:authorize="isAuthenticated()"
-               th:href="@{/login}"
+               href="javascript:void(0)"
+               onclick="openProfileModal(event)"
                class="login-button authenticated"
                aria-label="My Profile"></a>
 
@@ -519,6 +792,19 @@ header {
                class="login-button"
                aria-label="Login"></a>
         </nav>
+
+        <div id="profilePopover" class="profile-popover" sec:authorize="isAuthenticated()">
+            <div class="profile-popover-header">
+                <div class="profile-popover-info">
+                    <div class="profile-popover-name" id="profileName" th:text="#{profile.loading}">Loading...</div>
+                    <div class="profile-popover-email" id="profileEmail"></div>
+                    <div class="profile-popover-date" id="profileDate"></div>
+                </div>
+            </div>
+            <form th:action="@{/logout}" method="post">
+                <button type="submit" class="footer-btn profile-popover-logout" th:text="#{menu-logout}">Log out</button>
+            </form>
+        </div>
     </div>
 </header>
 
@@ -529,20 +815,20 @@ header {
         <div class="courses-hero-overlay"></div>
         <div class="courses-hero-content">
             <div class="courses-hero-left reveal">
-                <div class="hero-badge">LANGUAGE COURSES</div>
-                <h1>Learn Languages <br>Naturally & Confidently</h1>
-                <p>Modern courses for English, Polish and Ukrainian. Small groups, speaking practice from lesson one, flexible schedules and real-life communication.</p>
+                <div class="hero-badge" th:text="#{courses.hero.badge}">LANGUAGE COURSES</div>
+                <h1 th:utext="#{courses.hero.title}">Learn Languages <br>Naturally & Confidently</h1>
+                <p th:text="#{courses.hero.subtitle}">Modern courses for English, Polish and Ukrainian. Small groups, speaking practice from lesson one, flexible schedules and real-life communication.</p>
                 <div class="btn-group">
-                    <a href="#courses-list" class="btn btn-primary">Explore Courses</a>
-                    <a href="#learning-process" class="btn btn-outline">How It Works</a>
+                    <a href="#courses-list" class="btn btn-primary" th:text="#{courses.hero.btn.explore}">Explore Courses</a>
+                    <a href="#learning-process" class="btn btn-outline" th:text="#{courses.hero.btn.howItWorks}">How It Works</a>
                 </div>
             </div>
             <div class="hero-roadmap">
-                <div class="roadmap-step final"><div class="roadmap-circle">Fluency</div></div>
-                <div class="roadmap-step medium"><div class="roadmap-circle">Practice</div></div>
-                <div class="roadmap-step small"><div class="roadmap-circle">Speaking</div></div>
-                <div class="roadmap-step tiny"><div class="roadmap-circle">Grammar</div></div>
-                <div class="roadmap-step mini"><div class="roadmap-circle">Start</div></div>
+                <div class="roadmap-step final"><div class="roadmap-circle" th:text="#{courses.roadmap.fluency}">Fluency</div></div>
+                <div class="roadmap-step medium"><div class="roadmap-circle" th:text="#{courses.roadmap.practice}">Practice</div></div>
+                <div class="roadmap-step small"><div class="roadmap-circle" th:text="#{courses.roadmap.speaking}">Speaking</div></div>
+                <div class="roadmap-step tiny"><div class="roadmap-circle" th:text="#{courses.roadmap.grammar}">Grammar</div></div>
+                <div class="roadmap-step mini"><div class="roadmap-circle" th:text="#{courses.roadmap.start}">Start</div></div>
             </div>
         </div>
     </section>
@@ -550,13 +836,24 @@ header {
     <!-- FILTER -->
     <section class="courses-filter-section">
         <div class="filter-top reveal">
-            <h2>Find Your Perfect Course</h2>
+            <h2 th:text="#{courses.filter.title}">Find Your Perfect Course</h2>
         </div>
-        <div class="filter-pills reveal">
-            <button class="filter-pill active">All</button>
-            <button class="filter-pill">English</button>
-            <button class="filter-pill">Polish</button>
-            <button class="filter-pill">Ukrainian</button>
+
+        <div class="filter-tabs reveal" id="filterTabs">
+            <button class="filter-tab active" data-filter="All">
+                <span class="filter-tab-icon">✨</span>
+                <span class="filter-tab-label" th:text="#{courses.filter.all}">All</span>
+            </button>
+            <button class="filter-tab" data-filter="English">
+                <span class="filter-tab-label" th:text="#{courses.filter.english}">English</span>
+            </button>
+            <button class="filter-tab" data-filter="Polish">
+                <span class="filter-tab-label" th:text="#{courses.filter.polish}">Polish</span>
+            </button>
+            <button class="filter-tab" data-filter="Ukrainian">
+                <span class="filter-tab-label" th:text="#{courses.filter.ukrainian}">Ukrainian</span>
+            </button>
+            <span class="filter-tab-indicator" id="filterIndicator"></span>
         </div>
     </section>
 
@@ -627,7 +924,7 @@ header {
 
                     </div>
 
-                    <div class="premium-course-btn">
+                    <div class="premium-course-btn" th:text="#{courses.card.learnMore}">
                         Learn More
                     </div>
 
@@ -635,32 +932,38 @@ header {
 
             </div>
 
+            <div id="noCoursesPlaceholder" class="no-courses-placeholder" style="display:none;">
+                <div class="no-courses-icon"></div>
+                <h3 th:text="#{courses.noCourses.title}">No courses here yet</h3>
+                <p th:utext="#{courses.noCourses.text}">We're preparing new courses — <strong>coming soon!</strong></p>
+            </div>
+
         </div>
     </section>
 
     <!-- WHY -->
     <section class="why-courses-section">
-        <h2 class="reveal">Why Our Courses Work</h2>
+        <h2 class="reveal" th:text="#{courses.why.title}">Why Our Courses Work</h2>
         <div class="why-grid">
             <div class="why-card reveal">
                 <div class="why-icon">💬</div>
-                <h3>Speaking First</h3>
-                <p>You start speaking from the very first lesson. Real conversations instead of endless theory.</p>
+                <h3 th:text="#{courses.why.card1.title}">Speaking First</h3>
+                <p th:text="#{courses.why.card1.desc}">You start speaking from the very first lesson. Real conversations instead of endless theory.</p>
             </div>
             <div class="why-card reveal">
                 <div class="why-icon">🎯</div>
-                <h3>Individual Approach</h3>
-                <p>Personalized homework, teacher feedback and small learning groups.</p>
+                <h3 th:text="#{courses.why.card2.title}">Individual Approach</h3>
+                <p th:text="#{courses.why.card2.desc}">Personalized homework, teacher feedback and small learning groups.</p>
             </div>
             <div class="why-card reveal">
                 <div class="why-icon">📅</div>
-                <h3>Flexible Schedule</h3>
-                <p>Morning, evening and weekend groups available online and offline.</p>
+                <h3 th:text="#{courses.why.card3.title}">Flexible Schedule</h3>
+                <p th:text="#{courses.why.card3.desc}">Morning, evening and weekend groups available online and offline.</p>
             </div>
             <div class="why-card reveal">
                 <div class="why-icon">🌍</div>
-                <h3>Real-Life Practice</h3>
-                <p>Learn language for work, travel, relocation and daily communication.</p>
+                <h3 th:text="#{courses.why.card4.title}">Real-Life Practice</h3>
+                <p th:text="#{courses.why.card4.desc}">Learn language for work, travel, relocation and daily communication.</p>
             </div>
         </div>
     </section>
@@ -668,38 +971,38 @@ header {
     <section id="learning-process" class="learning-process-section">
         <div class="methodology-hero reveal">
             <div class="methodology-side">
-                <span class="methodology-label">Speaking Clubs</span>
-                <h2>Who Leads Our Speaking Clubs?</h2>
-                <p class="methodology-main-text">Our speaking clubs are led by experienced professionals and native speakers focused on real communication, confidence and practical English for modern life.</p>
+                <span class="methodology-label" th:text="#{courses.methodology.speakingClubs.label}">Speaking Clubs</span>
+                <h2 th:text="#{courses.methodology.speakingClubs.title}">Who Leads Our Speaking Clubs?</h2>
+                <p class="methodology-main-text" th:text="#{courses.methodology.speakingClubs.text}">Our speaking clubs are led by experienced professionals and native speakers focused on real communication, confidence and practical English for modern life.</p>
                 <div class="mini-speakers">
                     <div class="mini-speaker">
                         <img src="/img/Cory.webp" alt="Cory" class="mini-speaker-photo">
                         <div>
-                            <h3>Cory</h3>
-                            <p>Cory is a native English speaker from Texas with a warm Southern accent. He believes students should start speaking immediately, even with mistakes, because confidence and fluency grow naturally through real conversation.</p>
-                            <p style="margin-top:10px;">Inspired by the wisdom of his grandmother, Cory creates a supportive and motivating atmosphere in every speaking club.</p>
+                            <h3 th:text="#{courses.methodology.speaker.cory.name}">Cory</h3>
+                            <p th:text="#{courses.methodology.speaker.cory.bio1}">Cory is a native English speaker from Texas with a warm Southern accent. He believes students should start speaking immediately, even with mistakes, because confidence and fluency grow naturally through real conversation.</p>
+                            <p style="margin-top:10px;" th:text="#{courses.methodology.speaker.cory.bio2}">Inspired by the wisdom of his grandmother, Cory creates a supportive and motivating atmosphere in every speaking club.</p>
                         </div>
                     </div>
                     <div class="mini-speaker">
                         <img src="/img/Marta.webp" alt="Marta" class="mini-speaker-photo">
                         <div>
-                            <h3>Marta</h3>
-                            <p>Marta is an experienced HR professional who worked at Google in Dublin in a senior position and lived in Ireland for over 10 years.</p>
-                            <p style="margin-top:10px;">She specializes in business English, interview preparation, and professional communication, and also hosts live meetings in Warsaw.</p>
+                            <h3 th:text="#{courses.methodology.speaker.marta.name}">Marta</h3>
+                            <p th:text="#{courses.methodology.speaker.marta.bio1}">Marta is an experienced HR professional who worked at Google in Dublin in a senior position and lived in Ireland for over 10 years.</p>
+                            <p style="margin-top:10px;" th:text="#{courses.methodology.speaker.marta.bio2}">She specializes in business English, interview preparation, and professional communication, and also hosts live meetings in Warsaw.</p>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="methodology-side">
-                <span class="methodology-label">Learning System</span>
-                <h2>Our Learning Methodology</h2>
-                <p class="methodology-main-text">We combine a structured academic approach with modern learning tools, interactive exercises, and real communication practice. Students are carefully placed into groups based on their goals and learning pace.</p>
-                <p class="methodology-main-text">From the very first lesson, students start speaking and practicing useful language structures. All students also receive free access to speaking clubs with native speakers.</p>
+                <span class="methodology-label" th:text="#{courses.methodology.learningSystem.label}">Learning System</span>
+                <h2 th:text="#{courses.methodology.learningSystem.title}">Our Learning Methodology</h2>
+                <p class="methodology-main-text" th:text="#{courses.methodology.text1}">We combine a structured academic approach with modern learning tools, interactive exercises, and real communication practice. Students are carefully placed into groups based on their goals and learning pace.</p>
+                <p class="methodology-main-text" th:text="#{courses.methodology.text2}">From the very first lesson, students start speaking and practicing useful language structures. All students also receive free access to speaking clubs with native speakers.</p>
                 <div class="methodology-points">
-                    <div class="methodology-point">✔ Modern British coursebooks</div>
-                    <div class="methodology-point">✔ Interactive exercises & presentations</div>
-                    <div class="methodology-point">✔ Speaking practice from the first lesson</div>
-                    <div class="methodology-point">✔ Weekly free speaking clubs</div>
+                    <div class="methodology-point">✔ <span th:text="#{courses.methodology.point1}">Modern British coursebooks</span></div>
+                    <div class="methodology-point">✔ <span th:text="#{courses.methodology.point2}">Interactive exercises & presentations</span></div>
+                    <div class="methodology-point">✔ <span th:text="#{courses.methodology.point3}">Speaking practice from the first lesson</span></div>
+                    <div class="methodology-point">✔ <span th:text="#{courses.methodology.point4}">Weekly free speaking clubs</span></div>
                 </div>
             </div>
         </div>
@@ -727,32 +1030,64 @@ header {
                         </div>
                     </div>
                     <div class="footer-links">
-                        <a href="#">Privacy Policy</a>
-                        <a href="#">Terms of Use</a>
-                        <a href="#">Refund Policy</a>
+                        <a href="/privacy-policy" th:text="#{footer.links.privacy}">Privacy Policy</a>
+                        <a href="/terms-of-service" th:text="#{footer.links.terms}">Terms of Service</a>
+                        <a href="/refund-policy" th:text="#{footer.links.refund}">Refund Policy</a>
                     </div>
                 </div>
             </div>
             <div class="footer-right">
-                <div class="footer-newsletter"><h3>Your Language Journey Starts Here ✨</h3></div>
+                <div class="footer-newsletter"><h3 th:text="#{footer.newsletter.title}">Your Language Journey Starts Here ✨</h3></div>
                 <div class="footer-form">
                     <div class="footer-newsletter-text">
-                        <p>Join our language learning community and receive practical tips, speaking hacks, useful phrases, cultural insights, and creative ways to improve your English, Polish, and Ukrainian naturally.</p>
-                        <p>No boring grammar overload — just useful content, motivation, and real language for everyday life ✨📩</p>
+                        <p th:text="#{footer.newsletter.text1}"> Join our community of language learners and get real, practical content:
+                            speaking tips, useful phrases, cultural insights, and simple ways to grow your
+                            English, Polish, or Ukrainian — every single week. </p>
+                        <p th:text="#{footer.newsletter.text2}"> No boring grammar walls. Just things you'll actually use ✨📩 </p>
                     </div>
-                    <input type="email" placeholder="Enter your email" class="footer-input">
+                    <input type="email" id="newsletterEmail" th:placeholder="#{footer.newsletter.emailPlaceholder}" placeholder="Enter your email" class="footer-input">
                     <div class="footer-checkboxes">
-                        <label class="footer-checkbox"><input type="checkbox"><span class="checkmark"></span><span>I agree to receive language learning tips, updates, and special offers by email.</span></label>
-                        <label class="footer-checkbox"><input type="checkbox"><span class="checkmark"></span><span>I accept the Privacy Policy and consent to email communication.</span></label>
+                        <label class="footer-checkbox">
+                            <input type="checkbox" id="newsletterConsent1">
+                            <span class="checkmark"></span>
+                            <span th:text="#{footer.newsletter.consent1}"> Yes, send me learning tips, updates, and special offers. </span>
+                        </label>
+                        <label class="footer-checkbox">
+                            <input type="checkbox" id="newsletterConsent2">
+                            <span class="checkmark"></span>
+                            <span>
+                                <span th:text="#{footer.newsletter.consent2}">I've read and accept the</span>
+                                <a href="/privacy-policy" style="color:#b8922e; text-decoration:underline;" th:text="#{footer.newsletter.consent2.link}">Privacy Policy</a>.
+                            </span>
+                        </label>
                     </div>
-                    <button class="footer-btn">JOIN THE NEWSLETTER</button>
+                    <p id="newsletterMessage" style="font-size: .9rem; font-weight: 600; display: none;"></p>
+                    <div class="footer-newsletter-actions">
+                        <button class="footer-btn" id="newsletterSubmitBtn" type="button" th:text="#{footer.newsletter.join}">JOIN THE NEWSLETTER</button>
+                        <button class="footer-unsubscribe-btn" id="newsletterUnsubscribeBtn" type="button" th:text="#{footer.newsletter.unsubscribe}">Unsubscribe</button>
+                    </div>
                 </div>
             </div>
         </div>
     </footer>
 </main>
 
-<script>
+<script th:inline="javascript">
+    /* i18n messages injected by Thymeleaf */
+    const i18n = {
+        invalidEmail: /*[[#{footer.newsletter.msg.invalidEmail}]]*/ 'Please enter a valid email address.',
+        needConsent: /*[[#{footer.newsletter.msg.needConsent}]]*/ 'Please check both boxes to subscribe.',
+        joining: /*[[#{footer.newsletter.msg.joining}]]*/ 'Joining...',
+        subscribed: /*[[#{footer.newsletter.msg.subscribed}]]*/ 'Thank you for subscribing!',
+        genericError: /*[[#{footer.newsletter.msg.genericError}]]*/ 'Something went wrong. Please try again.',
+        networkError: /*[[#{footer.newsletter.msg.networkError}]]*/ 'Network error. Please try again later.',
+        enterEmailToUnsub: /*[[#{footer.newsletter.msg.enterEmailToUnsub}]]*/ 'Enter your email above to unsubscribe.',
+        unsubscribed: /*[[#{footer.newsletter.msg.unsubscribed}]]*/ 'You have been unsubscribed.',
+        profileLoadFailed: /*[[#{profile.loadFailed}]]*/ 'Failed to load',
+        profileLoadError: /*[[#{profile.loadError}]]*/ 'Error loading profile',
+        profileMemberSince: /*[[#{profile.memberSince}]]*/ 'Member since'
+    };
+
     /* ---- ROADMAP tilt ---- */
     document.querySelectorAll('.roadmap-step').forEach(step => {
         const circle = step.querySelector('.roadmap-circle');
@@ -775,30 +1110,243 @@ header {
     document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
     /* ---- Mobile menu ---- */
-    document.getElementById('menuToggle').addEventListener('click', () => {
-        document.getElementById('navMenu').classList.toggle('active');
+    const menuToggle = document.getElementById('menuToggle');
+    const navMenu    = document.getElementById('navMenu');
+    const overlay    = document.getElementById('menuOverlay');
+
+    function openMenu() {
+      navMenu.classList.add('active');
+      overlay.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeMenu() {
+      navMenu.classList.remove('active');
+      overlay.classList.remove('active');
+      document.body.style.overflow = '';
+      document.documentElement.style.overflow = '';
+    }
+
+    menuToggle.addEventListener('click', () => {
+      navMenu.classList.contains('active') ? closeMenu() : openMenu();
     });
 
-    /* ---- Filter pills ---- */
-    document.querySelectorAll('.filter-pill').forEach(pill => {
-        pill.addEventListener('click', () => {
-            document.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
-            pill.classList.add('active');
-            const lang = pill.textContent.trim();
-            document.querySelectorAll('.premium-course-card').forEach(card => {
-                if (lang === 'All' || card.dataset.language === lang) {
-                    card.style.display = '';
-                } else {
-                    card.style.display = 'none';
-                }
-            });
+    overlay.addEventListener('click', closeMenu);
+
+    /* ---- Filter tabs with sliding indicator ---- */
+    const filterTabs = document.getElementById('filterTabs');
+    const indicator  = document.getElementById('filterIndicator');
+
+    function moveIndicatorTo(tab) {
+        const tabsRect = filterTabs.getBoundingClientRect();
+        const tabRect  = tab.getBoundingClientRect();
+        indicator.style.width = tabRect.width + 'px';
+        indicator.style.transform = `translateX(${tabRect.left - tabsRect.left}px)`;
+    }
+
+    function applyFilter(lang) {
+        const cards = document.querySelectorAll('.premium-course-card');
+        let visibleCount = 0;
+
+        cards.forEach(card => {
+            const show = (lang === 'All' || card.dataset.language === lang);
+            card.style.display = show ? '' : 'none';
+            if (show) visibleCount++;
+        });
+
+        const placeholder = document.getElementById('noCoursesPlaceholder');
+        placeholder.style.display = visibleCount === 0 ? 'flex' : 'none';
+    }
+
+    document.querySelectorAll('.filter-tab').forEach(tab => {
+        tab.addEventListener('click', () => {
+            document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+            moveIndicatorTo(tab);
+            applyFilter(tab.dataset.filter);
         });
     });
+
+    // init indicator position after layout is ready
+    window.addEventListener('load', () => {
+        const activeTab = document.querySelector('.filter-tab.active');
+        if (activeTab) moveIndicatorTo(activeTab);
+    });
+    window.addEventListener('resize', () => {
+        const activeTab = document.querySelector('.filter-tab.active');
+        if (activeTab) moveIndicatorTo(activeTab);
+    });
+
     document.querySelectorAll('.premium-course-card').forEach(card => {
         card.addEventListener('click', () => {
             const slug = card.dataset.slug;
             if (slug) window.location.href = '/language-courses/' + slug;
         });
+    });
+
+    const newsletterBtn = document.getElementById('newsletterSubmitBtn');
+    const newsletterEmailInput = document.getElementById('newsletterEmail');
+    const newsletterConsent1 = document.getElementById('newsletterConsent1');
+    const newsletterConsent2 = document.getElementById('newsletterConsent2');
+    const newsletterMessage = document.getElementById('newsletterMessage');
+    const newsletterBtnOriginalText = newsletterBtn.textContent;
+
+    function showNewsletterMessage(text, isError) {
+        newsletterMessage.textContent = text;
+        newsletterMessage.style.color = isError ? '#c0392b' : '#2d8d31';
+        newsletterMessage.style.display = 'block';
+    }
+
+    function isValidEmail(email) {
+        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    }
+
+    newsletterBtn.addEventListener('click', async () => {
+        const email = newsletterEmailInput.value.trim();
+
+        if (!isValidEmail(email)) {
+            showNewsletterMessage(i18n.invalidEmail, true);
+            return;
+        }
+
+        if (!newsletterConsent1.checked || !newsletterConsent2.checked) {
+            showNewsletterMessage(i18n.needConsent, true);
+            return;
+        }
+
+        newsletterBtn.disabled = true;
+        newsletterBtn.textContent = i18n.joining;
+
+        try {
+            const response = await fetch(`/api/newsletter/subscribe?email=${encodeURIComponent(email)}`, {
+                method: 'POST'
+            });
+
+            if (response.ok) {
+                showNewsletterMessage(i18n.subscribed, false);
+                newsletterEmailInput.value = '';
+                newsletterConsent1.checked = false;
+                newsletterConsent2.checked = false;
+            } else {
+                const errorText = await response.text();
+                showNewsletterMessage(errorText || i18n.genericError, true);
+            }
+        } catch (err) {
+            showNewsletterMessage(i18n.networkError, true);
+        } finally {
+            newsletterBtn.disabled = false;
+            newsletterBtn.textContent = newsletterBtnOriginalText;
+        }
+    });
+
+    const newsletterUnsubBtn = document.getElementById('newsletterUnsubscribeBtn');
+
+    newsletterUnsubBtn.addEventListener('click', async () => {
+        const email = newsletterEmailInput.value.trim();
+
+        if (!isValidEmail(email)) {
+            showNewsletterMessage(i18n.enterEmailToUnsub, true);
+            return;
+        }
+
+        newsletterUnsubBtn.disabled = true;
+
+        try {
+            const response = await fetch(`/api/newsletter/unsubscribe?email=${encodeURIComponent(email)}`, {
+                method: 'POST'
+            });
+
+            if (response.ok) {
+                showNewsletterMessage(i18n.unsubscribed, false);
+                newsletterEmailInput.value = '';
+            } else {
+                const errorText = await response.text();
+                showNewsletterMessage(errorText || i18n.genericError, true);
+            }
+        } catch (err) {
+            showNewsletterMessage(i18n.networkError, true);
+        } finally {
+            newsletterUnsubBtn.disabled = false;
+        }
+    });
+
+    /* ─── PROFILE POPOVER ─── */
+    const profilePopover = document.getElementById('profilePopover');
+    let profileLoaded = false;
+
+    async function loadProfile() {
+        if (profileLoaded) return;
+        try {
+            const res = await fetch('/api/profile', {
+                method: 'GET',
+                credentials: 'include'
+            });
+
+            if (!res.ok) {
+                document.getElementById('profileName').textContent = i18n.profileLoadFailed;
+                return;
+            }
+
+            const user = await res.json();
+
+            document.getElementById('profileName').textContent = user.name || '—';
+            document.getElementById('profileEmail').textContent = user.email || '';
+
+            if (user.createDate) {
+                const date = new Date(user.createDate);
+                document.getElementById('profileDate').textContent =
+                    i18n.profileMemberSince + ' ' + date.toLocaleDateString('en-US', {
+                        day: '2-digit', month: 'long', year: 'numeric'
+                    });
+            }
+
+            profileLoaded = true;
+        } catch (e) {
+            console.error('Failed to load profile', e);
+            document.getElementById('profileName').textContent = i18n.profileLoadError;
+        }
+    }
+
+    function openProfileModal(e) {
+        e.preventDefault();
+        e.stopPropagation();
+
+        if (navMenu.classList.contains('active')) {
+            closeMenu();
+        }
+
+        if (profilePopover.classList.contains('active')) {
+            closeProfileModal();
+            return;
+        }
+
+        profilePopover.classList.add('active');
+        loadProfile();
+    }
+
+    function closeProfileModal() {
+        profilePopover.classList.remove('active');
+    }
+
+    document.addEventListener('click', (e) => {
+        if (profilePopover.classList.contains('active') &&
+            !profilePopover.contains(e.target) &&
+            !e.target.closest('.login-button.authenticated')) {
+            closeProfileModal();
+        }
+    });
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            closeProfileModal();
+            closeMenu();
+        }
+    });
+
+    window.addEventListener('load', () => {
+    const activeTab = document.querySelector('.filter-tab.active');
+    if (activeTab) moveIndicatorTo(activeTab);
+        applyFilter(activeTab ? activeTab.dataset.filter : 'All');
     });
 </script>
 

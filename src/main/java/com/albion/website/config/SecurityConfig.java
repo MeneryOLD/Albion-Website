@@ -28,12 +28,18 @@ public class SecurityConfig {
                         .requestMatchers("/css/**", "/js/**", "/img/**", "/fonts/**").permitAll()
                         .requestMatchers(
                                 "/api/pictures/**", "/", "/blog/**", "/language-courses/**",
-                                "/store/**", "/about-us/**", "/polices/**"
+                                "/store/**", "/about-us/**", "/terms-of-service", "/refund-policy", "/privacy-policy", "/api/newsletter/**",
+                                "/api/profile"
                         ).permitAll()
                         .requestMatchers("/api/admin/course-page/**").hasRole("ADMIN")
                         .requestMatchers("/api/admin/**", "/admin/stats/**").hasAnyRole("ADMIN")
                         .requestMatchers("/login", "/register").permitAll()
                         .anyRequest().authenticated()
+                )
+                .exceptionHandling(exceptions -> exceptions
+                        .accessDeniedHandler((request, response, accessDeniedException) -> {
+                            response.sendRedirect("/");
+                        })
                 )
                 .formLogin(form -> form
                         .loginPage("/login")
@@ -44,7 +50,7 @@ public class SecurityConfig {
                 )
                 .logout(logout -> logout
                         .logoutUrl("/logout")
-                        .logoutSuccessUrl("/login?logout=true")
+                        .logoutSuccessUrl("/")
                         .permitAll()
                 )
                 .sessionManagement(session -> session
