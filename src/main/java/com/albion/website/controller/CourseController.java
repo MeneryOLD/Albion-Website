@@ -21,8 +21,7 @@ public class CourseController {
 
     @GetMapping("/language-courses/{slug}")
     public String coursePage(@PathVariable String slug, Model model) {
-        Course course = courseService.getBySlug(slug);
-        model.addAttribute("course", course);
+        model.addAttribute("course", courseService.getBySlug(slug));
         return "course";
     }
 

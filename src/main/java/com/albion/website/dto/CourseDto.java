@@ -26,5 +26,6 @@ public class CourseDto {
     private CourseType type;
     private boolean published;
     private String language;
+    private String pageHtml;
 
 }

@@ -8,7 +8,6 @@ import com.albion.website.model.PictureType;
 import com.albion.website.repository.CourseRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -30,14 +29,12 @@ public class CourseService {
     private final SlugService slugService;
     private final PictureService pictureService;
 
-    @Cacheable(value = "courses", key = "#slug")
     @Transactional(readOnly = true)
-    public Course getBySlug(String slug) {
+    public CourseDto getBySlug(String slug) {
         Course course = courseRepository
                 .findBySlugAndPublishedTrue(slug)
                 .orElseThrow(() -> new NotFoundException("Course not found"));
-
-        return course;
+        return mapToDto(course);
     }
 
     @Transactional(readOnly = true)
@@ -74,7 +71,7 @@ public class CourseService {
 
                     return new CourseCardDto(
                             course.getId(),
-                            course.getTitle(),
+                            course.getName(),
                             course.getSlug(),
                             course.getDescription(),
                             course.getPrice(),
@@ -112,7 +109,7 @@ public class CourseService {
         }
 
         Course course = new Course();
-        course.setTitle(request.getName());
+        course.setName(request.getName());
         course.setSlug(slug);
         course.setDescription(request.getDescription());
         course.setText(request.getText());
@@ -149,7 +146,7 @@ public class CourseService {
         Course course = courseRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Course not found"));
 
-        course.setTitle(request.getName());
+        course.setName(request.getName());
         course.setDescription(request.getDescription());
         course.setText(request.getText());
         course.setPrice(request.getPrice());
@@ -201,9 +198,8 @@ public class CourseService {
                 course.getId(),
                 PictureType.COURSE
         );
-
         return new CourseDto(
-                course.getTitle(),
+                course.getName(),
                 course.getSlug(),
                 course.getDescription(),
                 course.getText(),
@@ -215,8 +211,9 @@ public class CourseService {
                 course.getFormat(),
                 course.getType(),
                 course.isPublished(),
-                course.getLanguage()
-                );
+                course.getLanguage(),
+                course.getPageHtml()
+        );
     }
 
     public void savePage(Long id, String html) {
@@ -234,7 +231,7 @@ public class CourseService {
 
     private CoursePreviewDto mapToPreviewDto(Course course) {
         return new CoursePreviewDto(
-                course.getTitle(),
+                course.getName(),
                 course.getSlug(),
                 course.getDescription(),
                 course.getCreatedAt()

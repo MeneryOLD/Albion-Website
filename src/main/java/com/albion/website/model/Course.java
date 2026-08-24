@@ -20,7 +20,7 @@ public class Course {
     private Long id;
 
     @Column(nullable = false, name = "name")
-    private String title;
+    private String name;
 
     @Column(unique = true, nullable = false)
     private String slug;
