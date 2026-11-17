@@ -418,6 +418,10 @@
             .product-card {min-width: 100%; max-width: 100%;}
         }
     </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700;800&display=swap">
+    <link rel="stylesheet" href="/css/albion.css" th:href="@{/css/albion.css}">
 </head>
 <body>
 <div id="menuOverlay" class="menu-overlay"></div>
@@ -459,6 +463,7 @@
                     <div class="profile-popover-date" id="profileDate"></div>
                 </div>
             </div>
+            <a sec:authorize="hasRole('ADMIN')" th:href="@{/admin/stats}" class="footer-btn profile-popover-logout" style="display:block;text-align:center;text-decoration:none;margin-bottom:10px;">Admin panel</a>
             <form th:action="@{/logout}" method="post">
                 <button type="submit" class="profile-popover-logout" th:text="#{menu-logout}">Log out</button>
             </form>

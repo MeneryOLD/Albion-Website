@@ -273,7 +273,12 @@
         }
     </style>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LC Albion</title></head>
+    <title>LC Albion</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700;800&display=swap">
+    <link rel="stylesheet" href="/css/albion.css" th:href="@{/css/albion.css}">
+</head>
 <link rel="icon" href="/img/logo.webp" type="image/png">
 <body th:attr="data-i18n-invalid-email=#{footer.newsletter.msg.invalidEmail},
                data-i18n-need-consent=#{footer.newsletter.msg.needConsent},
@@ -327,6 +332,7 @@
                     <div class="profile-popover-date" id="profileDate"></div>
                 </div>
             </div>
+            <a sec:authorize="hasRole('ADMIN')" th:href="@{/admin/stats}" class="footer-btn profile-popover-logout" style="display:block;text-align:center;text-decoration:none;margin-bottom:10px;">Admin panel</a>
             <form th:action="@{/logout}" method="post">
                 <button type="submit" class="footer-btn profile-popover-logout" th:text="#{menu-logout}">Log out</button>
             </form>

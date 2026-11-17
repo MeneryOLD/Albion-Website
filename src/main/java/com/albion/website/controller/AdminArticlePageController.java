@@ -1,6 +1,7 @@
 package com.albion.website.controller;
 
 import com.albion.website.service.ArticleService;
+import com.albion.website.service.PageHtml;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -19,7 +20,7 @@ public class AdminArticlePageController {
     public ResponseEntity<Void> savePage(
             @PathVariable Long id,
             @RequestBody Map<String, String> body) {
-        articleService.savePage(id, body.get("html"));
+        articleService.savePage(id, PageHtml.normalize(body.get("html")));
         return ResponseEntity.ok().build();
     }
     @GetMapping("/{id}")
